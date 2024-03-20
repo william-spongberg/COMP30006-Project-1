@@ -1,7 +1,7 @@
 {
   "tests": [
     {
-      "name": "Workshop 0 Test",
+      "name": "Project 1 Test",
       "setup": "",
       "run": "xvfb-run gradle test",
       "input": "",

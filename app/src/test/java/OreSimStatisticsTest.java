@@ -21,7 +21,7 @@ public class OreSimStatisticsTest {
         int model = Integer.parseInt(properties.getProperty("map"));
         MapGrid grid = new MapGrid(model);
 
-        String logResult = new OreSim(properties, grid).runApp(false);
+        String logResult = new OreSim(properties, grid).runApp(true);
         logLines = logResult.split("\n");
     }
 
