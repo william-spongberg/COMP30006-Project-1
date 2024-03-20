@@ -1,2 +1,2 @@
-# 2024S1-Project1-Template
-Template for Project1 for 2024 Semester 1
+# Workshop 0 Template
+A template for Workshop 0
