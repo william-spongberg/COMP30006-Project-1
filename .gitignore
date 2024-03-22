@@ -31,3 +31,13 @@ dist/
 # Gradle
 .idea/**/gradle.xml
 .idea/**/libraries
+
+# VSCode
+.vscode
+
+# Properties
+*.properties
+
+# Images
+*.png
+*.gif
