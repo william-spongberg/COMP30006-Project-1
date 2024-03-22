@@ -8,5 +8,5 @@
 
 
  ## Documentation files
-- Link to Draw.io 
-- Link to Google doc
+- Link to Draw.io: https://unimelbcloud-my.sharepoint.com/:u:/g/personal/ewhawkins_student_unimelb_edu_au/EQzn7eR9E9NOqQrW-6xmPMoB6MPxF7gAYe3TYlJAXfAioQ?e=9qfLzB
+- Link to Google doc: https://docs.google.com/document/d/1KVv-L4zRVStTCPlRpRv1BDFj2Hyfc7VqElK6ZllnJiM/edit?usp=sharing
