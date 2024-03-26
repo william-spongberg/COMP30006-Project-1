@@ -11,6 +11,12 @@ import java.util.*;
 import java.util.List;
 import java.util.Properties;
 
+/**
+ * The `OreSim` class represents a simulation of an ore mining game. It extends the `GameGrid` class and implements the `GGKeyListener` interface.
+ * The class contains inner classes representing different types of game elements such as `Target`, `Ore`, `Pusher`, `Bulldozer`, `Excavator`, `Rock`, and `Clay`.
+ * The `OreSim` class is responsible for setting up the game grid, initializing game elements, handling user input, and running the game simulation.
+ * It also provides methods for checking the progress of the game, updating statistics, and drawing the game board.
+ */
 public class OreSim extends GameGrid implements GGKeyListener
 {
   // ------------- Inner classes -------------

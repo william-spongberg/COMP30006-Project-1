@@ -1,6 +1,19 @@
 package ore;
 import ch.aplu.jgamegrid.*;
 
+/**
+ * The MapGrid class represents a grid-based map for an ore simulation game.
+ * It stores information about the elements present in each cell of the grid,
+ * such as borders, empty spaces, stones, targets, pushers, bulldozers, excavators,
+ * rocks, and clay. The class provides methods to retrieve information about the
+ * dimensions of the grid, the number of stones, and the type of element in a specific cell.
+ *
+ * The map grid is initialized based on a predefined model, which consists of a string
+ * representation of the map and the dimensions of the grid for each model. The map
+ * elements are mapped from the string representation to the corresponding element types.
+ *
+ * @param model The index of the model to use for initializing the map grid.
+ */
 public class MapGrid
 {
   private int nbHorzCells = -1;
