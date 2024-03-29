@@ -2,7 +2,7 @@ package ore;
 
 import ch.aplu.jgamegrid.Actor;
 
-public class Bulldozer extends Actor
+public class Bulldozer extends Vehicle
 {
     public Bulldozer()
     {

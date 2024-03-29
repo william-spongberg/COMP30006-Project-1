@@ -5,7 +5,7 @@ import ch.aplu.jgamegrid.Location;
 
 import java.util.List;
 
-public class Pusher extends Actor
+public class Pusher extends Vehicle
 {
     private List<String> controls = null;
     private int autoMovementIndex = 0;

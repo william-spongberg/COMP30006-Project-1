@@ -3,7 +3,7 @@ package ore;
 import ch.aplu.jgamegrid.Actor;
 
 
-public class Target extends Actor
+public class Target extends MapObject
 {
     public Target()
     {
