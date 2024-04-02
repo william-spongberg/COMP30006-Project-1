@@ -6,9 +6,6 @@ import java.util.Map;
 import ch.aplu.jgamegrid.*;
 
 public abstract class Vehicle extends MapObject {
-    private List<String> controls = null;
-    private int autoMovementIndex = 0;
-
     public Vehicle(boolean rotatable, String image) {
         super(rotatable, image);
     }
@@ -39,23 +36,5 @@ public abstract class Vehicle extends MapObject {
         }
 
         return false; // TODO: was set to return true??
-    }
-
-    /* getters */
-    public List<String> getControls() {
-        return controls;
-    }
-
-    public int getAutoMovementIndex() {
-        return autoMovementIndex;
-    }
-
-    /* setters */
-    public void setControls(List<String> controls) {
-        this.controls = controls;
-    }
-
-    public void setAutoMovementIndex(int autoMovementIndex) {
-        this.autoMovementIndex = autoMovementIndex;
     }
 }

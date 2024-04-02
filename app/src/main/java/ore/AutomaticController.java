@@ -9,45 +9,53 @@ public class AutomaticController extends VehicleController {
      * properties file
      */
     public void autoMoveNext() {
-        if (vehicle.getControls() != null && vehicle.getAutoMovementIndex() < vehicle.getControls().size()) {
-            String[] currentMove = vehicle.getControls().get(vehicle.getAutoMovementIndex()).split("-");
+        if (this.getControls() != null && this.getAutoMovementIndex() < this.getControls().size()) {
+            String[] currentMove = this.getControls().get(this.getAutoMovementIndex()).split("-");
             String machine = currentMove[0];
             String move = currentMove[1];
-            vehicle.setAutoMovementIndex(vehicle.getAutoMovementIndex() + 1);
+            this.setAutoMovementIndex(this.getAutoMovementIndex() + 1);
             
             if (machine.equals("P")) {
-                if (isFinished)
+                if (this.getIsFinished())
                     return;
 
                 Location next = null;
                 switch (move) {
                     case "L":
-                        next = vehicle.getLocation().getNeighbourLocation(Location.WEST);
-                        vehicle.setDirection(Location.WEST);
+                        next = this.getVehicle().getLocation().getNeighbourLocation(Location.WEST);
+                        this.getVehicle().setDirection(Location.WEST);
                         break;
                     case "U":
-                        next = vehicle.getLocation().getNeighbourLocation(Location.NORTH);
-                        vehicle.setDirection(Location.NORTH);
+                        next = this.getVehicle().getLocation().getNeighbourLocation(Location.NORTH);
+                        this.getVehicle().setDirection(Location.NORTH);
                         break;
                     case "R":
-                        next = vehicle.getLocation().getNeighbourLocation(Location.EAST);
-                        vehicle.setDirection(Location.EAST);
+                        next = this.getVehicle().getLocation().getNeighbourLocation(Location.EAST);
+                        this.getVehicle().setDirection(Location.EAST);
                         break;
                     case "D":
-                        next = vehicle.getLocation().getNeighbourLocation(Location.SOUTH);
-                        vehicle.setDirection(Location.SOUTH);
+                        next = this.getVehicle().getLocation().getNeighbourLocation(Location.SOUTH);
+                        this.getVehicle().setDirection(Location.SOUTH);
                         break;
                 }
 
-                Target curTarget = (Target) getOneActorAt(vehicle.getLocation(), Target.class);
+                Target curTarget = (Target) getOneActorAt(this.getVehicle().getLocation(), Target.class);
                 if (curTarget != null) {
                     curTarget.show();
                 }
-                if (next != null && vehicle.canMove(next)) {
-                    vehicle.setLocation(next);
+                if (next != null && this.getVehicle().canMove(next)) {
+                    this.getVehicle().setLocation(next);
                 }
                 refresh(); // TODO: refreshes gameGrid
             }
         }
+    }
+
+    public boolean keyPressed(KeyEvent evt) {
+        return true;
+    }
+
+    public boolean keyReleased(KeyEvent evt) {
+        return true;
     }
 }
