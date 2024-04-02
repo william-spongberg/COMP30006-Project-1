@@ -1,66 +1,75 @@
 package ore;
 
-import ch.aplu.jgamegrid.Actor;
-import ch.aplu.jgamegrid.Location;
-
 import java.util.List;
+import java.util.Map;
 
-public class Pusher extends Vehicle
-{
-    private List<String> controls = null;
-    private int autoMovementIndex = 0;
-    public Pusher()
-    {
-        super(true, "sprites/pusher.png");  // Rotatable
+import ch.aplu.jgamegrid.*;
+
+public class Pusher extends Vehicle {
+    // only vehicle that can be manually controlled
+
+    public Pusher() {
+        super(true, "sprites/pusher.png");
     }
-    public void setupPusher(boolean isAutoMode, List<String> controls) {
-        this.controls = controls;
+
+    public boolean updateObject(MapObject object) {
+        if (object instanceof Ore) {
+            Ore ore = (Ore) object;
+            // Try to move the ore
+            ore.setDirection(this.getDirection());
+            return moveOre(ore);
+        }
+        return false;
     }
 
     /**
-     * Method to move pusher automatically based on the instructions input from properties file
+     * When the pusher pushes the ore in 1 direction, this method will be called to
+     * check if the ore can move in that direction
+     * and if it can move, then it changes the location
+     * 
+     * @param ore
+     * @return
      */
-    public void autoMoveNext() {
-        if (controls != null && autoMovementIndex < controls.size()) {
-            String[] currentMove = controls.get(autoMovementIndex).split("-");
-            String machine = currentMove[0];
-            String move = currentMove[1];
-            autoMovementIndex++;
-            if (machine.equals("P")) {
-                if (isFinished)
-                    return;
+    private boolean moveOre(Ore ore) {
+        Location next = ore.getNextMoveLocation();
 
-                Location next = null;
-                switch (move)
-                {
-                    case "L":
-                        next = getLocation().getNeighbourLocation(Location.WEST);
-                        setDirection(Location.WEST);
-                        break;
-                    case "U":
-                        next = getLocation().getNeighbourLocation(Location.NORTH);
-                        setDirection(Location.NORTH);
-                        break;
-                    case "R":
-                        next = getLocation().getNeighbourLocation(Location.EAST);
-                        setDirection(Location.EAST);
-                        break;
-                    case "D":
-                        next = getLocation().getNeighbourLocation(Location.SOUTH);
-                        setDirection(Location.SOUTH);
-                        break;
-                }
+        // Test if try to move into border
+        Color c = getBg().getColor(next);
+        Rock rock = (Rock) getOneActorAt(next, Rock.class);
+        Clay clay = (Clay) getOneActorAt(next, Clay.class);
+        if (c.equals(borderColor) || rock != null || clay != null)
+            return false;
 
-                Target curTarget = (Target) getOneActorAt(getLocation(), Target.class);
-                if (curTarget != null){
-                    curTarget.show();
+        // Test if there is another ore
+        Ore neighbourOre = (Ore) getOneActorAt(next, Ore.class);
+        if (neighbourOre != null)
+            return false;
+
+        // Reset the target if the ore is moved out of target
+        Location currentLocation = ore.getLocation();
+        List<Actor> actors = getActorsAt(currentLocation);
+        if (actors != null) {
+            for (Actor actor : actors) {
+                if (actor instanceof Target) {
+                    Target currentTarget = (Target) actor;
+                    currentTarget.show();
+                    ore.show(0);
                 }
-                if (next != null && canMove(next))
-                {
-                    setLocation(next);
-                }
-                refresh();
             }
         }
+
+        // Move the ore
+        ore.setLocation(next);
+
+        // Check if we are at a target
+        Target nextTarget = (Target) getOneActorAt(next, Target.class);
+        if (nextTarget != null) {
+            ore.show(1);
+            nextTarget.hide();
+        } else {
+            ore.show(0);
+        }
+
+        return true;
     }
 }
