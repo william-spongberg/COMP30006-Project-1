@@ -17,7 +17,7 @@ import java.util.Properties;
  * The `OreSim` class is responsible for setting up the game grid, initializing game elements, handling user input, and running the game simulation.
  * It also provides methods for checking the progress of the game, updating statistics, and drawing the game board.
  */
-public class OreSim extends GameGrid implements GGKeyListener
+public class OreSim extends GameGrid implements GGKeyListener, DestroyListener
 {
   // ------------- Inner classes -------------
   public enum ElementType{
@@ -238,18 +238,22 @@ public class OreSim extends GameGrid implements GGKeyListener
 
         if (a == ElementType.ROCK)
         {
-          addActor(new Rock(), location);
+          Rock rock = new Rock(location);
+          rock.setDestroyListener(this);
+          addActor(rock, rock.getLocation());
         }
 
         if (a == ElementType.CLAY)
         {
-          addActor(new Clay(), location);
+          Clay clay = new Clay(location);
+          clay.setDestroyListener(this);
+          addActor(clay, clay.getLocation());
         }
 
         if (a == ElementType.BULLDOZER)
         {
           bulldozer = new Bulldozer();
-          addActor(bulldozer, location);
+          addActor(bulldozer, bulldozer.getLocation());
 
         }
         if (a == ElementType.EXCAVATOR)
@@ -451,5 +455,13 @@ public class OreSim extends GameGrid implements GGKeyListener
 
     logResult.append("\n");
   }
+
+  @Override
+  public void onDestroy(MapObject object) {
+    // Logic to remove the actor from the game grid
+    removeActor(object);
+  }
+
+
 
 }
