@@ -18,18 +18,18 @@ import java.util.HashMap;
  * //@param model The index of the model to use for initializing the map grid.
  */
 public class MapGrid {
-    private final static String[] map_0 =
-            {"    xxxxx          ", // 0 (19)
-             "    x...x          ", // 1
-             "    x*..x          ", // 2
-             "  xxx...xx         ", // 3
-             "  x......x         ", // 4
-             "xxx...RD.x   xxxxxx", // 5
-             "x.....RD.xxxxx....x", // 6
-             "x...*............ox", // 7
-             "xxxxx.DDD.xPxx...ox", // 8
-             "    x.....xxxxxxxxx", // 9
-             "    xxxxxxx        "};//10
+    private final static String[] map_0 = {
+            "    xxxxx          ", // 0 (19)
+            "    x...x          ", // 1
+            "    x*..x          ", // 2
+            "  xxx...xx         ", // 3
+            "  x......x         ", // 4
+            "xxx...RD.x   xxxxxx", // 5
+            "x.....RD.xxxxx....x", // 6
+            "x...*............ox", // 7
+            "xxxxx.DDD.xPxx...ox", // 8
+            "    x.....xxxxxxxxx", // 9
+            "    xxxxxxx        "};//10
     private final static String[] map_1 = {
             "xxxxxxxxxxxx", // 0  (14)
             "x..........x", // 1
@@ -40,31 +40,27 @@ public class MapGrid {
             "x....RRR*.xx", // 6
             "x..........x", // 7
             "xxxxxxxxxxxx"};// 8
-    private HashMap<Location, MapObject> map = new HashMap<>();
     private final int numHorzCells;
     private final int numVertCells;
+    private final HashMap<Location, MapObject> map = new HashMap<>();
 
     /**
      * Mapping from the string to a HashMap to prepare drawing
      *
      * @param model An enum specifying the map to generate
      */
-    public MapGrid(Model model) throws Exception {
+    public MapGrid(int model) {
         String[] map_str;
-        switch (model) {
-            case MAP0 -> {
-                numHorzCells = map_0[0].length();
-                numVertCells = map_0.length;
-                map_str = map_0;
-            }
-            case MAP1 -> {
-                numHorzCells = map_1[0].length();
-                numVertCells = map_1.length;
-                map_str = map_1;
-            }
-            default -> {
-                throw new Exception("Invalid model");
-            }
+        if (model == Model.MAP0.ordinal()) {
+
+            numHorzCells = map_0[0].length();
+            numVertCells = map_0.length;
+            map_str = map_0;
+        } else {
+
+            numHorzCells = map_1[0].length();
+            numVertCells = map_1.length;
+            map_str = map_1;
         }
 
         // Copy structure into HashMap

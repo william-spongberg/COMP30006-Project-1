@@ -14,7 +14,7 @@ public class Driver {
         // load properties
         final Properties properties = PropertiesLoader.loadPropertiesFile(propertiesPath);
         // feed into MapGrid
-        MapGrid.Model model = MapGrid.Model.values()[Integer.parseInt(properties.getProperty("map"))];
+        int model = Integer.parseInt(properties.getProperty("map"));
         MapGrid grid = new MapGrid(model);
         // feed MapGrid into Oresim
         String logResult = new OreSim(properties, grid).runApp(true);

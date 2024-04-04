@@ -66,7 +66,7 @@ public class OreSim extends GameGrid implements GGKeyListener
   private StringBuilder logResult = new StringBuilder();
   public OreSim(Properties properties, MapGrid grid)
   {
-    super(grid.getNbHorzCells(), grid.getNbVertCells(), 30, false);
+    super(grid.getNumHorzCells(), grid.getNumVertCells(), 30, false);
     this.grid = grid;
     nbHorzCells = grid.getNbHorzCells();
     nbVertCells = grid.getNbVertCells();
