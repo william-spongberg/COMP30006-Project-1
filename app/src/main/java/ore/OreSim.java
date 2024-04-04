@@ -124,10 +124,6 @@ public class OreSim extends GameGrid implements GGKeyListener
         gameDuration -= minusDuration;
         String title = String.format("# Ores at Target: %d. Time left: %.2f seconds", oresDone, gameDuration);
         setTitle(title);
-        if (isAutoMode) {
-          pusher.autoMoveNext();
-          updateLogResult();
-        }
 
         oresDone = checkOresDone();
       } catch (InterruptedException e) {
@@ -221,7 +217,6 @@ public class OreSim extends GameGrid implements GGKeyListener
         {
           pusher = new Pusher();
           addActor(pusher, location);
-          pusher.setupPusher(isAutoMode, controls);
         }
         if (a == ElementType.ORE)
         {

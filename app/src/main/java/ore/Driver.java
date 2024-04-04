@@ -5,7 +5,7 @@ public class Driver {
     // properties/settings for game
     public static final String DEFAULT_PROPERTIES_PATH = "properties/game1.properties";
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         String propertiesPath = DEFAULT_PROPERTIES_PATH;
         // if more than one property, set to first property
         if (args.length > 0) {
@@ -14,7 +14,7 @@ public class Driver {
         // load properties
         final Properties properties = PropertiesLoader.loadPropertiesFile(propertiesPath);
         // feed into MapGrid
-        int model = Integer.parseInt(properties.getProperty("map"));
+        MapGrid.Model model = MapGrid.Model.values()[Integer.parseInt(properties.getProperty("map"))];
         MapGrid grid = new MapGrid(model);
         // feed MapGrid into Oresim
         String logResult = new OreSim(properties, grid).runApp(true);

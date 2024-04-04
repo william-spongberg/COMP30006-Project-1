@@ -1,6 +1,8 @@
 package ore;
 
-import ch.aplu.jgamegrid.*;
+import ch.aplu.jgamegrid.Location;
+
+import java.util.HashMap;
 
 /**
  * The MapGrid class represents a grid-based map for an ore simulation game.
@@ -16,105 +18,88 @@ import ch.aplu.jgamegrid.*;
  * //@param model The index of the model to use for initializing the map grid.
  */
 public class MapGrid {
-    private int nbHorzCells = -1;
-    private int nbVertCells = -1;
-    private final OreSim.ElementType[][] mapElements; // = new OreSim.ElementType[nbHorzCells][nbVertCells];
-    private int nbStones = 0;
-
     private final static String[] map_0 =
-            {"    xxxxx          " + // 0 (19)
-                    "    x...x          ", // 1
-                    "    x*..x          ", // 2
-                    "  xxx...xx         ",  // 3
-                    "  x......x         ",  // 4
-                    "xxx...RD.x   xxxxxx", // 5
-                    "x.....RD.xxxxx....x", // 6
-                    "x...*............ox",  // 7
-                    "xxxxx.DDD.xPxx...ox",  // 8
-                    "    x.....xxxxxxxxx",  // 9
-                    "    xxxxxxx        "};  //10
-
+            {"    xxxxx          ", // 0 (19)
+             "    x...x          ", // 1
+             "    x*..x          ", // 2
+             "  xxx...xx         ", // 3
+             "  x......x         ", // 4
+             "xxx...RD.x   xxxxxx", // 5
+             "x.....RD.xxxxx....x", // 6
+             "x...*............ox", // 7
+             "xxxxx.DDD.xPxx...ox", // 8
+             "    x.....xxxxxxxxx", // 9
+             "    xxxxxxx        "};//10
     private final static String[] map_1 = {
             "xxxxxxxxxxxx", // 0  (14)
-            "x..........x", // 0  (14)
-            "x....RB....x", // 1
-            "xo...R.*...x", // 2
-            "xo...RDDDDDx", // 3
-            "xP....ERRRRx", // 4
-            "x....RRR*.xx", // 5
-            "x..........x", // 6
-            "xxxxxxxxxxxx"};  // 7
-
-    private final static String[][] mapModel =
-            {
-                    map_0, map_1
-            };
-
-
-    public enum Model {MAP0, MAP1}
-
-    private Model model;
+            "x..........x", // 1
+            "x....RB....x", // 2
+            "xo...R.*...x", // 3
+            "xo...RDDDDDx", // 4
+            "xP....ERRRRx", // 5
+            "x....RRR*.xx", // 6
+            "x..........x", // 7
+            "xxxxxxxxxxxx"};// 8
+    private HashMap<Location, MapObject> map = new HashMap<>();
+    private final int numHorzCells;
+    private final int numVertCells;
 
     /**
      * Mapping from the string to a HashMap to prepare drawing
      *
-     * @param model
+     * @param model An enum specifying the map to generate
      */
     public MapGrid(Model model) throws Exception {
-
-        String[] map;
+        String[] map_str;
         switch (model) {
             case MAP0 -> {
-                nbHorzCells = map_0[0].length();
-                nbVertCells = map_0.length;
-                map = map_0;
+                numHorzCells = map_0[0].length();
+                numVertCells = map_0.length;
+                map_str = map_0;
             }
             case MAP1 -> {
-                nbHorzCells = map_1[0].length();
-                nbVertCells = map_1.length;
-                map = map_1;
+                numHorzCells = map_1[0].length();
+                numVertCells = map_1.length;
+                map_str = map_1;
             }
             default -> {
                 throw new Exception("Invalid model");
             }
         }
 
-        mapElements = new OreSim.ElementType[nbHorzCells][nbVertCells];
-
-        // Copy structure into integer array
-        for (int k = 0; k < nbVertCells; k++) {
-            for (int i = 0; i < nbHorzCells; i++) {
-                switch (map[k].charAt(i)) {
-                    case ' ':
-                        mapElements[i][k] = OreSim.ElementType.OUTSIDE;  // Empty outside
+        // Copy structure into HashMap
+        for (int y = 0; y < numVertCells; y++) {
+            for (int x = 0; x < numHorzCells; x++) {
+                switch (map_str[y].charAt(x)) {
+                    case ' ': // outside
+                        // TODO: necessary?
                         break;
-                    case '.':
-                        mapElements[i][k] = OreSim.ElementType.EMPTY;  // Empty inside
+                    case '.': // Empty
+                        // TODO: handle empties
                         break;
-                    case 'x':
-                        mapElements[i][k] = OreSim.ElementType.BORDER;  // Border
+                    case 'x': // Border
+                        // TODO: handle border
                         break;
-                    case '*':
-                        mapElements[i][k] = OreSim.ElementType.ORE;  // Stones
-                        nbStones++;
+                    case '*': // Stone (did they mean ore???)
+                        map.put(new Location(x, y), new Ore());
                         break;
-                    case 'o':
-                        mapElements[i][k] = OreSim.ElementType.TARGET;  // Target positions
+                    case 'o': // Target
+                        map.put(new Location(x, y), new Target());
                         break;
-                    case 'P':
-                        mapElements[i][k] = OreSim.ElementType.PUSHER;
+                    case 'P': // Pusher
+                        map.put(new Location(x, y), new Pusher());
                         break;
-                    case 'B':
-                        mapElements[i][k] = OreSim.ElementType.BULLDOZER;
+                    case 'B': // Bulldozer
+                        map.put(new Location(x, y), new Bulldozer());
                         break;
-                    case 'E':
-                        mapElements[i][k] = OreSim.ElementType.EXCAVATOR;
+                    case 'E': // Excavator
+                        map.put(new Location(x, y), new Excavator());
                         break;
-                    case 'R':
-                        mapElements[i][k] = OreSim.ElementType.ROCK; // Rocks
+                    case 'R': // Rock
+                        map.put(new Location(x, y), new Rock());
                         break;
-                    case 'D':
-                        mapElements[i][k] = OreSim.ElementType.CLAY; // Clay
+                    case 'D': // Clay
+                        map.put(new Location(x, y), new Clay());
                         break;
                 }
             }
@@ -122,18 +107,12 @@ public class MapGrid {
     }
 
     public int getNbHorzCells() {
-        return nbHorzCells;
+        return numHorzCells;
     }
 
     public int getNbVertCells() {
-        return nbVertCells;
+        return numVertCells;
     }
 
-    public int getNbOres() {
-        return nbStones;
-    }
-
-    public OreSim.ElementType getCell(Location location) {
-        return mapElements[location.x][location.y];
-    }
+    public enum Model {MAP0, MAP1}
 }
