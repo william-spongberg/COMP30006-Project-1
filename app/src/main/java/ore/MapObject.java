@@ -12,7 +12,7 @@ public abstract class MapObject extends Actor implements Updateable {
 
     private static List<MapObject> allMapObjects = new ArrayList<>();
 
-    // need to discuss how location works here.. we also need to set it in the children, how do we fix?
+    // location will be set and handled by the map. these objects are fine as is.
     public MapObject(boolean isRotatable, String spriteImage, Location location) {
         super(isRotatable, spriteImage);
         this.location = location;
@@ -31,11 +31,11 @@ public abstract class MapObject extends Actor implements Updateable {
 
     public void interact(MapObject otherObject) {
         if (this instanceof Excavator && otherObject instanceof Rock) {
-            ((Destroyable) otherObject).destroy();
+            // to implement when hashmap is in
         }
 
         if (this instanceof Bulldozer && otherObject instanceof Clay) {
-            ((Destroyable) otherObject).destroy();
+            // to implement when hashmap is in
         }
 
     }
