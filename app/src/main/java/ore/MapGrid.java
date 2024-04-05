@@ -115,11 +115,47 @@ public class MapGrid {
         }
     }
 
-    public int getNbHorzCells() {
-        return numHorzCells;
+    /**
+     * gets the number of ores that have been moved to targets by checking for an ore and a target in each location
+     * @return the number of ores in a target location
+     */
+    public int getOresDone()
+    {
+        int oresDone = 0;
+        for (Location location: map.keySet()) {
+            if (contains(location, OreSim.ElementType.ORE) && contains(location, OreSim.ElementType.TARGET))
+            {
+                oresDone++;
+            }
+        }
+        return oresDone;
     }
 
-    public int getNbVertCells() {
-        return numVertCells;
+    public boolean completed()
+    {
+        // count number of ores
+        int numOres = 0;
+        for (Location location: map.keySet()) {
+            for (MapObject mapObject: map.get(location))
+            {
+                if (mapObject.getType() == OreSim.ElementType.ORE)
+                {
+                    numOres++;
+                }
+            }
+        }
+        return numOres == getOresDone();
+    }
+
+    public boolean contains(Location location, OreSim.ElementType type)
+    {
+        for (MapObject mapObject: map.get(location))
+        {
+            if (mapObject.getType() == type)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }

@@ -48,14 +48,9 @@ public class OreSim extends GameGrid
   // ------------- End of inner classes ------
   //
   private MapGrid grid;
-  private int nbHorzCells;
-  private int nbVertCells;
-  private final Color borderColor = new Color(100, 100, 100);
-  private Ore[] ores;
-  private Target[] targets;
-  private Pusher pusher;
-  private Bulldozer bulldozer;
-  private Excavator excavator;
+  private int numHorzCells;
+  private int numVertCells;
+  private static final Color BORDER_COLOUR = new Color(100, 100, 100);
   private boolean isFinished = false;
   private Properties properties;
   private boolean isAutoMode;
@@ -63,12 +58,13 @@ public class OreSim extends GameGrid
   private List<String> controls;
   private int movementIndex;
   private StringBuilder logResult = new StringBuilder();
+  private final List<ElementType> ACTORS = Arrays.asList(ElementType.PUSHER, ElementType.BULLDOZER, ElementType.EXCAVATOR, ElementType.ORE, ElementType.ROCK, ElementType.CLAY, ElementType.TARGET);
   public OreSim(Properties properties, MapGrid grid)
   {
     super(grid.getNumHorzCells(), grid.getNumVertCells(), 30, false);
     this.grid = grid;
-    nbHorzCells = grid.getNbHorzCells();
-    nbVertCells = grid.getNbVertCells();
+    numHorzCells = grid.getNumHorzCells();
+    numVertCells = grid.getNumVertCells();
     this.properties = properties;
 
     isAutoMode = properties.getProperty("movement.mode").equals("auto");
@@ -176,19 +172,24 @@ public class OreSim extends GameGrid
    */
   private void drawActors()
   {
-    for (int y = 0; y < nbVertCells; y++)
+    // iterate over every location
+    Location location;
+    for (int y = 0; y < numVertCells; y++)
     {
-      for (int x = 0; x < nbHorzCells; x++)
+      for (int x = 0; x < numHorzCells; x++)
       {
-        Location location = new Location(x, y);
-        MapObject mapObject = grid.get(location);
-        if (mapObject instanceof Actor)
-        {
-          addActor(mapObject, location);
+        location = new Location(x, y);
+        // iterate over each mapObject at location
+        for(MapObject mapObject: grid.get(location)) {
+          // draw actor if an actor
+          if(ACTORS.contains(mapObject.getType()))
+          {
+            addActor(mapObject, location);
+          }
         }
       }
     }
-    System.out.println("ores = " + Arrays.asList(ores));
+    System.out.println("ores = " + grid.getOresDone());
     setPaintOrder(Target.class);
   }
 
@@ -201,18 +202,21 @@ public class OreSim extends GameGrid
   {
     bg.clear(new Color(230, 230, 230));
     bg.setPaintColor(Color.darkGray);
-    for (int y = 0; y < nbVertCells; y++)
+    Location location;
+    for (int y = 0; y < numVertCells; y++)
     {
-      for (int x = 0; x < nbHorzCells; x++)
+      for (int x = 0; x < numHorzCells; x++)
       {
-        Location location = new Location(x, y);
-        MapObject mapObject = grid.get(location);
-        if (mapObject != ElementType.OUTSIDE)
-        {
-          bg.fillCell(location, Color.lightGray);
+        location = new Location(x, y);
+        for (MapObject mapObject: grid.get(location)) {
+          if (mapObject.getType() == ElementType.EMPTY) {
+            bg.fillCell(location, Color.lightGray);
+            break;
+          }
+          else if (mapObject.getType() == ElementType.BORDER)  // Border
+            bg.fillCell(location, BORDER_COLOUR);
+            break;
         }
-        if (mapObject == ElementType.BORDER)  // Border
-          bg.fillCell(location, borderColor);
       }
     }
   }
