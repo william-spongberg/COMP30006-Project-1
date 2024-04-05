@@ -2,6 +2,7 @@ package ore;
 
 import ch.aplu.jgamegrid.Location;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -40,9 +41,21 @@ public class MapGrid {
             "x....RRR*.xx", // 6
             "x..........x", // 7
             "xxxxxxxxxxxx"};// 8
+
+    public int getNumHorzCells() {
+        return numHorzCells;
+    }
+
+    public int getNumVertCells() {
+        return numVertCells;
+    }
+    public ArrayList<MapObject> get(Location location) {
+        return map.get(location);
+    }
+
     private final int numHorzCells;
     private final int numVertCells;
-    private final HashMap<Location, MapObject> map = new HashMap<>();
+    private final HashMap<Location, ArrayList<MapObject>> map = new HashMap<>();
 
     /**
      * Mapping from the string to a HashMap to prepare drawing
@@ -51,51 +64,51 @@ public class MapGrid {
      */
     public MapGrid(int model) {
         String[] map_str;
-        if (model == Model.MAP0.ordinal()) {
-
+        if (model == 0) {
+            // model == 0
             numHorzCells = map_0[0].length();
             numVertCells = map_0.length;
             map_str = map_0;
         } else {
-
+            // model == 1
             numHorzCells = map_1[0].length();
             numVertCells = map_1.length;
             map_str = map_1;
         }
 
         // Copy structure into HashMap
+        Location location;
         for (int y = 0; y < numVertCells; y++) {
             for (int x = 0; x < numHorzCells; x++) {
+                location = new Location(x, y);
+                map.put(location, new ArrayList<MapObject>());
                 switch (map_str[y].charAt(x)) {
-                    case ' ': // outside
-                        // TODO: necessary?
-                        break;
                     case '.': // Empty
-                        // TODO: handle empties
+                        map.get(location).add(new Floor());
                         break;
                     case 'x': // Border
-                        // TODO: handle border
+                        map.get(location).add(new Border());
                         break;
-                    case '*': // Stone (did they mean ore???)
-                        map.put(new Location(x, y), new Ore());
+                    case '*': // Ore
+                        map.get(location).add(new Ore());
                         break;
                     case 'o': // Target
-                        map.put(new Location(x, y), new Target());
+                        map.get(location).add(new Target());
                         break;
                     case 'P': // Pusher
-                        map.put(new Location(x, y), new Pusher());
+                        map.get(location).add(new Pusher());
                         break;
                     case 'B': // Bulldozer
-                        map.put(new Location(x, y), new Bulldozer());
+                        map.get(location).add(new Bulldozer());
                         break;
                     case 'E': // Excavator
-                        map.put(new Location(x, y), new Excavator());
+                        map.get(location).add(new Excavator());
                         break;
                     case 'R': // Rock
-                        map.put(new Location(x, y), new Rock());
+                        map.get(location).add(new Rock());
                         break;
                     case 'D': // Clay
-                        map.put(new Location(x, y), new Clay());
+                        map.get(location).add(new Clay());
                         break;
                 }
             }
@@ -109,6 +122,4 @@ public class MapGrid {
     public int getNbVertCells() {
         return numVertCells;
     }
-
-    public enum Model {MAP0, MAP1}
 }
