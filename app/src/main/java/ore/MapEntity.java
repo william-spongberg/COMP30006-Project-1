@@ -7,7 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class MapEntity extends Actor {
-    public MapEntity(boolean isRotatable, String filename) {
-        super(isRotatable, filename);
+
+    Location location;
+    public MapEntity(boolean isRotatable, String spriteImage, Location location) {
+        super(isRotatable, spriteImage);
+        this.location = location;
     }
 }

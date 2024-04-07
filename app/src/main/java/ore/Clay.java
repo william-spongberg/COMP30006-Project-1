@@ -11,4 +11,8 @@ public class Clay extends MapObject implements Updateable
         this.location = location;
     }
 
+    public void update() {
+        // talk to map method and remove myself. Bulldozer calls this method
+        Map.remove(this);
+    }
 }

@@ -1,7 +1,12 @@
 package ore;
 
+import ch.aplu.jgamegrid.Location;
+
 public class Border extends MapEntity{
-    public Border(boolean isRotatable, String filename) {
-        super(isRotatable, filename);
+
+    Location location;
+    public Border(Location location) {
+        super(false, "sprites/border.png", location);
+        this.location = location;
     }
 }

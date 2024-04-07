@@ -39,4 +39,8 @@ public abstract class MapObject extends MapEntity implements Updateable {
         }
 
     }
+
+    public void update() {
+        Map.updateLocation(location);
+    }
 }

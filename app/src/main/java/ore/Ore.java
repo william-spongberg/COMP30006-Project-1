@@ -22,12 +22,25 @@ public class Ore extends MapObject
 
     }
 
+
     // only call if moved by a pusher
     private boolean canMove() {
+        return true;
+        // here we test if an Ore can be moved in the first place
 
     }
 
-    private void update () {
-        // called when ?
+
+
+    public boolean moveOre(Location location) {
+        // called when it is attempted to be moved by a pusher
+
+        if (canMove()) {
+            setLocation(location);
+        }
+        else {
+            return false;
+
+        }
     }
 }

@@ -1,8 +1,12 @@
 package ore;
 
+import ch.aplu.jgamegrid.Location;
+
 public class Floor extends MapEntity{
 
-    public Floor(boolean isRotatable, String filename) {
-        super(isRotatable, filename);
+    Location location;
+    public Floor(Location location) {
+        super(false, "sprites/Floor.png", location);
+        this.location = location;
     }
 }

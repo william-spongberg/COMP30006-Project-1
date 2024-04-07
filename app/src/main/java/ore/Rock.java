@@ -10,4 +10,10 @@ public class Rock extends MapObject implements Updateable {
         this.location = location;
     }
 
+    @Override
+    public void update() {
+        // talk to map method and remove myself. Excavator calls this
+        Map.remove(this);
+    }
+
 }

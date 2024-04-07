@@ -31,6 +31,7 @@ public class Pusher extends Vehicle {
      * @return
      */
     private boolean moveOre(Ore ore) {
+
         Location next = ore.getNextMoveLocation();
 
         // Test if try to move into border
