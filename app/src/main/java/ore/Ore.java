@@ -28,6 +28,6 @@ public class Ore extends MapObject
     }
 
     private void update () {
-        // called when ? 
+        // called when ?
     }
 }

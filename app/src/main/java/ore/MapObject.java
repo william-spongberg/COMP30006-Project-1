@@ -6,7 +6,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class MapObject extends Actor implements Updateable {
+public abstract class MapObject extends MapEntity implements Updateable {
 
     private Location location;
 
