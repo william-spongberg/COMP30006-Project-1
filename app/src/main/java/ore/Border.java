@@ -2,7 +2,7 @@ package ore;
 
 import ch.aplu.jgamegrid.Location;
 
-public class Border extends MapEntity{
+public class Border extends MapObject{
 
     Location location;
     public Border(Location location) {

@@ -3,7 +3,9 @@ package ore;
 import ch.aplu.jgamegrid.Actor;
 import ch.aplu.jgamegrid.Location;
 
-public class Ore extends MapObject
+import java.util.ArrayList;
+
+public class Ore extends MapEntity implements Updateable
 {
     private Location location;
     public Ore(Location location) {
@@ -11,7 +13,22 @@ public class Ore extends MapObject
         this.location = location;
     }
 
-    // call this every time we move
+    @Override
+    public MapGrid update(MapGrid map) {
+        ArrayList<MapEntity> objectAtLoc = map.get(this.getLocation());
+        if (objectAtLoc != null && !objectAtLoc.isEmpty()) {
+            MapEntity obj = objectAtLoc.get(this.getLocation());
+            if (obj instanceof Target) {
+                Location newSpawn = this.getLocation();
+                removeSelf();
+                // ?
+                map.addToHashMap(new OreCart(newSpawn));
+            }
+        }
+        // else, we need to update location
+    }
+
+    /* might not need this actually
     private OreCart checkIfExists() {
         if (getMapObject(location) == instanceof(Target)){
             // delete self from map hashmap
@@ -21,26 +38,6 @@ public class Ore extends MapObject
         }
 
     }
+    */
 
-
-    // only call if moved by a pusher
-    private boolean canMove() {
-        return true;
-        // here we test if an Ore can be moved in the first place
-
-    }
-
-
-
-    public boolean moveOre(Location location) {
-        // called when it is attempted to be moved by a pusher
-
-        if (canMove()) {
-            setLocation(location);
-        }
-        else {
-            return false;
-
-        }
-    }
 }

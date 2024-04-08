@@ -90,10 +90,10 @@ public class MapGrid {
                         map.get(location).add(new Border());
                         break;
                     case '*': // Ore
-                        map.get(location).add(new Ore());
+                        map.get(location).add(new Ore(location));
                         break;
                     case 'o': // Target
-                        map.get(location).add(new Target());
+                        map.get(location).add(new Target(location));
                         break;
                     case 'P': // Pusher
                         map.get(location).add(new Pusher());
@@ -105,10 +105,10 @@ public class MapGrid {
                         map.get(location).add(new Excavator());
                         break;
                     case 'R': // Rock
-                        map.get(location).add(new Rock());
+                        map.get(location).add(new Rock(location));
                         break;
                     case 'D': // Clay
-                        map.get(location).add(new Clay());
+                        map.get(location).add(new Clay(location));
                         break;
                 }
             }

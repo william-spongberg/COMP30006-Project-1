@@ -1,10 +1,5 @@
 package ore;
 
-import java.util.List;
-import java.util.Map;
-
-import ch.aplu.jgamegrid.*;
-
 public class Excavator extends Vehicle {
     public Excavator() {
         super(true, "sprites/excavator.png"); // can destroy rocks
@@ -13,7 +8,7 @@ public class Excavator extends Vehicle {
     public boolean updateObject(MapObject object) {
         if (object instanceof Rock) {
             Rock rock = (Rock) object;
-            rock.update();
+            rock.update(map);
             return true;
         }
         return false;

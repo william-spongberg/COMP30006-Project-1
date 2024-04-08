@@ -5,7 +5,7 @@ import java.util.Map;
 
 import ch.aplu.jgamegrid.*;
 
-public abstract class Vehicle extends MapObject {
+public abstract class Vehicle extends MapEntity implements Updateable{
     public Vehicle(boolean rotatable, String image) {
         super(rotatable, image);
     }
@@ -22,14 +22,14 @@ public abstract class Vehicle extends MapObject {
     public boolean canMove(Location location) {
         // Test if try to move into border, rock or clay
         Color c = getBg().getColor(location);
-        Rock rock = (Rock) getOneActorAt(location, Rock.class);
-        Clay clay = (Clay) getOneActorAt(location, Clay.class);
-        Bulldozer bulldozer = (Bulldozer) getOneActorAt(location, Bulldozer.class);
-        Excavator excavator = (Excavator) getOneActorAt(location, Excavator.class);
+        Rock rock = (Rock) gameGrid.getOneActorAt(location, Rock.class);
+        Clay clay = (Clay) gameGrid.getOneActorAt(location, Clay.class);
+        Bulldozer bulldozer = (Bulldozer) gameGrid.getOneActorAt(location, Bulldozer.class);
+        Excavator excavator = (Excavator) gameGrid.getOneActorAt(location, Excavator.class);
         if (c.equals(borderColor) || rock != null || clay != null || bulldozer != null || excavator != null)
             return false;
         else {
-            MapObject object = (MapObject) getOneActorAt(location);
+            MapObject object = (MapObject) gameGrid.getOneActorAt(location);
             if (object != null) {
                 return updateObject(object);
             }

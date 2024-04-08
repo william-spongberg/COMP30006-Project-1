@@ -1,9 +1,8 @@
 package ore;
 
-import ch.aplu.jgamegrid.Actor;
 import ch.aplu.jgamegrid.Location;
 
-public class Rock extends MapObject implements Updateable {
+public class Rock extends MapEntity implements Updateable {
     private Location location;
     public Rock(Location location) {
         super(false, "sprites/rock.png", location);
@@ -11,9 +10,10 @@ public class Rock extends MapObject implements Updateable {
     }
 
     @Override
-    public void update() {
+    public MapGrid update(MapGrid map) {
         // talk to map method and remove myself. Excavator calls this
         Map.remove(this);
+        return map;
     }
 
 }

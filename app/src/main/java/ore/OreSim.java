@@ -65,6 +65,8 @@ public class OreSim extends GameGrid {
                 entities = getActors(MapEntity);
                 for (MapEntity entity: entities)
                 {
+                    // changed the method signature to return a mapGrid, as i presume it does here?
+                    // since we're passing a mapGrid to update.
                     map = entity.update(map);
                 }
                 refresh();
