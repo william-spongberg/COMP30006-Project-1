@@ -21,6 +21,7 @@ public abstract class VehicleController {
         return vehicle;
     }
 
+
     public boolean getIsFinished() {
         return isFinished;
     }

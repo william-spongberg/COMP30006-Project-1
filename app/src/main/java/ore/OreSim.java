@@ -88,6 +88,7 @@ public class OreSim extends GameGrid {
             setTitle("Mission Failed. You ran out of time");
         }
 
+
         updateStatistics();
         return logResult.toString();
     }
@@ -144,8 +145,10 @@ public class OreSim extends GameGrid {
             } catch (IOException e) {
                 System.out.println("Cannot close file - e: " + e.getLocalizedMessage());
             }
+
         }
     }
+
 
     /**
      * Draw all different actors on the board: pusher, ore, target, rock, clay, bulldozer, excavator
@@ -247,5 +250,4 @@ public class OreSim extends GameGrid {
             return shortType;
         }
     }
-
 }

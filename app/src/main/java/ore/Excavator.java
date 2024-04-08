@@ -11,10 +11,10 @@ public class Excavator extends Vehicle {
     }
 
     public boolean updateObject(MapObject object) {
-        if (object instanceof Destroyable) {
-            Destroyable destroyable = (Destroyable) object;
-            // Try to destroy the object
-            return destroyOre(destroyable);
+        if (object instanceof Rock) {
+            Rock rock = (Rock) object;
+            rock.update();
+            return true;
         }
         return false;
     }
