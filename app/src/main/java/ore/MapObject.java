@@ -6,16 +6,19 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public abstract class MapObject extends MapEntity implements Updateable {
 
     private Location location;
+    private final OreSim.ElementType type;
 
     private static List<MapObject> allMapObjects = new ArrayList<>();
 
     // location will be set and handled by the map. these objects are fine as is.
-    public MapObject(boolean isRotatable, String spriteImage, Location location) {
+    public MapObject(boolean isRotatable, String spriteImage, Location location, ) {
         super(isRotatable, spriteImage);
         this.location = location;
+        this.type = type;
         allMapObjects.add(this);
     }
 
@@ -27,6 +30,9 @@ public abstract class MapObject extends MapEntity implements Updateable {
     public void setLocation(Location location) {
         this.location = location;
 
+    }
+    public OreSim.ElementType getType() {
+        return type;
     }
 
     public void interact(MapObject otherObject) {
@@ -42,5 +48,6 @@ public abstract class MapObject extends MapEntity implements Updateable {
 
     public void update() {
         Map.updateLocation(location);
+
     }
 }
