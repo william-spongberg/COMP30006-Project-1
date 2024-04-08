@@ -9,6 +9,7 @@ import java.awt.*;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
@@ -24,7 +25,7 @@ public class OreSim extends GameGrid {
     private final List<ElementType> ACTORS = Arrays.asList(ElementType.PUSHER, ElementType.BULLDOZER, ElementType.EXCAVATOR, ElementType.ORE, ElementType.ROCK, ElementType.CLAY, ElementType.TARGET);
     // ------------- End of inner classes ------
     //
-    private final MapGrid map;
+    private MapGrid map;
     private final int numHorzCells;
     private final int numVertCells;
     private final Properties properties;
@@ -57,8 +58,16 @@ public class OreSim extends GameGrid {
         if (isDisplayingUI) {
             show();
         }
+        ArrayList<MapEntity> entities;
         while (!map.completed() && gameDuration >= 0) {
             try {
+                // update actors
+                entities = getActors(MapEntity);
+                for (MapEntity entity: entities)
+                {
+                    map = entity.update(map);
+                }
+                refresh();
                 // handle duration
                 Thread.sleep(simulationPeriod);
                 double minusDuration = (simulationPeriod / ONE_SECOND);
