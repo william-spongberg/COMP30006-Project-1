@@ -34,9 +34,10 @@ public class Pusher extends Vehicle {
 
         Location next = ore.getNextMoveLocation();
 
+        MapGrid map;
         // Test if try to move into border
         Color c = getBg().getColor(next);
-        Rock rock = (Rock) getOneActorAt(next, Rock.class);
+        Rock rock = (Rock) map.getOneActorAt(next, Rock.class);
         Clay clay = (Clay) getOneActorAt(next, Clay.class);
         if (c.equals(borderColor) || rock != null || clay != null)
             return false;

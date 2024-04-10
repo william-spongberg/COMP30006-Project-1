@@ -1,17 +1,10 @@
 package ore;
 
 import ch.aplu.jgamegrid.Location;
+import ch.aplu.jgamegrid.Actor;
+public class OreCart extends Actor {
 
-public class OreCart extends MapEntity implements Updateable{
-    // check if this is pushable
-
-    // check if this is on the target
-    private Location location;
-    public OreCart(Location location) {
-        super(false, "sprites/ore_1.png", location);
-        this.location = location;
+    public OreCart(boolean isRotatable, String filename) {
+        super(false, "sprites/ore_1.png");
     }
-
-    // call this every time we move
-
 }

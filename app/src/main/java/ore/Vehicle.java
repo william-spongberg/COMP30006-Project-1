@@ -22,7 +22,7 @@ public abstract class Vehicle extends MapEntity implements Updateable{
     public boolean canMove(Location location) {
         // Test if try to move into border, rock or clay
         Color c = getBg().getColor(location);
-        Rock rock = (Rock) gameGrid.getOneActorAt(location, Rock.class);
+        Rock rock = (Rock) OreSim.getOneActorAt(location, Rock.class);
         Clay clay = (Clay) gameGrid.getOneActorAt(location, Clay.class);
         Bulldozer bulldozer = (Bulldozer) gameGrid.getOneActorAt(location, Bulldozer.class);
         Excavator excavator = (Excavator) gameGrid.getOneActorAt(location, Excavator.class);
