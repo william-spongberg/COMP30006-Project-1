@@ -5,7 +5,7 @@ import ch.aplu.jgamegrid.Actor;
 
 public class Clay extends Actor
 {
-    public Clay(boolean isRotatable, String filename) {
+    public Clay() {
         super(false, "sprites/clay.png");
     }
 

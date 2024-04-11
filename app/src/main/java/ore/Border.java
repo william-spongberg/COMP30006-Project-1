@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class Border extends Actor
 {
-    public Border(boolean isRotatable, String filename) {
+    public Border() {
         super(false, "sprites/border.png");
     }
 }

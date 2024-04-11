@@ -53,6 +53,10 @@ public class OreSim extends GameGrid {
      */
     public String runApp(boolean isDisplayingUI) {
         GGBackground bg = getBg();
+        // this wont work anymore
+        // need to iterate over arrayList of actors
+        // changed the arrayList to work with actors.
+        // tuple with elementType in arrayList?
         drawBoard(bg);
         drawActors();
         if (isDisplayingUI) {
@@ -162,10 +166,11 @@ public class OreSim extends GameGrid {
             for (int x = 0; x < numHorzCells; x++) {
                 location = new Location(x, y);
                 // iterate over each mapObject at location
-                for (MapObject mapObject : map.get(location)) {
+                for (Actor actor : map.get(location)) {
                     // draw actor if an actor
-                    if (ACTORS.contains(mapObject.getType())) {
-                        addActor(mapObject, location);
+                    // do we need getType anymore
+                    if (ACTORS.contains(actor.getType())) {
+                        addActor(actor, location);
                     }
                 }
             }

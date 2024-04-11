@@ -1,7 +1,7 @@
 package ore;
 
 import ch.aplu.jgamegrid.Location;
-
+import ch.aplu.jgamegrid.Actor;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -49,13 +49,13 @@ public class MapGrid {
     public int getNumVertCells() {
         return numVertCells;
     }
-    public ArrayList<MapObject> get(Location location) {
+    public ArrayList<Actor> get(Location location) {
         return map.get(location);
     }
 
     private final int numHorzCells;
     private final int numVertCells;
-    private final HashMap<Location, ArrayList<MapObject>> map = new HashMap<>();
+    private final HashMap<Location, ArrayList<Actor>> map = new HashMap<>();
 
     /**
      * Mapping from the string to a HashMap to prepare drawing
@@ -81,7 +81,7 @@ public class MapGrid {
         for (int y = 0; y < numVertCells; y++) {
             for (int x = 0; x < numHorzCells; x++) {
                 location = new Location(x, y);
-                map.put(location, new ArrayList<MapObject>());
+                map.put(location, new ArrayList<Actor>());
                 switch (map_str[y].charAt(x)) {
                     case '.': // Empty
                         map.get(location).add(new Floor());
@@ -90,10 +90,10 @@ public class MapGrid {
                         map.get(location).add(new Border());
                         break;
                     case '*': // Ore
-                        map.get(location).add(new Ore(location));
+                        map.get(location).add(new Ore());
                         break;
                     case 'o': // Target
-                        map.get(location).add(new Target(location));
+                        map.get(location).add(new Target());
                         break;
                     case 'P': // Pusher
                         map.get(location).add(new Pusher());
@@ -105,10 +105,10 @@ public class MapGrid {
                         map.get(location).add(new Excavator());
                         break;
                     case 'R': // Rock
-                        map.get(location).add(new Rock(location));
+                        map.get(location).add(new Rock());
                         break;
                     case 'D': // Clay
-                        map.get(location).add(new Clay(location));
+                        map.get(location).add(new Clay());
                         break;
                 }
             }

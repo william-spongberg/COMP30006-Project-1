@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class Floor extends Actor
 {
-    public Floor(boolean isRotatable, String filename) {
+    public Floor() {
         super(false, "sprites/floor.png");
     }
 }
