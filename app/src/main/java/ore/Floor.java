@@ -1,12 +1,13 @@
 package ore;
 
+import ch.aplu.jgamegrid.Actor;
 import ch.aplu.jgamegrid.Location;
 
-public class Floor extends MapEntity{
+import java.util.ArrayList;
 
-    Location location;
-    public Floor(Location location) {
-        super(false, "sprites/Floor.png", location);
-        this.location = location;
+public class Floor extends Actor
+{
+    public Floor(boolean isRotatable, String filename) {
+        super(false, "sprites/floor.png");
     }
 }

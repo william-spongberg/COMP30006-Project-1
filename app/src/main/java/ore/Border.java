@@ -1,12 +1,13 @@
 package ore;
 
+import ch.aplu.jgamegrid.Actor;
 import ch.aplu.jgamegrid.Location;
 
-public class Border extends MapObject{
+import java.util.ArrayList;
 
-    Location location;
-    public Border(Location location) {
-        super(false, "sprites/border.png", location);
-        this.location = location;
+public class Border extends Actor
+{
+    public Border(boolean isRotatable, String filename) {
+        super(false, "sprites/border.png");
     }
 }
