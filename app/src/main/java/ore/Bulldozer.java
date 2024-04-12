@@ -1,14 +1,20 @@
 package ore;
 
+import ch.aplu.jgamegrid.*;
+
+import java.util.List;
+
 public class Bulldozer extends Vehicle {
-    public Bulldozer(String image, Location location) {
-        super("sprites/bulldozer.png", location); // same as excavator except can destroy clay
+    // destroys clay
+    public Bulldozer(String image, Location location, boolean isAuto, List<String> controls, int autoMovementIndex) {
+        super("sprites/bulldozer.png", location, isAuto, controls, autoMovementIndex);
     }
 
     public boolean canMove(Location location) {
-        if (getActorsAt(location) instanceof Clay) {
-            return collideWithActor(getActorsAt(location));
-        } else if (getActorsAt(location) == null) {
+        // assuming only one clay can exist in a location at a time
+        if (gameGrid.getOneActorAt(location, Clay.class) != null) {
+            return collideWithActor(gameGrid.getOneActorAt(location, Clay.class));
+        } else if (gameGrid.getOneActorAt(location) == null) {
             return true;
         }
         return false;
@@ -16,7 +22,7 @@ public class Bulldozer extends Vehicle {
 
     public boolean collideWithActor(Actor actor) {
         if (actor instanceof Clay) {
-            ((Clay) getActorsAt(actor)).removeSelf();
+            ((Clay) gameGrid.getOneActorAt(actor.getLocation(), Clay.class)).removeSelf();
             return true;
         }
         return false;

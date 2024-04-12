@@ -1,21 +1,22 @@
 package ore;
 
 import java.util.List;
-import java.util.Map;
 
-import javax.swing.border.Border;
+//import javax.swing.border.Border;
 
 import ch.aplu.jgamegrid.*;
 
 public class Pusher extends Vehicle {
-    public Pusher(String image, Location location) {
-        super("sprites/pusher.png", location);
+    // pushes ore
+    public Pusher(String image, Location location, boolean isAuto, List<String> controls, int autoMovementIndex) {
+        super("sprites/pusher.png", location, isAuto, controls, autoMovementIndex);
     }
 
     public boolean canMove(Location location) {
-        if (getActorsAt(location) instanceof Ore) {
-            return collideWithActor(getActorsAt(location));
-        } else if (getActorsAt(location) == null) {
+        // assuming only one ore can exist in a location at a time
+        if (gameGrid.getOneActorAt(location, Ore.class) != null) {
+            return collideWithActor(gameGrid.getOneActorAt(location, Ore.class));
+        } else if (gameGrid.getOneActorAt(location) == null) {
             return true;
         }
         return false;
@@ -40,20 +41,25 @@ public class Pusher extends Vehicle {
      * @return
      */
     private boolean moveOre(Ore ore) {
-
-        Location next = ore.getNextMoveLocation();
+        Location currentLocation = ore.getLocation();
+        Location nextLocation = ore.getNextMoveLocation();
 
         // Test if try to move into another actor and actor is not the target
-        if (!(getActorsAt(next) instanceof Target) && getActorsAt(next) != null) {
-            return false;
+        List<Actor> actorsNext = gameGrid.getActorsAt(nextLocation);
+        if (actorsNext != null) {
+            for (Actor actor : actorsNext) {
+                if (!(actor instanceof Target)) {
+                    return false;
+                }
+            }
         }
 
-        // Reset the target if the ore is moved out of target
-        Location currentLocation = ore.getLocation();
+        // TODO: Check if ore is pushed into border (colour?)
 
-        List<Actor> actors = getActorsAt(currentLocation);
-        if (actors != null) {
-            for (Actor actor : actors) {
+        // Reset the target if the ore is moved out of target
+        List<Actor> actorsCurrent = gameGrid.getActorsAt(currentLocation);
+        if (actorsCurrent != null) {
+            for (Actor actor : actorsCurrent) {
                 if (actor instanceof Target) {
                     Target currentTarget = (Target) actor;
                     currentTarget.show();
@@ -63,10 +69,10 @@ public class Pusher extends Vehicle {
         }
 
         // Move the ore
-        ore.setLocation(next);
+        ore.setLocation(nextLocation);
 
-        // Check if we are at a target
-        Target nextTarget = (Target) getOneActorAt(next, Target.class);
+        // Check if we are now at a target
+        Target nextTarget = (Target) gameGrid.getOneActorAt(nextLocation, Target.class);
         if (nextTarget != null) {
             ore.show(1);
             nextTarget.hide();
