@@ -19,15 +19,13 @@ public abstract class Vehicle extends Actor {
      * Constructs a new Vehicle object.
      * 
      * @param image             The image of the vehicle.
-     * @param location          The initial location of the vehicle.
      * @param isAuto            A flag indicating whether the vehicle is controlled
      *                          automatically or by the keyboard.
      * @param controls          The list of controls for the vehicle.
      * @param autoMovementIndex The index of the automatic movement for the vehicle.
      */
-    public Vehicle(String image, Location location, boolean isAuto, List<String> controls, int autoMovementIndex) {
+    public Vehicle(String image, boolean isAuto, List<String> controls, int autoMovementIndex) {
         super(true, image);
-        this.setLocation(location);
         incrementID();
 
         if (isAuto) {

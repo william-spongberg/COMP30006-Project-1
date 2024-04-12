@@ -14,15 +14,13 @@ public class Bulldozer extends Vehicle {
     /**
      * Constructs a Bulldozer object.
      *
-     * @param image             The image of the vehicle.
-     * @param location          The initial location of the vehicle.
      * @param isAuto            A flag indicating whether the vehicle is controlled
      *                          automatically or by the keyboard.
      * @param controls          The list of controls for the vehicle.
      * @param autoMovementIndex The index of the automatic movement for the vehicle.
      */
-    public Bulldozer(String image, Location location, boolean isAuto, List<String> controls, int autoMovementIndex) {
-        super("sprites/bulldozer.png", location, isAuto, controls, autoMovementIndex);
+    public Bulldozer(boolean isAuto, List<String> controls, int autoMovementIndex) {
+        super("sprites/bulldozer.png", isAuto, controls, autoMovementIndex);
     }
 
     /**
