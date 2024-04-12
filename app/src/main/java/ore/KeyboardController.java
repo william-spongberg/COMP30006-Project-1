@@ -8,6 +8,7 @@ import java.awt.event.KeyEvent;
  * user input from the keyboard to control a vehicle in the game.
  */
 public class KeyboardController extends VehicleController {
+    private Location nextLocation = null;
 
     /**
      * Constructs a new KeyboardController object with the specified vehicle.
@@ -18,6 +19,17 @@ public class KeyboardController extends VehicleController {
         this.setVehicle(vehicle);
     }
 
+    /*
+     * Returns the next location to move to based on the last key pressed.
+     * Sets the next location to null to avoid moving to the same location.
+     */
+    public Location manualMoveNext() {
+        Location next = this.getNextLocation();
+        // set to null to avoid moving to the same location
+        this.setNextLocation(null);
+        return next;
+    }
+
     /**
      * This method is automatically called by the framework when a key is pressed.
      * Based on the pressed key, the pusher will change the direction and move.
@@ -25,9 +37,9 @@ public class KeyboardController extends VehicleController {
      * @param evt the KeyEvent object representing the key press event
      * @return the next location to move to, or null if no valid location
      */
-    public Location keyPressed(KeyEvent evt) {
+    public boolean keyPressed(KeyEvent evt) {
         if (this.getIsFinished())
-            return null;
+            return false;
 
         Location next = null;
         switch (evt.getKeyCode()) {
@@ -51,10 +63,11 @@ public class KeyboardController extends VehicleController {
 
         if (next != null) {
             // TODO: updateLogResult();
-            return next;
+            this.setNextLocation(next);
+            return true;
         }
 
-        return null;
+        return false;
     }
 
     /**
@@ -70,9 +83,31 @@ public class KeyboardController extends VehicleController {
      * Handles the key released event.
      *
      * @param evt the KeyEvent object representing the key release event
-     * @return null as key releases are not supported in this controller
+     * @return false as key releases are not supported in this controller
      */
-    public Location keyReleased(KeyEvent evt) {
-        return null;
+    public boolean keyReleased(KeyEvent evt) {
+        return false;
+    }
+
+    /* getters */
+
+    /**
+     * Retrieves the next location.
+     *
+     * @return The next location.
+     */
+    public Location getNextLocation() {
+        return this.nextLocation;
+    }
+
+    /* setters */
+
+    /**
+     * Sets the next location.
+     *
+     * @param nextLocation the next location to set
+     */
+    public void setNextLocation(Location nextLocation) {
+        this.nextLocation = nextLocation;
     }
 }

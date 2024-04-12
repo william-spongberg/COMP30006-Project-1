@@ -12,6 +12,7 @@ import java.util.List;
  */
 public abstract class Vehicle extends Actor {
     private VehicleController controller = null;
+    private boolean isAuto = false;
     private static int id = 0;
     private int numMoves = 0;
 
@@ -36,6 +37,19 @@ public abstract class Vehicle extends Actor {
     }
 
     /**
+     * Moves the vehicle to the next location based on the current mode.
+     * If the vehicle is in auto mode, it moves to the next location returned by the controller's autoMoveNext method.
+     * If the vehicle is in manual mode, it moves to the next location returned by the controller's manualMoveNext method.
+     */
+    public void moveVehicle() {
+        if (isAuto) {
+            moveToLocation(controller.autoMoveNext());
+        } else {
+            moveToLocation(controller.manualMoveNext());
+        }
+    }
+
+    /**
      * Moves the vehicle to the specified location if it is not null and can be
      * moved to.
      * If the vehicle is currently on a target, the target is shown.
@@ -44,7 +58,7 @@ public abstract class Vehicle extends Actor {
      *
      * @param location the location to move the vehicle to
      */
-    public void move(Location location) {
+    public void moveToLocation(Location location) {
         if (location != null && canMove(location)) {
             Target curTarget = (Target) gameGrid.getOneActorAt(this.getLocation(), Target.class);
             if (curTarget != null) {
@@ -91,6 +105,15 @@ public abstract class Vehicle extends Actor {
     }
 
     /**
+     * Returns the value indicating whether the vehicle is automatic or not.
+     *
+     * @return true if the vehicle is automatic, false otherwise
+     */
+    public boolean getIsAuto() {
+        return this.isAuto;
+    }
+
+    /**
      * Returns the ID of the vehicle.
      *
      * @return the ID of the vehicle
@@ -117,6 +140,15 @@ public abstract class Vehicle extends Actor {
      */
     public void setController(VehicleController controller) {
         this.controller = controller;
+    }
+
+    /**
+     * Sets the value indicating whether the vehicle is automatic or manual.
+     *
+     * @param isAuto true if the vehicle is automatic, false if it is manual
+     */
+    public void setIsAuto(boolean isAuto) {
+        this.isAuto = isAuto;
     }
 
     /**

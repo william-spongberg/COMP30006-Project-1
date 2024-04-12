@@ -74,22 +74,31 @@ public class AutomaticController extends VehicleController {
     }
 
     /**
+     * Handles the manual movement of the vehicle.
+     *
+     * @return null as manual controls are not supported in this controller
+     */
+    public Location manualMoveNext() {
+        return null;
+    }
+
+    /**
      * Handles the key pressed event.
      *
      * @param evt the KeyEvent object representing the key press event
-     * @return null as manual controls are not supported in this controller
+     * @return false as manual controls are not supported in this controller
      */
-    public Location keyPressed(KeyEvent evt) {
-        return null;
+    public boolean keyPressed(KeyEvent evt) {
+        return false;
     }
 
     /**
      * Handles the key released event.
      *
      * @param evt the KeyEvent object representing the key release event
-     * @return null as manual controls are not supported in this controller
+     * @return false as manual controls are not supported in this controller
      */
-    public Location keyReleased(KeyEvent evt) {
-        return null;
+    public boolean keyReleased(KeyEvent evt) {
+        return false;
     }
 }
