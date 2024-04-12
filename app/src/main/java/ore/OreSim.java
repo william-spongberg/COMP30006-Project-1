@@ -64,8 +64,7 @@ public class OreSim extends GameGrid {
                 vehicles = getActors(Vehicle.class);
                 for (Actor vehicle: vehicles)
                 {
-                    //TODO: fix bc this is just calling Actor.move()
-                    ((Vehicle)vehicle).move();
+                    ((Vehicle)vehicle).moveVehicle();
                 }
                 refresh();
                 // handle duration
@@ -132,16 +131,36 @@ public class OreSim extends GameGrid {
         FileWriter fileWriter = null;
         try {
             fileWriter = new FileWriter(statisticsFile);
-            fileWriter.write("Pusher-1 Moves: 10\n");
-            fileWriter.write("Excavator-1 Moves: 5\n");
-            fileWriter.write("Excavator-1 Rock removed: 3\n");
-            fileWriter.write("Bulldozer-1 Moves: 2\n");
-            fileWriter.write("Bulldozer-1 Clay removed: 1\n");
+            List<Actor> pushers = getActors(Pusher.class);
+            List<Actor> excavators = getActors(Excavator.class);
+            List<Actor> bulldozers = getActors(Bulldozer.class);
+
+            for (Actor pusher : pushers) {
+                String[] statistics = ((Pusher) pusher).getStatistics();
+                for (String statistic : statistics) {
+                    fileWriter.write(statistic + "\n");
+                }
+            }
+
+            for (Actor excavator : excavators) {
+                String[] statistics = ((Excavator) excavator).getStatistics();
+                for (String statistic : statistics) {
+                    fileWriter.write(statistic + "\n");
+                }
+            }
+
+            for (Actor bulldozer : bulldozers) {
+                String[] statistics = ((Bulldozer) bulldozer).getStatistics();
+                for (String statistic : statistics) {
+                    fileWriter.write(statistic + "\n");
+                }
+            }
         } catch (IOException e) {
             System.out.println("Cannot write to file - e: " + e.getLocalizedMessage());
         } finally {
             try {
-                fileWriter.close();
+                if (fileWriter != null)
+                    fileWriter.close();
             } catch (IOException e) {
                 System.out.println("Cannot close file - e: " + e.getLocalizedMessage());
             }
