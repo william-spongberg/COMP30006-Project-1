@@ -26,6 +26,7 @@ public abstract class Vehicle extends Actor {
                 curTarget.show();
             }
             this.setLocation(location);
+            this.controller.setVehicle(this);
         }
     }
 
