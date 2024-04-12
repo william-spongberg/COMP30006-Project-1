@@ -78,7 +78,7 @@ public class Pusher extends Vehicle {
         // TODO: Check if ore is pushed into border (colour?)
 
         // Move the ore to the next location
-        ore.moveTo(nextLocation);
+        ore.checkAndMove(nextLocation);
 
         return true;
     }
