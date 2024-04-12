@@ -58,10 +58,10 @@ public class OreSim extends GameGrid {
             show();
         }
         ArrayList<Vehicle> vehicles;
-        while (!grid.completed() && gameDuration >= 0) {
+        while (!completed() && gameDuration >= 0) {
             try {
                 // update actors
-                vehicles = getActors(Vehicle);
+                vehicles = getActors(Vehicle.class);
                 for (Vehicle vehicle: vehicles)
                 {
                     vehicle.move();
@@ -72,7 +72,7 @@ public class OreSim extends GameGrid {
                 double minusDuration = (simulationPeriod / ONE_SECOND);
                 gameDuration -= minusDuration;
                 // Set title
-                String title = String.format("# Ores at Target: %d. Time left: %.2f seconds", grid.getOresDone(), gameDuration);
+                String title = String.format("# Ores at Target: %d. Time left: %.2f seconds", getOresDone(), gameDuration);
                 setTitle(title);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
@@ -81,7 +81,7 @@ public class OreSim extends GameGrid {
 
         doPause();
 
-        if (grid.completed()) {
+        if (completed()) {
             setTitle("Mission Complete. Well done!");
         } else if (gameDuration < 0) {
             setTitle("Mission Failed. You ran out of time");
@@ -218,6 +218,31 @@ public class OreSim extends GameGrid {
                 }
             }
         }
+    }
+    private int getOresDone()
+    {
+        int counter = 0;
+        for (Actor ore: getActors(Ore.class))
+        {
+            if (getActorsAt(ore.getLocation(), Target.class).size() > 0)
+            {
+                counter++;
+            }
+        }
+        return counter;
+    }
+
+    private boolean completed()
+    {
+        // try to find an ore not at a target
+        for (Actor ore: getActors(Ore.class))
+        {
+            if (getActorsAt(ore.getLocation(), Target.class).size() == 0)
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
