@@ -10,7 +10,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
@@ -22,10 +21,10 @@ import java.util.Properties;
  */
 public class OreSim extends GameGrid {
     private static final Color BORDER_COLOUR = new Color(100, 100, 100);
-    private final List<ElementType> ACTORS = Arrays.asList(ElementType.PUSHER, ElementType.BULLDOZER, ElementType.EXCAVATOR, ElementType.ORE, ElementType.ROCK, ElementType.CLAY, ElementType.TARGET);
-    // ------------- End of inner classes ------
-    //
-    private MapGrid map;
+    private static final Color FLOOR_COLOUR = Color.lightGray;
+    //TODO: see drawBoard()
+    private static final Color OUTSIDE_COLOUR = Color.darkGray;
+    private final MapGrid grid;
     private final int numHorzCells;
     private final int numVertCells;
     private final Properties properties;
@@ -34,11 +33,11 @@ public class OreSim extends GameGrid {
     private int movementIndex;
     private static final double ONE_SECOND = 1000.0;
     private final StringBuilder logResult = new StringBuilder();
-    public OreSim(Properties properties, MapGrid map) {
-        super(map.getNumHorzCells(), map.getNumVertCells(), 30, false);
-        this.map = map;
-        numHorzCells = map.getNumHorzCells();
-        numVertCells = map.getNumVertCells();
+    public OreSim(Properties properties, MapGrid grid) {
+        super(grid.getNumHorzCells(), grid.getNumVertCells(), 30, false);
+        this.grid = grid;
+        numHorzCells = grid.getNumHorzCells();
+        numVertCells = grid.getNumVertCells();
         this.properties = properties;
         isAutoMode = properties.getProperty("movement.mode").equals("auto");
         gameDuration = Integer.parseInt(properties.getProperty("duration"));
@@ -63,7 +62,7 @@ public class OreSim extends GameGrid {
             show();
         }
         ArrayList<MapEntity> entities;
-        while (!map.completed() && gameDuration >= 0) {
+        while (!grid.completed() && gameDuration >= 0) {
             try {
                 // update actors
                 entities = getActors(MapEntity);
@@ -71,7 +70,7 @@ public class OreSim extends GameGrid {
                 {
                     // changed the method signature to return a mapGrid, as i presume it does here?
                     // since we're passing a mapGrid to update.
-                    map = entity.update(map);
+                    grid = entity.update(grid);
                 }
                 refresh();
                 // handle duration
@@ -79,7 +78,7 @@ public class OreSim extends GameGrid {
                 double minusDuration = (simulationPeriod / ONE_SECOND);
                 gameDuration -= minusDuration;
                 // Set title
-                String title = String.format("# Ores at Target: %d. Time left: %.2f seconds", map.getOresDone(), gameDuration);
+                String title = String.format("# Ores at Target: %d. Time left: %.2f seconds", grid.getOresDone(), gameDuration);
                 setTitle(title);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
@@ -88,7 +87,7 @@ public class OreSim extends GameGrid {
 
         doPause();
 
-        if (map.completed()) {
+        if (grid.completed()) {
             setTitle("Mission Complete. Well done!");
         } else if (gameDuration < 0) {
             setTitle("Mission Failed. You ran out of time");
@@ -166,7 +165,7 @@ public class OreSim extends GameGrid {
             for (int x = 0; x < numHorzCells; x++) {
                 location = new Location(x, y);
                 // iterate over each mapObject at location
-                for (Actor actor : map.get(location)) {
+                for (Actor actor : grid.get(location)) {
                     // draw actor if an actor
                     // do we need getType anymore
                     if (ACTORS.contains(actor.getType())) {
@@ -175,7 +174,7 @@ public class OreSim extends GameGrid {
                 }
             }
         }
-        System.out.println("ores = " + map.getOresDone());
+        System.out.println("ores = " + grid.getOresDone());
         setPaintOrder(Target.class);
     }
 
@@ -186,19 +185,26 @@ public class OreSim extends GameGrid {
      */
 
     private void drawBoard(GGBackground bg) {
+        //TODO: work out what tf going on here
+        // the following for loop should paint cells the correct colour, so unsure what the next 2 lines do :P
         bg.clear(new Color(230, 230, 230));
         bg.setPaintColor(Color.darkGray);
-        Location location;
-        for (int y = 0; y < numVertCells; y++) {
-            for (int x = 0; x < numHorzCells; x++) {
-                location = new Location(x, y);
-                for (MapObject mapObject : map.get(location)) {
-                    if (mapObject.getType() == ElementType.EMPTY) {
-                        bg.fillCell(location, Color.lightGray);
+
+        ArrayList<ArrayList<ElementType>> map = grid.getMap();
+        for (int y = 0; y < grid.getNumVertCells(); y++)
+        {
+            for (int x = 0; x < grid.getNumHorzCells(); x++)
+            {
+                switch (map.get(y).get(x))
+                {
+                    case OUTSIDE:
+                        bg.fillCell(new Location(x, y), OUTSIDE_COLOUR);
                         break;
-                    } else if (mapObject.getType() == ElementType.BORDER)  // Border
-                        bg.fillCell(location, BORDER_COLOUR);
-                    break;
+                    case BORDER:
+                        bg.fillCell(new Location(x, y), BORDER_COLOUR);
+                        break;
+                    default:
+                        bg.fillCell(new Location(x, y), FLOOR_COLOUR);
                 }
             }
         }
