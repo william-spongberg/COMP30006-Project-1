@@ -2,10 +2,12 @@ package ore;
 
 import ch.aplu.jgamegrid.Actor;
 import ch.aplu.jgamegrid.GGBackground;
+import ch.aplu.jgamegrid.GGKeyListener;
 import ch.aplu.jgamegrid.GameGrid;
 import ch.aplu.jgamegrid.Location;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -20,7 +22,7 @@ import java.util.Collections;
  * The `OreSim` class is responsible for setting up the game grid, initializing game elements, handling user input, and running the game simulation.
  * It also provides methods for checking the progress of the game, updating statistics, and drawing the game board.
  */
-public class OreSim extends GameGrid {
+public class OreSim extends GameGrid implements GGKeyListener {
     private static final Color BORDER_COLOUR = new Color(100, 100, 100);
     private static final Color FLOOR_COLOUR = Color.lightGray;
     //TODO: see drawBoard()
@@ -48,9 +50,12 @@ public class OreSim extends GameGrid {
         if (isAutoMode) {
             Collections.addAll(autoMovements, properties.getProperty("machines.movements").split(","));
         }
+        //System.out.println("autoMovements = " + autoMovements);
 
         gameDuration = Integer.parseInt(properties.getProperty("duration"));
         setSimulationPeriod(Integer.parseInt(properties.getProperty("simulationPeriod")));
+
+        addKeyListener(this);
     }
 
     /**
@@ -63,6 +68,7 @@ public class OreSim extends GameGrid {
         GGBackground bg = getBg();
         drawBoard(bg);
         drawActors();
+
         if (isDisplayingUI) {
             show();
         }
@@ -74,6 +80,7 @@ public class OreSim extends GameGrid {
                 for (Actor vehicle: vehicles)
                 {
                     ((Vehicle)vehicle).moveVehicle();
+                    addKeyListener(((Vehicle)vehicle).getController());
                 }
                 refresh();
                 updateLogResult();
@@ -313,6 +320,14 @@ public class OreSim extends GameGrid {
         logResult.append(ElementType.EXCAVATOR.getShortType()).append(actorLocations(excavators));
 
         logResult.append("\n");
+    }
+
+    public boolean keyPressed(KeyEvent evt) {
+        return false;
+    }
+
+    public boolean keyReleased(KeyEvent evt) {
+        return false;
     }
 
     // ------------- Inner classes -------------
