@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.Collections;
 
 /**
  * The `OreSim` class represents a simulation of an ore mining game. It extends the `GameGrid` class and implements the `GGKeyListener` interface.
@@ -31,7 +32,7 @@ public class OreSim extends GameGrid {
     private final boolean isAutoMode;
 
     // TODO: set to private, create getters and setters
-    public List<String> autoMovements = null;
+    public List<String> autoMovements = new ArrayList<String>();
 
     private double gameDuration;
     private int movementIndex;
@@ -45,9 +46,7 @@ public class OreSim extends GameGrid {
         this.properties = properties;
         this.isAutoMode = properties.getProperty("movement.mode").equals("auto");
         if (isAutoMode) {
-            for (String move: properties.getProperty("machines.movements").split(",")) {
-                autoMovements.add(move);
-            }
+            Collections.addAll(autoMovements, properties.getProperty("machines.movements").split(","));
         }
 
         gameDuration = Integer.parseInt(properties.getProperty("duration"));
