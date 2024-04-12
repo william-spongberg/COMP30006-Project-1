@@ -1,5 +1,7 @@
 package ore;
 
+import java.util.ArrayList;
+
 /**
  * The MapGrid class represents a grid-based map for an ore simulation game.
  * It stores information about the elements present in each cell of the grid,
@@ -37,11 +39,11 @@ public class MapGrid {
             "x..........x", // 7
             "xxxxxxxxxxxx"};// 8
 
-    public String[] getMap() {
+    public ArrayList<ArrayList<OreSim.ElementType>> getMap() {
         return map;
     }
 
-    private final String[] map;
+    private final ArrayList<ArrayList<OreSim.ElementType>> map;
 
     public int getNumHorzCells() {
         return numHorzCells;
@@ -61,15 +63,60 @@ public class MapGrid {
      */
     public MapGrid(int model) {
         // set map
+        String[] map_str;
         if (model == 0) {
             // model == 0
-            map = map_0;
+            map_str = map_0;
         } else {
             // model == 1
-            map = map_1;
+            map_str = map_1;
         }
         // set vertical and horizontal number of cells
-        numHorzCells = map[0].length();
-        numVertCells = map.length;
+        numHorzCells = map_str[0].length();
+        numVertCells = map_str.length;
+
+        // generate 2d array of ElementTypes
+        ArrayList<ArrayList<OreSim.ElementType>> _map = new ArrayList<>();
+        for (int y = 0; y < numVertCells; y++)
+        {
+            _map.add(new ArrayList<>());
+            for (int x = 0; x < numHorzCells; x++)
+            {
+                switch (map_str[y].charAt(x))
+                {
+                    case 'P':
+                        _map.get(y).add(OreSim.ElementType.PUSHER);
+                        break;
+                    case 'B':
+                        _map.get(y).add(OreSim.ElementType.BULLDOZER);
+                        break;
+                    case 'E':
+                        _map.get(y).add(OreSim.ElementType.EXCAVATOR);
+                        break;
+                    case 'R':
+                        _map.get(y).add(OreSim.ElementType.ROCK);
+                        break;
+                    case 'D':
+                        _map.get(y).add(OreSim.ElementType.CLAY);
+                        break;
+                    case '*':
+                        _map.get(y).add(OreSim.ElementType.ORE);
+                        break;
+                    case 'o':
+                        _map.get(y).add(OreSim.ElementType.TARGET);
+                        break;
+                    case ' ':
+                        _map.get(y).add(OreSim.ElementType.OUTSIDE);
+                        break;
+                    case '.':
+                        _map.get(y).add(OreSim.ElementType.EMPTY);
+                        break;
+                    case 'x':
+                        _map.get(y).add(OreSim.ElementType.BORDER);
+                        break;
+                }
+            }
+        }
+        map = _map;
     }
 }
