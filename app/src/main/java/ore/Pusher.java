@@ -1,10 +1,10 @@
 package ore;
 
+import ch.aplu.jgamegrid.*;
+
 import java.util.List;
 
 //import javax.swing.border.Border;
-
-import ch.aplu.jgamegrid.*;
 
 /**
  * The Pusher class represents a vehicle that pushes ore in a game.
@@ -107,17 +107,16 @@ public class Pusher extends Vehicle {
         return true;
     }
 
-
     /**
-     * Returns an array of statistics related to the Pusher object.
-     *
-     * @return the number of moves made by the Pusher
+     * Retrieves the statistics of the Pusher object.
+     * 
+     * @return an array of strings containing the statistics
      */
     public String[] getStatistics() {
-        String [] result = {
-            "Pusher-" + getId(),
-            " Moves: " + this.getNumMoves(),
-            "\n"
+        String[] result = {
+                "Pusher-" + getId(),
+                " Moves: " + this.getNumMoves(),
+                "\n"
         };
         return result;
     }
