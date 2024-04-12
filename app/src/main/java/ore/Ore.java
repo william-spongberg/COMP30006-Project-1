@@ -2,51 +2,60 @@ package ore;
 
 import ch.aplu.jgamegrid.Actor;
 import ch.aplu.jgamegrid.Location;
+
+import java.awt.*;
 import java.util.ArrayList;
+import ch.aplu.jgamegrid.GGBackground;
+
+
 
 public class Ore extends Actor
 {
+    private static final Color BORDER_COLOUR = new Color(100, 100, 100);
     public Ore() {
         super("sprites/ore.png", 2);
     }
 
-    // this function checks if the provided location that we are about to move to is a target,
-    // and whether an ore is at that spot.
-    public void checkOnTarget(Location location) {
-        // check if there is anything at the location except a Target
+    // checks if we can move, if we can, then we check if we are going to / leaving a target
+    public void checkAndMove(Location location) {
+        // see whats at the location we're moving to.
         ArrayList<Actor> onLocation = gameGrid.getActorsAt(location);
-        for (Actor actor : onLocation) {
-            if (!(actor instanceof Target)) {
-                return;
-            }
-        }
-        // switch sprite to OreCart
-        Target targetTo = (Target) gameGrid.getOneActorAt(location, Target.class);
-        targetTo.hide();
-        switchSprite(1);
-    }
 
-    // check if the target we're moving to is not a target, and if the one we're currently on is.
-    // this assumes we've already checked a move is indeed possible.
-    public void movingFromTarget(Location locationTo) {
-        // check if we're on a target in the first place
-        Target targetAt = (Target) gameGrid.getOneActorAt(this.getLocation(), Target.class);
-        Target targetTo = (Target) gameGrid.getOneActorAt(locationTo, Target.class);
-        // we're moving to another target, so return false
-        if (targetTo != null) {
+        // check if we're gonna hit a wall.
+        Color c = gameGrid.getBg().getColor(location);
+        if (c == BORDER_COLOUR) {
             return;
         }
-        // we are on a target
-        if (targetAt != null) {
-            // we are on a target, and next place isn't a target, so we can switch to Ore
-            // and make the hidden target visible
-            targetAt.show();
-            switchSprite(0);
+
+        // check if theres too much at a spot (target and ore) or theres something else blocking us
+        if (onLocation.size() > 1 || (onLocation.size() == 1 && !(onLocation.get(0) instanceof Target))) {
+            return;
         }
 
-    }
+        // if we have reached this point, there is either a target or empty space.
+        Target targetAt = (Target) gameGrid.getOneActorAt(this.getLocation(), Target.class);
 
-    public void switchSprite(int spriteChange) {
-        this.show(spriteChange);
+        if (onLocation.size() == 1 && onLocation.get(0) instanceof Target) {
+            // get the target we're going to
+            Target targetTo = (Target) gameGrid.getOneActorAt(location, Target.class);
+
+            // update us (set us to an oreCart)
+            this.setLocation(location);
+            this.show(1);
+
+            // hide the target we're going to
+            targetTo.hide();
+
+            // if we were already on the target, show the target we were at
+            if (targetAt != null) {
+                targetAt.show();
+            }
+            return;
+
+        }
+        // must be an empty space, so move.
+        this.setLocation(location);
+        this.show(0);
+
     }
 }
