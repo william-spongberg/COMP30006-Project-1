@@ -159,22 +159,38 @@ public class OreSim extends GameGrid {
      * Draw all different actors on the board: pusher, ore, target, rock, clay, bulldozer, excavator
      */
     private void drawActors() {
-        // iterate over every location
-        Location location;
-        for (int y = 0; y < numVertCells; y++) {
-            for (int x = 0; x < numHorzCells; x++) {
-                location = new Location(x, y);
-                // iterate over each mapObject at location
-                for (Actor actor : grid.get(location)) {
-                    // draw actor if an actor
-                    // do we need getType anymore
-                    if (ACTORS.contains(actor.getType())) {
-                        addActor(actor, location);
-                    }
+        ArrayList<ArrayList<ElementType>> map = grid.getMap();
+        for (int y = 0; y < grid.getNumVertCells(); y++)
+        {
+            for (int x = 0; x < grid.getNumHorzCells(); x++)
+            {
+                switch (map.get(y).get(x))
+                {
+                    //TODO: add vehicle control type
+                    case PUSHER:
+                        addActor(new Pusher(), new Location(x, y));
+                        break;
+                    case BULLDOZER:
+                        addActor(new Bulldozer(), new Location(x, y));
+                        break;
+                    case EXCAVATOR:
+                        addActor(new Excavator(), new Location(x, y));
+                        break;
+                    case ORE:
+                        addActor(new Ore(), new Location(x, y));
+                        break;
+                    case ROCK:
+                        addActor(new Rock(), new Location(x, y));
+                        break;
+                    case CLAY:
+                        addActor(new Clay(), new Location(x, y));
+                        break;
+                    case TARGET:
+                        addActor(new Target(), new Location(x, y));
                 }
             }
         }
-        System.out.println("ores = " + grid.getOresDone());
+        System.out.println("ores = " + getOresDone());
         setPaintOrder(Target.class);
     }
 
