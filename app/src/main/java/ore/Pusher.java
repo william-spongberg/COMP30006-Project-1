@@ -77,14 +77,8 @@ public class Pusher extends Vehicle {
 
         // TODO: Check if ore is pushed into border (colour?)
 
-        // Reset the target if the ore is moved out of target
-        ore.movingFromTarget(nextLocation);
-
-        // Move the ore
-        ore.setLocation(nextLocation);
-
-        // Check if we are now at a target
-        ore.checkOnTarget(nextLocation);
+        // Move the ore to the next location
+        ore.moveTo(nextLocation);
 
         return true;
     }
