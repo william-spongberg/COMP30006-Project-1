@@ -4,14 +4,32 @@ import ch.aplu.jgamegrid.*;
 
 import java.util.List;
 
+/**
+ * Represents a Bulldozer, a type of Vehicle that destroys clay.
+ */
 public class Bulldozer extends Vehicle {
-    // destroys clay
+
+    /**
+     * Constructs a Bulldozer object.
+     *
+     * @param image             The image of the vehicle.
+     * @param location          The initial location of the vehicle.
+     * @param isAuto            A flag indicating whether the vehicle is controlled
+     *                          automatically or by the keyboard.
+     * @param controls          The list of controls for the vehicle.
+     * @param autoMovementIndex The index of the automatic movement for the vehicle.
+     */
     public Bulldozer(String image, Location location, boolean isAuto, List<String> controls, int autoMovementIndex) {
         super("sprites/bulldozer.png", location, isAuto, controls, autoMovementIndex);
     }
 
+    /**
+     * Checks if the Bulldozer can move to the specified location.
+     *
+     * @param location the location to check
+     * @return true if the Bulldozer can move to the location, false otherwise
+     */
     public boolean canMove(Location location) {
-        // assuming only one clay can exist in a location at a time
         if (gameGrid.getOneActorAt(location, Clay.class) != null) {
             return collideWithActor(gameGrid.getOneActorAt(location, Clay.class));
         } else if (gameGrid.getOneActorAt(location) == null) {
@@ -20,6 +38,13 @@ public class Bulldozer extends Vehicle {
         return false;
     }
 
+    /**
+     * Collides with the specified actor.
+     * If the actor is of type Clay, it removes the clay from the game grid.
+     *
+     * @param actor the actor to collide with
+     * @return true if the collision was successful, false otherwise
+     */
     public boolean collideWithActor(Actor actor) {
         if (actor instanceof Clay) {
             ((Clay) gameGrid.getOneActorAt(actor.getLocation(), Clay.class)).removeSelf();

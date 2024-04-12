@@ -6,12 +6,32 @@ import java.util.List;
 
 import ch.aplu.jgamegrid.*;
 
+/**
+ * The Pusher class represents a vehicle that pushes ore in a game.
+ * It extends the Vehicle class.
+ */
 public class Pusher extends Vehicle {
-    // pushes ore
+
+    /**
+     * Constructs a Pusher object.
+     *
+     * @param image             The image of the vehicle.
+     * @param location          The initial location of the vehicle.
+     * @param isAuto            A flag indicating whether the vehicle is controlled
+     *                          automatically or by the keyboard.
+     * @param controls          The list of controls for the vehicle.
+     * @param autoMovementIndex The index of the automatic movement for the vehicle.
+     */
     public Pusher(String image, Location location, boolean isAuto, List<String> controls, int autoMovementIndex) {
         super("sprites/pusher.png", location, isAuto, controls, autoMovementIndex);
     }
 
+    /**
+     * Checks if the Pusher can move to the specified location.
+     *
+     * @param location the location to check
+     * @return true if the Pusher can move to the location, false otherwise
+     */
     public boolean canMove(Location location) {
         // assuming only one ore can exist in a location at a time
         if (gameGrid.getOneActorAt(location, Ore.class) != null) {
@@ -22,6 +42,12 @@ public class Pusher extends Vehicle {
         return false;
     }
 
+    /**
+     * Checks if the Pusher collides with the specified actor.
+     *
+     * @param actor the actor to check collision with
+     * @return true if the Pusher collides with the actor, false otherwise
+     */
     public boolean collideWithActor(Actor actor) {
         if (actor instanceof Ore) {
             Ore ore = (Ore) actor;
@@ -33,12 +59,10 @@ public class Pusher extends Vehicle {
     }
 
     /**
-     * When the pusher pushes the ore in 1 direction, this method will be called to
-     * check if the ore can move in that direction
-     * and if it can move, then it changes the location
-     * 
-     * @param ore
-     * @return
+     * Moves the specified ore to the next location.
+     *
+     * @param ore the ore to move
+     * @return true if the ore is successfully moved, false otherwise
      */
     private boolean moveOre(Ore ore) {
         Location currentLocation = ore.getLocation();

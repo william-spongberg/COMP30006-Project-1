@@ -4,18 +4,35 @@ import ch.aplu.jgamegrid.*;
 import java.awt.event.KeyEvent;
 import java.util.List;
 
+/**
+ * The AutomaticController class is a subclass of VehicleController that
+ * represents a controller for a vehicle that can move automatically based on
+ * instructions inputted from a properties file.
+ */
 public class AutomaticController extends VehicleController {
 
+    /**
+     * Constructs a new AutomaticController object with the specified vehicle,
+     * controls, and autoMovementIndex.
+     *
+     * @param vehicle           the vehicle to be controlled
+     * @param controls          the list of controls/instructions for automatic
+     *                          movement
+     * @param autoMovementIndex the index of the current control/instruction
+     */
     public AutomaticController(Vehicle vehicle, List<String> controls, int autoMovementIndex) {
         this.setVehicle(vehicle);
         this.setControls(controls);
         this.setAutoMovementIndex(autoMovementIndex);
     }
-    
 
     /**
-     * Method to move vehicle automatically based on the instructions input from
-     * properties file
+     * Moves the vehicle automatically based on the instructions input from the
+     * properties file.
+     *
+     * @return the next location of the vehicle after the automatic movement,
+     *         or null if the movement is finished or an invalid control is
+     *         encountered
      */
     public Location autoMoveNext() {
         if (this.getControls() != null && this.getAutoMovementIndex() < this.getControls().size()) {
@@ -23,7 +40,7 @@ public class AutomaticController extends VehicleController {
             String machine = currentMove[0];
             String move = currentMove[1];
             this.setAutoMovementIndex(this.getAutoMovementIndex() + 1);
-            
+
             if (machine.equals("P")) {
                 if (this.getIsFinished())
                     return null;
@@ -56,10 +73,22 @@ public class AutomaticController extends VehicleController {
         return null;
     }
 
+    /**
+     * Handles the key pressed event.
+     *
+     * @param evt the KeyEvent object representing the key press event
+     * @return null as manual controls are not supported in this controller
+     */
     public Location keyPressed(KeyEvent evt) {
         return null;
     }
 
+    /**
+     * Handles the key released event.
+     *
+     * @param evt the KeyEvent object representing the key release event
+     * @return null as manual controls are not supported in this controller
+     */
     public Location keyReleased(KeyEvent evt) {
         return null;
     }
