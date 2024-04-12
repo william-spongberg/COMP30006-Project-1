@@ -57,14 +57,15 @@ public class OreSim extends GameGrid {
         if (isDisplayingUI) {
             show();
         }
-        ArrayList<Vehicle> vehicles;
+        ArrayList<Actor> vehicles;
         while (!completed() && gameDuration >= 0) {
             try {
                 // update actors
                 vehicles = getActors(Vehicle.class);
-                for (Vehicle vehicle: vehicles)
+                for (Actor vehicle: vehicles)
                 {
-                    vehicle.move();
+                    //TODO: fix bc this is just calling Actor.move()
+                    ((Vehicle)vehicle).move();
                 }
                 refresh();
                 // handle duration
