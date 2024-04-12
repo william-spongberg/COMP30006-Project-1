@@ -1,5 +1,9 @@
 package ore;
-import ch.aplu.jgamegrid.*;
+
+import ch.aplu.jgamegrid.Location;
+import ch.aplu.jgamegrid.Actor;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * The MapGrid class represents a grid-based map for an ore simulation game.
@@ -7,138 +11,151 @@ import ch.aplu.jgamegrid.*;
  * such as borders, empty spaces, stones, targets, pushers, bulldozers, excavators,
  * rocks, and clay. The class provides methods to retrieve information about the
  * dimensions of the grid, the number of stones, and the type of element in a specific cell.
- *
+ * <p>
  * The map grid is initialized based on a predefined model, which consists of a string
  * representation of the map and the dimensions of the grid for each model. The map
  * elements are mapped from the string representation to the corresponding element types.
- *
- * @param model The index of the model to use for initializing the map grid.
+ * <p>
+ * //@param model The index of the model to use for initializing the map grid.
  */
-public class MapGrid
-{
-  private int nbHorzCells = -1;
-  private int nbVertCells = -1;
-  private OreSim.ElementType[][] mapElements; // = new OreSim.ElementType[nbHorzCells][nbVertCells];
-  private int nbStones = 0;
+public class MapGrid {
+    private final static String[] map_0 = {
+            "    xxxxx          ", // 0 (19)
+            "    x...x          ", // 1
+            "    x*..x          ", // 2
+            "  xxx...xx         ", // 3
+            "  x......x         ", // 4
+            "xxx...RD.x   xxxxxx", // 5
+            "x.....RD.xxxxx....x", // 6
+            "x...*............ox", // 7
+            "xxxxx.DDD.xPxx...ox", // 8
+            "    x.....xxxxxxxxx", // 9
+            "    xxxxxxx        "};//10
+    private final static String[] map_1 = {
+            "xxxxxxxxxxxx", // 0  (14)
+            "x..........x", // 1
+            "x....RB....x", // 2
+            "xo...R.*...x", // 3
+            "xo...RDDDDDx", // 4
+            "xP....ERRRRx", // 5
+            "x....RRR*.xx", // 6
+            "x..........x", // 7
+            "xxxxxxxxxxxx"};// 8
 
-  private final static String map_0 =
-    "    xxxxx          " + // 0 (19)
-    "    x...x          " + // 1
-    "    x*..x          " + // 2
-    "  xxx...xx         " + // 3
-    "  x......x         " + // 4
-    "xxx...RD.x   xxxxxx" + // 5
-    "x.....RD.xxxxx....x" + // 6
-    "x...*............ox" + // 7
-    "xxxxx.DDD.xPxx...ox" + // 8
-    "    x.....xxxxxxxxx" + // 9
-    "    xxxxxxx        ";  //10
-  private final static int nbHorzCells_0 = 19;
-  private final static int nbVertCells_0 = 11;
-
-  private final static String map_1 =
-    "xxxxxxxxxxxx" + // 0  (14)
-    "x..........x" + // 0  (14)
-    "x....RB....x" + // 1
-    "xo...R.*...x" + // 2
-    "xo...RDDDDDx" + // 3
-    "xP....ERRRRx" + // 4
-    "x....RRR*.xx" + // 5
-    "x..........x" + // 6
-    "xxxxxxxxxxxx";  // 7
-
-  private final static int nbHorzCells_1 = 12;
-  private final static int nbVertCells_1 = 9;
-
-  private final static String[] mapModel =
-  {
-          map_0, map_1
-  };
-
-  private final static int[] nbHorzCellsModel =
-  {
-    nbHorzCells_0, nbHorzCells_1
-  };
-
-  private final static int[] nbVertCellsModel =
-  {
-    nbVertCells_0, nbVertCells_1
-  };
-
-  private static int model;
-
-  /**
-   * Mapping from the string to a HashMap to prepare drawing
-   * @param model
-   */
-  public MapGrid(int model)
-  {
-    this.model = model;
-    nbHorzCells = nbHorzCellsModel[model];
-    nbVertCells = nbVertCellsModel[model];
-
-    mapElements = new OreSim.ElementType[nbHorzCells][nbVertCells];
-
-    // Copy structure into integer array
-    for (int k = 0; k < nbVertCellsModel[model]; k++)
-    {
-      for (int i = 0; i < nbHorzCellsModel[model]; i++)
-      {
-        switch (mapModel[model].charAt(nbHorzCellsModel[model] * k + i))
-        {
-          case ' ':
-            mapElements[i][k] = OreSim.ElementType.OUTSIDE;  // Empty outside
-            break;
-          case '.':
-            mapElements[i][k] = OreSim.ElementType.EMPTY;  // Empty inside
-            break;
-          case 'x':
-            mapElements[i][k] = OreSim.ElementType.BORDER;  // Border
-            break;
-          case '*':
-            mapElements[i][k] = OreSim.ElementType.ORE;  // Stones
-            nbStones++;
-            break;
-          case 'o':
-            mapElements[i][k] = OreSim.ElementType.TARGET;  // Target positions
-            break;
-          case 'P':
-            mapElements[i][k] = OreSim.ElementType.PUSHER;
-            break;
-          case 'B':
-            mapElements[i][k] = OreSim.ElementType.BULLDOZER;
-            break;
-          case 'E':
-            mapElements[i][k] = OreSim.ElementType.EXCAVATOR;
-            break;
-          case 'R':
-            mapElements[i][k] = OreSim.ElementType.ROCK; // Rocks
-            break;
-          case 'D':
-            mapElements[i][k] = OreSim.ElementType.CLAY; // Clay
-            break;
-        }
-      }
+    public int getNumHorzCells() {
+        return numHorzCells;
     }
-  }
 
-  public int getNbHorzCells()
-  {
-    return nbHorzCellsModel[model];
-  }
+    public int getNumVertCells() {
+        return numVertCells;
+    }
+    public ArrayList<Actor> get(Location location) {
+        return map.get(location);
+    }
 
-  public int getNbVertCells()
-  {
-    return nbVertCellsModel[model];
-  }
+    private final int numHorzCells;
+    private final int numVertCells;
+    private final HashMap<Location, ArrayList<Actor>> map = new HashMap<>();
 
-  public int getNbOres()
-  {
-    return nbStones;
-  }
+    /**
+     * Mapping from the string to a HashMap to prepare drawing
+     *
+     * @param model An enum specifying the map to generate
+     */
+    public MapGrid(int model) {
+        String[] map_str;
+        if (model == 0) {
+            // model == 0
+            numHorzCells = map_0[0].length();
+            numVertCells = map_0.length;
+            map_str = map_0;
+        } else {
+            // model == 1
+            numHorzCells = map_1[0].length();
+            numVertCells = map_1.length;
+            map_str = map_1;
+        }
 
-  public OreSim.ElementType getCell(Location location)
-  {
-    return mapElements[location.x][location.y];
-  }
+        // Copy structure into HashMap
+        Location location;
+        for (int y = 0; y < numVertCells; y++) {
+            for (int x = 0; x < numHorzCells; x++) {
+                location = new Location(x, y);
+                map.put(location, new ArrayList<Actor>());
+                switch (map_str[y].charAt(x)) {
+                    case '.': // Empty
+                        map.get(location).add(new Floor());
+                        break;
+                    case 'x': // Border
+                        map.get(location).add(new Border());
+                        break;
+                    case '*': // Ore
+                        map.get(location).add(new Ore());
+                        break;
+                    case 'o': // Target
+                        map.get(location).add(new Target());
+                        break;
+                    case 'P': // Pusher
+                        map.get(location).add(new Pusher());
+                        break;
+                    case 'B': // Bulldozer
+                        map.get(location).add(new Bulldozer());
+                        break;
+                    case 'E': // Excavator
+                        map.get(location).add(new Excavator());
+                        break;
+                    case 'R': // Rock
+                        map.get(location).add(new Rock());
+                        break;
+                    case 'D': // Clay
+                        map.get(location).add(new Clay());
+                        break;
+                }
+            }
+        }
+    }
+
+    /**
+     * gets the number of ores that have been moved to targets by checking for an ore and a target in each location
+     * @return the number of ores in a target location
+     */
+    public int getOresDone()
+    {
+        int oresDone = 0;
+        for (Location location: map.keySet()) {
+            if (contains(location, OreSim.ElementType.ORE) && contains(location, OreSim.ElementType.TARGET))
+            {
+                oresDone++;
+            }
+        }
+        return oresDone;
+    }
+
+    public boolean completed()
+    {
+        // count number of ores
+        int numOres = 0;
+        for (Location location: map.keySet()) {
+            for (MapObject mapObject: map.get(location))
+            {
+                if (mapObject.getType() == OreSim.ElementType.ORE)
+                {
+                    numOres++;
+                }
+            }
+        }
+        return numOres == getOresDone();
+    }
+
+    public boolean contains(Location location, OreSim.ElementType type)
+    {
+        for (MapObject mapObject: map.get(location))
+        {
+            if (mapObject.getType() == type)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 }

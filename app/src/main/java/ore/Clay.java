@@ -1,27 +1,19 @@
 package ore;
 
-import ch.aplu.jgamegrid.Actor;
 import ch.aplu.jgamegrid.Location;
+import ch.aplu.jgamegrid.Actor;
 
-public class Clay extends MapObject implements Destroyable
+public class Clay extends Actor
 {
-    private DestroyListener listener;
-
-    public void setDestroyListener(DestroyListener listener) {
-        this.listener = listener;
-    }
-    private Location location;
-    public Clay(Location location) {
-        super(false, "sprites/clay.png", location);
-        this.location = location;
+    public Clay() {
+        super(false, "sprites/clay.png");
     }
 
-    @Override
     public void destroy() {
-        // Notify the listener about the destruction
-        if (listener != null) {
-            listener.onDestroy(this);
-        }
-
+        removeSelf();
     }
+
 }
+
+
+

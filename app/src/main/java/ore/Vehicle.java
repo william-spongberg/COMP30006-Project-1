@@ -15,7 +15,7 @@ public abstract class Vehicle extends Actor {
             this.controller = new KeyboardController();
         }
     }
-    
+
     public void move(Location location) {
         if (location != null && canMove(location)) {
             this.setLocation(location);

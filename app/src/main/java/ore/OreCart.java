@@ -1,8 +1,10 @@
 package ore;
 
-public class OreCart extends MapObject{
-    // check if this is pushable
+import ch.aplu.jgamegrid.Location;
+import ch.aplu.jgamegrid.Actor;
+public class OreCart extends Actor {
 
-    // check if this is on the target
-
+    public OreCart() {
+        super(false, "sprites/ore_1.png");
+    }
 }

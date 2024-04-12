@@ -1,10 +1,5 @@
 package ore;
 
-import java.util.List;
-import java.util.Map;
-
-import ch.aplu.jgamegrid.*;
-
 public class Bulldozer extends Vehicle {
     public Bulldozer(String image, Location location) {
         super("sprites/bulldozer.png", location); // same as excavator except can destroy clay

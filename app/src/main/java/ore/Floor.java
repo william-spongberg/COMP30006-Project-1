@@ -5,9 +5,9 @@ import ch.aplu.jgamegrid.Location;
 
 import java.util.ArrayList;
 
-public class Ore extends Actor
+public class Floor extends Actor
 {
-    public Ore() {
-        super(false, "sprites/ore_0.png");
+    public Floor() {
+        super(false, "sprites/floor.png");
     }
 }
