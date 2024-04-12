@@ -15,15 +15,13 @@ public class Pusher extends Vehicle {
     /**
      * Constructs a Pusher object.
      *
-     * @param image             The image of the vehicle.
-     * @param location          The initial location of the vehicle.
      * @param isAuto            A flag indicating whether the vehicle is controlled
      *                          automatically or by the keyboard.
      * @param controls          The list of controls for the vehicle.
      * @param autoMovementIndex The index of the automatic movement for the vehicle.
      */
-    public Pusher(String image, Location location, boolean isAuto, List<String> controls, int autoMovementIndex) {
-        super("sprites/pusher.png", location, isAuto, controls, autoMovementIndex);
+    public Pusher(boolean isAuto, List<String> controls, int autoMovementIndex) {
+        super("sprites/pusher.png", isAuto, controls, autoMovementIndex);
     }
 
     /**
@@ -65,7 +63,6 @@ public class Pusher extends Vehicle {
      * @return true if the ore is successfully moved, false otherwise
      */
     private boolean moveOre(Ore ore) {
-        Location currentLocation = ore.getLocation();
         Location nextLocation = ore.getNextMoveLocation();
 
         // Test if try to move into another actor and actor is not the target
@@ -81,28 +78,13 @@ public class Pusher extends Vehicle {
         // TODO: Check if ore is pushed into border (colour?)
 
         // Reset the target if the ore is moved out of target
-        List<Actor> actorsCurrent = gameGrid.getActorsAt(currentLocation);
-        if (actorsCurrent != null) {
-            for (Actor actor : actorsCurrent) {
-                if (actor instanceof Target) {
-                    Target currentTarget = (Target) actor;
-                    currentTarget.show();
-                    ore.show(0);
-                }
-            }
-        }
+        ore.movingFromTarget(nextLocation);
 
         // Move the ore
         ore.setLocation(nextLocation);
 
         // Check if we are now at a target
-        Target nextTarget = (Target) gameGrid.getOneActorAt(nextLocation, Target.class);
-        if (nextTarget != null) {
-            ore.show(1);
-            nextTarget.hide();
-        } else {
-            ore.show(0);
-        }
+        ore.checkOnTarget(nextLocation);
 
         return true;
     }
