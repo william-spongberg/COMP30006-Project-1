@@ -4,9 +4,11 @@ import ch.aplu.jgamegrid.*;
 import java.awt.event.KeyEvent;
 
 public class KeyboardController extends VehicleController {
-    public void autoMoveNext() {
-        return;
+
+    public Location autoMoveNext() {
+        return null;
     }
+
     /**
      * The method is automatically called by the framework when a key is pressed.
      * Based on the pressed key, the pusher will change the direction and move
@@ -14,9 +16,9 @@ public class KeyboardController extends VehicleController {
      * @param evt
      * @return
      */
-    public boolean keyPressed(KeyEvent evt) {
+    public Location keyPressed(KeyEvent evt) {
         if (this.getIsFinished())
-            return true;
+            return null;
 
         Location next = null;
         switch (evt.getKeyCode()) {
@@ -43,16 +45,15 @@ public class KeyboardController extends VehicleController {
             curTarget.show();
         }
 
-        if (next != null && this.getVehicle().canMove(next)) {
-            this.getVehicle().setLocation(next);
+        if (next != null) {
             updateLogResult();
+            return next;
         }
-        refresh();
 
-        return true;
+        return null;
     }
 
-    public boolean keyReleased(KeyEvent evt) {
-        return true;
+    public Location keyReleased(KeyEvent evt) {
+        return null;
     }
 }

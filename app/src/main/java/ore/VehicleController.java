@@ -12,18 +12,25 @@ public abstract class VehicleController {
     private int autoMovementIndex = 0;
 
     // methods
-    public abstract void autoMoveNext();
-    public abstract boolean keyPressed(KeyEvent evt);
-    public abstract boolean keyReleased(KeyEvent evt);
+    public abstract Location autoMoveNext();
+    public abstract Location keyPressed(KeyEvent evt);
+    public abstract Location keyReleased(KeyEvent evt);
 
     /* getters */
     public Vehicle getVehicle() {
-        return vehicle;
+        return this.vehicle;
     }
-
 
     public boolean getIsFinished() {
         return isFinished;
+    }
+
+    public List<String> getControls() {
+        return controls;
+    }
+
+    public int getAutoMovementIndex() {
+        return autoMovementIndex;
     }
 
     /* setters */
@@ -35,16 +42,6 @@ public abstract class VehicleController {
         this.isFinished = isFinished;
     }
 
-    /* getters */
-    public List<String> getControls() {
-        return controls;
-    }
-
-    public int getAutoMovementIndex() {
-        return autoMovementIndex;
-    }
-
-    /* setters */
     public void setControls(List<String> controls) {
         this.controls = controls;
     }

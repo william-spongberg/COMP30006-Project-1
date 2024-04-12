@@ -1,40 +1,45 @@
 package ore;
 
-import java.util.List;
-import java.util.Map;
-
 import ch.aplu.jgamegrid.*;
 
-public abstract class Vehicle extends MapObject {
-    public Vehicle(boolean rotatable, String image) {
-        super(rotatable, image);
-    }
+public abstract class Vehicle extends Actor {
+    private Location nextLocation = null;
+    private VehicleController controller = null;
 
-    // move or destroy the ore
-    public abstract boolean updateObject(MapObject object);
-
-    /**
-     * Check if we can move the pusher into the location
-     * 
-     * @param location
-     * @return
-     */
-    public boolean canMove(Location location) {
-        // Test if try to move into border, rock or clay
-        Color c = getBg().getColor(location);
-        Rock rock = (Rock) getOneActorAt(location, Rock.class);
-        Clay clay = (Clay) getOneActorAt(location, Clay.class);
-        Bulldozer bulldozer = (Bulldozer) getOneActorAt(location, Bulldozer.class);
-        Excavator excavator = (Excavator) getOneActorAt(location, Excavator.class);
-        if (c.equals(borderColor) || rock != null || clay != null || bulldozer != null || excavator != null)
-            return false;
-        else {
-            MapObject object = (MapObject) getOneActorAt(location);
-            if (object != null) {
-                return updateObject(object);
-            }
+    public Vehicle(String image, Location location, boolean isAuto) {
+        super(true, image);
+        this.setLocation(location);
+        if (isAuto) {
+            this.controller = new AutomaticController();
+        } else {
+            this.controller = new KeyboardController();
         }
-
-        return false; // TODO: was set to return true??
     }
+    
+    public void move(Location location) {
+        if (location != null && canMove(location)) {
+            this.setLocation(location);
+        }
+    }
+
+    public abstract boolean canMove(Location location);
+
+    public abstract boolean collideWithActor(Actor actor);
+
+    public Location getNextLocation() {
+        return this.nextLocation;
+    }
+
+    public VehicleController getController() {
+        return this.controller;
+    }
+
+    public void setNextLocation(Location nextLocation) {
+        this.nextLocation = nextLocation;
+    }
+
+    public void setController(VehicleController controller) {
+        this.controller = controller;
+    }
+    
 }

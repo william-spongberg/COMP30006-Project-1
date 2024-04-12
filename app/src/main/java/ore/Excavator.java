@@ -6,22 +6,22 @@ import java.util.Map;
 import ch.aplu.jgamegrid.*;
 
 public class Excavator extends Vehicle {
-    public Excavator() {
-        super(true, "sprites/excavator.png"); // can destroy rocks
+    public Excavator(String image, Location location) {
+        super("sprites/excavator.png", location); // can destroy rocks
     }
 
-    public boolean updateObject(MapObject object) {
-        if (object instanceof Destroyable) {
-            Destroyable destroyable = (Destroyable) object;
-            // Try to destroy the object
-            return destroyOre(destroyable);
+    public boolean canMove(Location location) {
+        if (getActorsAt(location) instanceof Rock) {
+            return collideWithActor(getActorsAt(location));
+        } else if (getActorsAt(location) == null) {
+            return true;
         }
         return false;
     }
 
-    private boolean destroyOre(Destroyable destroyable) {
-        if (destroyable instanceof Rock) {
-            destroyable.destroy();
+    public boolean collideWithActor(Actor actor) {
+        if (actor instanceof Rock) {
+            ((Rock) getActorsAt(actor)).removeSelf();
             return true;
         }
         return false;

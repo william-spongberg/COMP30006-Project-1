@@ -8,7 +8,7 @@ public class AutomaticController extends VehicleController {
      * Method to move vehicle automatically based on the instructions input from
      * properties file
      */
-    public void autoMoveNext() {
+    public Location autoMoveNext() {
         if (this.getControls() != null && this.getAutoMovementIndex() < this.getControls().size()) {
             String[] currentMove = this.getControls().get(this.getAutoMovementIndex()).split("-");
             String machine = currentMove[0];
@@ -17,7 +17,7 @@ public class AutomaticController extends VehicleController {
             
             if (machine.equals("P")) {
                 if (this.getIsFinished())
-                    return;
+                    return null;
 
                 Location next = null;
                 switch (move) {
@@ -43,19 +43,21 @@ public class AutomaticController extends VehicleController {
                 if (curTarget != null) {
                     curTarget.show();
                 }
-                if (next != null && this.getVehicle().canMove(next)) {
-                    this.getVehicle().setLocation(next);
+
+                if (next != null) {
+                    return next;
                 }
-                refresh(); // TODO: refreshes gameGrid
+
+                return null;
             }
         }
     }
 
-    public boolean keyPressed(KeyEvent evt) {
-        return true;
+    public Location keyPressed(KeyEvent evt) {
+        return null;
     }
 
-    public boolean keyReleased(KeyEvent evt) {
-        return true;
+    public Location keyReleased(KeyEvent evt) {
+        return null;
     }
 }

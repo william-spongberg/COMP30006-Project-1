@@ -3,19 +3,28 @@ package ore;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.border.Border;
+
 import ch.aplu.jgamegrid.*;
 
 public class Pusher extends Vehicle {
-    // only vehicle that can be manually controlled
-
-    public Pusher() {
-        super(true, "sprites/pusher.png");
+    public Pusher(String image, Location location) {
+        super("sprites/pusher.png", location);
     }
 
-    public boolean updateObject(MapObject object) {
-        if (object instanceof Ore) {
-            Ore ore = (Ore) object;
-            // Try to move the ore
+    public boolean canMove(Location location) {
+        if (getActorsAt(location) instanceof Ore) {
+            return collideWithActor(getActorsAt(location));
+        } else if (getActorsAt(location) == null) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean collideWithActor(Actor actor) {
+        if (actor instanceof Ore) {
+            Ore ore = (Ore) actor;
+            // try to move the ore
             ore.setDirection(this.getDirection());
             return moveOre(ore);
         }
@@ -33,20 +42,14 @@ public class Pusher extends Vehicle {
     private boolean moveOre(Ore ore) {
         Location next = ore.getNextMoveLocation();
 
-        // Test if try to move into border
-        Color c = getBg().getColor(next);
-        Rock rock = (Rock) getOneActorAt(next, Rock.class);
-        Clay clay = (Clay) getOneActorAt(next, Clay.class);
-        if (c.equals(borderColor) || rock != null || clay != null)
+        // Test if try to move into another actor and actor is not the target
+        if (!(getActorsAt(next) instanceof Target) && getActorsAt(next) != null) {
             return false;
-
-        // Test if there is another ore
-        Ore neighbourOre = (Ore) getOneActorAt(next, Ore.class);
-        if (neighbourOre != null)
-            return false;
+        }
 
         // Reset the target if the ore is moved out of target
         Location currentLocation = ore.getLocation();
+
         List<Actor> actors = getActorsAt(currentLocation);
         if (actors != null) {
             for (Actor actor : actors) {
