@@ -14,15 +14,13 @@ public class Excavator extends Vehicle {
     /**
      * Constructs an Excavator object.
      *
-     * @param image             The image of the vehicle.
-     * @param location          The initial location of the vehicle.
      * @param isAuto            A flag indicating whether the vehicle is controlled
      *                          automatically or by the keyboard.
      * @param controls          The list of controls for the vehicle.
      * @param autoMovementIndex The index of the automatic movement for the vehicle.
      */
-    public Excavator(String image, Location location, boolean isAuto, List<String> controls, int autoMovementIndex) {
-        super("sprites/excavator.png", location, isAuto, controls, autoMovementIndex);
+    public Excavator(boolean isAuto, List<String> controls, int autoMovementIndex) {
+        super("sprites/excavator.png", isAuto, controls, autoMovementIndex);
     }
 
     /**
