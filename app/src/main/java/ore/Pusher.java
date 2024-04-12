@@ -106,4 +106,19 @@ public class Pusher extends Vehicle {
 
         return true;
     }
+
+
+    /**
+     * Returns an array of statistics related to the Pusher object.
+     *
+     * @return the number of moves made by the Pusher
+     */
+    public String[] getStatistics() {
+        String [] result = {
+            "Pusher-" + getId(),
+            " Moves: " + this.getNumMoves(),
+            "\n"
+        };
+        return result;
+    }
 }

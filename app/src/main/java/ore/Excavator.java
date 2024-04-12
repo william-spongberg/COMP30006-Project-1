@@ -9,6 +9,7 @@ import java.util.List;
  * It extends the Vehicle class.
  */
 public class Excavator extends Vehicle {
+    private int numRockRemoved = 0;
 
     /**
      * Constructs an Excavator object.
@@ -51,8 +52,47 @@ public class Excavator extends Vehicle {
     public boolean collideWithActor(Actor actor) {
         if (actor instanceof Rock) {
             ((Rock) gameGrid.getOneActorAt(actor.getLocation(), Rock.class)).removeSelf();
+            this.incrementNumRockRemoved();
             return true;
         }
         return false;
+    }
+
+    /**
+     * Returns an array of strings containing the statistics of the excavator.
+     * The statistics include the number of moves and the amount of clay removed.
+     *
+     * @return an array of strings representing the statistics
+     */
+    public String[] getStatistics() {
+        String result[] = {
+            "Excavator-" + getId(),
+            " Moves: " + this.getNumMoves(),
+            "\n",
+            "Excavator-" + getId(),
+            " Rock removed: " + this.getNumRockRemoved(),
+            "\n"
+        };
+        return result;
+    }
+
+    /* getters */
+
+    /**
+     * Gets the number of rocks removed by the excavator.
+     *
+     * @return the number of rocks removed
+     */
+    public int getNumRockRemoved() {
+        return this.numRockRemoved;
+    }
+
+    /* setters */
+
+    /**
+     * Increments the number of rocks removed by the excavator.
+     */
+    public void incrementNumRockRemoved() {
+        this.numRockRemoved++;
     }
 }

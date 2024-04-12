@@ -12,6 +12,8 @@ import java.util.List;
  */
 public abstract class Vehicle extends Actor {
     private VehicleController controller = null;
+    private static int id = 0;
+    private int numMoves = 0;
 
     /**
      * Constructs a new Vehicle object.
@@ -26,6 +28,7 @@ public abstract class Vehicle extends Actor {
     public Vehicle(String image, Location location, boolean isAuto, List<String> controls, int autoMovementIndex) {
         super(true, image);
         this.setLocation(location);
+        incrementID();
 
         if (isAuto) {
             this.controller = new AutomaticController(this, controls, autoMovementIndex);
@@ -51,6 +54,7 @@ public abstract class Vehicle extends Actor {
             }
             this.setLocation(location);
             this.controller.setVehicle(this);
+            this.incrementNumMoves();
         }
     }
 
@@ -71,6 +75,15 @@ public abstract class Vehicle extends Actor {
     public abstract boolean collideWithActor(Actor actor);
 
     /**
+     * Returns an array of strings representing the statistics of the vehicle.
+     * 
+     * @return An array of strings representing the statistics.
+     */
+    public abstract String[] getStatistics();
+
+    /* getters */
+
+    /**
      * Gets the controller of the vehicle.
      * 
      * @return The controller of the vehicle.
@@ -80,11 +93,45 @@ public abstract class Vehicle extends Actor {
     }
 
     /**
+     * Returns the ID of the vehicle.
+     *
+     * @return the ID of the vehicle
+     */
+    public static int getId() {
+        return id;
+    }
+
+    /**
+     * Returns the number of moves made by the vehicle.
+     *
+     * @return the number of moves made by the vehicle
+     */
+    public int getNumMoves() {
+        return this.numMoves;
+    }
+
+    /* setters */
+
+    /**
      * Sets the controller of the vehicle.
      * 
      * @param controller The controller to set.
      */
     public void setController(VehicleController controller) {
         this.controller = controller;
+    }
+
+    /**
+     * Increments the ID of the vehicle by 1.
+     */
+    public void incrementID() {
+        id += 1;
+    }
+
+    /**
+     * Increments the number of moves for the vehicle.
+     */
+    public void incrementNumMoves() {
+        this.numMoves++;
     }
 }

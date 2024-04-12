@@ -8,6 +8,7 @@ import java.util.List;
  * Represents a Bulldozer, a type of Vehicle that destroys clay.
  */
 public class Bulldozer extends Vehicle {
+    private int numClayRemoved = 0;
 
     /**
      * Constructs a Bulldozer object.
@@ -48,8 +49,47 @@ public class Bulldozer extends Vehicle {
     public boolean collideWithActor(Actor actor) {
         if (actor instanceof Clay) {
             ((Clay) gameGrid.getOneActorAt(actor.getLocation(), Clay.class)).removeSelf();
+            this.incrementNumClayRemoved();
             return true;
         }
         return false;
+    }
+
+    /**
+     * Returns an array of strings representing the statistics of the Bulldozer.
+     * The statistics include the number of moves and the amount of clay removed.
+     *
+     * @return an array of strings representing the statistics
+     */
+    public String[] getStatistics() {
+        String result[] = {
+            "Bulldozer-" + getId(),
+            " Moves: " + this.getNumMoves(),
+            "\n",
+            "Bulldozer-" + getId(),
+            " Clay removed: " + this.getNumClayRemoved(),
+            "\n"
+        };
+        return result;
+    }
+
+    /* getters */
+
+    /**
+     * Returns the number of clay removed by the bulldozer.
+     *
+     * @return the number of clay removed
+     */
+    public int getNumClayRemoved() {
+        return this.numClayRemoved;
+    }
+
+    /* setters */
+
+    /**
+     * Increments the number of clay removed by the bulldozer.
+     */
+    public void incrementNumClayRemoved() {
+        this.numClayRemoved++;
     }
 }
