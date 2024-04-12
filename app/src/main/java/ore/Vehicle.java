@@ -38,8 +38,10 @@ public abstract class Vehicle extends Actor {
 
     /**
      * Moves the vehicle to the next location based on the current mode.
-     * If the vehicle is in auto mode, it moves to the next location returned by the controller's autoMoveNext method.
-     * If the vehicle is in manual mode, it moves to the next location returned by the controller's manualMoveNext method.
+     * If the vehicle is in auto mode, it moves to the next location returned by the
+     * controller's autoMoveNext method.
+     * If the vehicle is in manual mode, it moves to the next location returned by
+     * the controller's manualMoveNext method.
      */
     public void moveVehicle() {
         if (isAuto) {

@@ -58,7 +58,7 @@ public class Bulldozer extends Vehicle {
 
     /* getters */
 
-     /**
+    /**
      * Returns an array of strings containing the statistics of the Bulldozer.
      * The statistics include the Bulldozer's ID, number of moves, and amount of
      * clay removed.

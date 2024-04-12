@@ -6,7 +6,8 @@ import java.util.List;
 
 /**
  * The abstract class representing a vehicle controller.
- * This class provides common functionality and properties for all vehicle controllers in the game.
+ * This class provides common functionality and properties for all vehicle
+ * controllers in the game.
  */
 public abstract class VehicleController implements GGKeyListener {
     private Vehicle vehicle;
@@ -20,7 +21,6 @@ public abstract class VehicleController implements GGKeyListener {
      * @return The next location for automatic movement, or null if failed.
      */
     public abstract Location autoMoveNext();
-    
 
     /**
      * Abstract method to get the next location for manual movement.

@@ -77,7 +77,6 @@ public class Excavator extends Vehicle {
         return result;
     }
 
-
     /**
      * Gets the number of rocks removed by the excavator.
      *
