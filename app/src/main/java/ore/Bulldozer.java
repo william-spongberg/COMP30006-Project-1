@@ -5,7 +5,8 @@ import ch.aplu.jgamegrid.*;
 import java.util.List;
 
 /**
- * Represents a Bulldozer, a type of Vehicle that destroys clay.
+ * The Bulldozer class represents a type of vehicle that destroys clay.
+ * It extends the Vehicle class.
  */
 public class Bulldozer extends Vehicle {
     private int numClayRemoved = 0;
@@ -25,7 +26,9 @@ public class Bulldozer extends Vehicle {
     }
 
     /**
-     * Checks if the Bulldozer can move to the specified location.
+     * Checks if the bulldozer can move to the specified location.
+     * The bulldozer can move if there is no clay at the location or if it can
+     * collide with the clay.
      *
      * @param location the location to check
      * @return true if the Bulldozer can move to the location, false otherwise
@@ -55,25 +58,26 @@ public class Bulldozer extends Vehicle {
         return false;
     }
 
-    /**
-     * Returns an array of strings representing the statistics of the Bulldozer.
-     * The statistics include the number of moves and the amount of clay removed.
+    /* getters */
+
+     /**
+     * Returns an array of strings containing the statistics of the Bulldozer.
+     * The statistics include the Bulldozer's ID, number of moves, and amount of
+     * clay removed.
      *
-     * @return an array of strings representing the statistics
+     * @return an array of strings representing the statistics of the Bulldozer
      */
     public String[] getStatistics() {
         String result[] = {
-            "Bulldozer-" + getId(),
-            " Moves: " + this.getNumMoves(),
-            "\n",
-            "Bulldozer-" + getId(),
-            " Clay removed: " + this.getNumClayRemoved(),
-            "\n"
+                "Bulldozer-" + getId(),
+                " Moves: " + this.getNumMoves(),
+                "\n",
+                "Bulldozer-" + getId(),
+                " Clay removed: " + this.getNumClayRemoved(),
+                "\n"
         };
         return result;
     }
-
-    /* getters */
 
     /**
      * Returns the number of clay removed by the bulldozer.

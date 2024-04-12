@@ -58,25 +58,27 @@ public class Excavator extends Vehicle {
         return false;
     }
 
+    /* getters */
+
     /**
-     * Returns an array of strings containing the statistics of the excavator.
-     * The statistics include the number of moves and the amount of clay removed.
+     * Returns an array of strings containing the statistics of the Excavator.
+     * The statistics include the Excavator's ID, number of moves, and amount of
+     * rock removed.
      *
-     * @return an array of strings representing the statistics
+     * @return an array of strings representing the statistics of the Excavator
      */
     public String[] getStatistics() {
         String result[] = {
-            "Excavator-" + getId(),
-            " Moves: " + this.getNumMoves(),
-            "\n",
-            "Excavator-" + getId(),
-            " Rock removed: " + this.getNumRockRemoved(),
-            "\n"
+                "Excavator-" + getId(),
+                " Moves: " + this.getNumMoves(),
+                "\n",
+                "Excavator-" + getId(),
+                " Rock removed: " + this.getNumRockRemoved(),
+                "\n"
         };
         return result;
     }
 
-    /* getters */
 
     /**
      * Gets the number of rocks removed by the excavator.
