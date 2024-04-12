@@ -29,6 +29,10 @@ public class OreSim extends GameGrid {
     private final int numVertCells;
     private final Properties properties;
     private final boolean isAutoMode;
+
+    // TODO: set to private, create getters and setters
+    public List<String> autoMovements = null;
+
     private double gameDuration;
     private int movementIndex;
     private static final double ONE_SECOND = 1000.0;
@@ -39,7 +43,13 @@ public class OreSim extends GameGrid {
         numHorzCells = grid.getNumHorzCells();
         numVertCells = grid.getNumVertCells();
         this.properties = properties;
-        isAutoMode = properties.getProperty("movement.mode").equals("auto");
+        this.isAutoMode = properties.getProperty("movement.mode").equals("auto");
+        if (isAutoMode) {
+            for (String move: properties.getProperty("machines.movements").split(",")) {
+                autoMovements.add(move);
+            }
+        }
+
         gameDuration = Integer.parseInt(properties.getProperty("duration"));
         setSimulationPeriod(Integer.parseInt(properties.getProperty("simulationPeriod")));
     }
@@ -67,6 +77,7 @@ public class OreSim extends GameGrid {
                     ((Vehicle)vehicle).moveVehicle();
                 }
                 refresh();
+                updateLogResult();
                 // handle duration
                 Thread.sleep(simulationPeriod);
                 double minusDuration = (simulationPeriod / ONE_SECOND);
@@ -180,15 +191,14 @@ public class OreSim extends GameGrid {
             {
                 switch (map.get(y).get(x))
                 {
-                    //TODO: handle vehicle control type
                     case PUSHER:
-                        addActor(new Pusher(), new Location(x, y));
+                        addActor(new Pusher(autoMovements.contains("P"), autoMovements, 0), new Location(x, y));
                         break;
                     case BULLDOZER:
-                        addActor(new Bulldozer(), new Location(x, y));
+                        addActor(new Bulldozer(autoMovements.contains("B"), autoMovements, 0), new Location(x, y));
                         break;
                     case EXCAVATOR:
-                        addActor(new Excavator(), new Location(x, y));
+                        addActor(new Excavator(autoMovements.contains("E"), autoMovements, 0), new Location(x, y));
                         break;
                     case ORE:
                         addActor(new Ore(), new Location(x, y));
@@ -201,6 +211,8 @@ public class OreSim extends GameGrid {
                         break;
                     case TARGET:
                         addActor(new Target(), new Location(x, y));
+                    default:
+                        break;
                 }
             }
         }
