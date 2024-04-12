@@ -1,9 +1,6 @@
 package ore;
 
-import ch.aplu.jgamegrid.Location;
-import ch.aplu.jgamegrid.Actor;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * The MapGrid class represents a grid-based map for an ore simulation game.
@@ -42,6 +39,12 @@ public class MapGrid {
             "x..........x", // 7
             "xxxxxxxxxxxx"};// 8
 
+    public ArrayList<ArrayList<OreSim.ElementType>> getMap() {
+        return map;
+    }
+
+    private final ArrayList<ArrayList<OreSim.ElementType>> map;
+
     public int getNumHorzCells() {
         return numHorzCells;
     }
@@ -49,13 +52,9 @@ public class MapGrid {
     public int getNumVertCells() {
         return numVertCells;
     }
-    public ArrayList<Actor> get(Location location) {
-        return map.get(location);
-    }
 
     private final int numHorzCells;
     private final int numVertCells;
-    private final HashMap<Location, ArrayList<Actor>> map = new HashMap<>();
 
     /**
      * Mapping from the string to a HashMap to prepare drawing
@@ -63,99 +62,61 @@ public class MapGrid {
      * @param model An enum specifying the map to generate
      */
     public MapGrid(int model) {
+        // set map
         String[] map_str;
         if (model == 0) {
             // model == 0
-            numHorzCells = map_0[0].length();
-            numVertCells = map_0.length;
             map_str = map_0;
         } else {
             // model == 1
-            numHorzCells = map_1[0].length();
-            numVertCells = map_1.length;
             map_str = map_1;
         }
+        // set vertical and horizontal number of cells
+        numHorzCells = map_str[0].length();
+        numVertCells = map_str.length;
 
-        // Copy structure into HashMap
-        Location location;
-        for (int y = 0; y < numVertCells; y++) {
-            for (int x = 0; x < numHorzCells; x++) {
-                location = new Location(x, y);
-                map.put(location, new ArrayList<Actor>());
-                switch (map_str[y].charAt(x)) {
-                    case '.': // Empty
-                        map.get(location).add(new Floor());
-                        break;
-                    case 'x': // Border
-                        map.get(location).add(new Border());
-                        break;
-                    case '*': // Ore
-                        map.get(location).add(new Ore());
-                        break;
-                    case 'o': // Target
-                        map.get(location).add(new Target());
-                        break;
-                    case 'P': // Pusher
-                        map.get(location).add(new Pusher());
-                        break;
-                    case 'B': // Bulldozer
-                        map.get(location).add(new Bulldozer());
-                        break;
-                    case 'E': // Excavator
-                        map.get(location).add(new Excavator());
-                        break;
-                    case 'R': // Rock
-                        map.get(location).add(new Rock());
-                        break;
-                    case 'D': // Clay
-                        map.get(location).add(new Clay());
-                        break;
-                }
-            }
-        }
-    }
-
-    /**
-     * gets the number of ores that have been moved to targets by checking for an ore and a target in each location
-     * @return the number of ores in a target location
-     */
-    public int getOresDone()
-    {
-        int oresDone = 0;
-        for (Location location: map.keySet()) {
-            if (contains(location, OreSim.ElementType.ORE) && contains(location, OreSim.ElementType.TARGET))
-            {
-                oresDone++;
-            }
-        }
-        return oresDone;
-    }
-
-    public boolean completed()
-    {
-        // count number of ores
-        int numOres = 0;
-        for (Location location: map.keySet()) {
-            for (MapObject mapObject: map.get(location))
-            {
-                if (mapObject.getType() == OreSim.ElementType.ORE)
-                {
-                    numOres++;
-                }
-            }
-        }
-        return numOres == getOresDone();
-    }
-
-    public boolean contains(Location location, OreSim.ElementType type)
-    {
-        for (MapObject mapObject: map.get(location))
+        // generate 2d array of ElementTypes
+        ArrayList<ArrayList<OreSim.ElementType>> _map = new ArrayList<>();
+        for (int y = 0; y < numVertCells; y++)
         {
-            if (mapObject.getType() == type)
+            _map.add(new ArrayList<>());
+            for (int x = 0; x < numHorzCells; x++)
             {
-                return true;
+                switch (map_str[y].charAt(x))
+                {
+                    case 'P':
+                        _map.get(y).add(OreSim.ElementType.PUSHER);
+                        break;
+                    case 'B':
+                        _map.get(y).add(OreSim.ElementType.BULLDOZER);
+                        break;
+                    case 'E':
+                        _map.get(y).add(OreSim.ElementType.EXCAVATOR);
+                        break;
+                    case 'R':
+                        _map.get(y).add(OreSim.ElementType.ROCK);
+                        break;
+                    case 'D':
+                        _map.get(y).add(OreSim.ElementType.CLAY);
+                        break;
+                    case '*':
+                        _map.get(y).add(OreSim.ElementType.ORE);
+                        break;
+                    case 'o':
+                        _map.get(y).add(OreSim.ElementType.TARGET);
+                        break;
+                    case ' ':
+                        _map.get(y).add(OreSim.ElementType.OUTSIDE);
+                        break;
+                    case '.':
+                        _map.get(y).add(OreSim.ElementType.EMPTY);
+                        break;
+                    case 'x':
+                        _map.get(y).add(OreSim.ElementType.BORDER);
+                        break;
+                }
             }
         }
-        return false;
+        map = _map;
     }
 }
