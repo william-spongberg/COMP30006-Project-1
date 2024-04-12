@@ -2,8 +2,17 @@ package ore;
 
 import ch.aplu.jgamegrid.*;
 import java.awt.event.KeyEvent;
+import java.util.List;
 
 public class AutomaticController extends VehicleController {
+
+    public AutomaticController(Vehicle vehicle, List<String> controls, int autoMovementIndex) {
+        this.setVehicle(vehicle);
+        this.setControls(controls);
+        this.setAutoMovementIndex(autoMovementIndex);
+    }
+    
+
     /**
      * Method to move vehicle automatically based on the instructions input from
      * properties file
@@ -39,18 +48,12 @@ public class AutomaticController extends VehicleController {
                         break;
                 }
 
-                Target curTarget = (Target) getOneActorAt(this.getVehicle().getLocation(), Target.class);
-                if (curTarget != null) {
-                    curTarget.show();
-                }
-
                 if (next != null) {
                     return next;
                 }
-
-                return null;
             }
         }
+        return null;
     }
 
     public Location keyPressed(KeyEvent evt) {

@@ -5,6 +5,10 @@ import java.awt.event.KeyEvent;
 
 public class KeyboardController extends VehicleController {
 
+    public KeyboardController(Vehicle vehicle) {
+        this.setVehicle(vehicle);
+    }
+
     public Location autoMoveNext() {
         return null;
     }
@@ -40,13 +44,8 @@ public class KeyboardController extends VehicleController {
                 break;
         }
 
-        Target curTarget = (Target) getOneActorAt(this.getVehicle().getLocation(), Target.class);
-        if (curTarget != null) {
-            curTarget.show();
-        }
-
         if (next != null) {
-            updateLogResult();
+            //TODO: updateLogResult();
             return next;
         }
 
