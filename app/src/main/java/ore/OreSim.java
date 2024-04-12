@@ -192,13 +192,25 @@ public class OreSim extends GameGrid {
                 switch (map.get(y).get(x))
                 {
                     case PUSHER:
-                        addActor(new Pusher(autoMovements.contains("P"), autoMovements, 0), new Location(x, y));
+                        if (autoMovements == null) {
+                            addActor(new Pusher(false, null, 0), new Location(x, y));
+                        } else {
+                            addActor(new Pusher(autoMovements.contains("P"), autoMovements, 0), new Location(x, y));
+                        }
                         break;
                     case BULLDOZER:
-                        addActor(new Bulldozer(autoMovements.contains("B"), autoMovements, 0), new Location(x, y));
+                        if (autoMovements == null) {
+                            addActor(new Bulldozer(false, null, 0), new Location(x, y));
+                        } else {
+                            addActor(new Bulldozer(autoMovements.contains("B"), autoMovements, 0), new Location(x, y));
+                        }
                         break;
                     case EXCAVATOR:
-                        addActor(new Excavator(autoMovements.contains("E"), autoMovements, 0), new Location(x, y));
+                        if (autoMovements == null) {
+                            addActor(new Excavator(false, null, 0), new Location(x, y));
+                        } else {
+                            addActor(new Excavator(autoMovements.contains("E"), autoMovements, 0), new Location(x, y));
+                        }
                         break;
                     case ORE:
                         addActor(new Ore(), new Location(x, y));
