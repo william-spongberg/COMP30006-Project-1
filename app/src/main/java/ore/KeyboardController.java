@@ -3,20 +3,31 @@ package ore;
 import ch.aplu.jgamegrid.*;
 import java.awt.event.KeyEvent;
 
+/**
+ * The KeyboardController class is a subclass of VehicleController that handles
+ * user input from the keyboard to control a vehicle in the game.
+ */
 public class KeyboardController extends VehicleController {
-    public void autoMoveNext() {
-        return;
-    }
+
     /**
-     * The method is automatically called by the framework when a key is pressed.
-     * Based on the pressed key, the pusher will change the direction and move
-     * 
-     * @param evt
-     * @return
+     * Constructs a new KeyboardController object with the specified vehicle.
+     *
+     * @param vehicle the vehicle to be controlled
      */
-    public boolean keyPressed(KeyEvent evt) {
+    public KeyboardController(Vehicle vehicle) {
+        this.setVehicle(vehicle);
+    }
+
+    /**
+     * This method is automatically called by the framework when a key is pressed.
+     * Based on the pressed key, the pusher will change the direction and move.
+     *
+     * @param evt the KeyEvent object representing the key press event
+     * @return the next location to move to, or null if no valid location
+     */
+    public Location keyPressed(KeyEvent evt) {
         if (this.getIsFinished())
-            return true;
+            return null;
 
         Location next = null;
         switch (evt.getKeyCode()) {
@@ -38,21 +49,30 @@ public class KeyboardController extends VehicleController {
                 break;
         }
 
-        Target curTarget = (Target) getOneActorAt(this.getVehicle().getLocation(), Target.class);
-        if (curTarget != null) {
-            curTarget.show();
+        if (next != null) {
+            // TODO: updateLogResult();
+            return next;
         }
 
-        if (next != null && this.getVehicle().canMove(next)) {
-            this.getVehicle().setLocation(next);
-            updateLogResult();
-        }
-        refresh();
-
-        return true;
+        return null;
     }
 
-    public boolean keyReleased(KeyEvent evt) {
-        return true;
+    /**
+     * Handles the automatic movement of the vehicle.
+     * 
+     * @return null as automatic controls are not supported in this controller
+     */
+    public Location autoMoveNext() {
+        return null;
+    }
+
+    /**
+     * Handles the key released event.
+     *
+     * @param evt the KeyEvent object representing the key release event
+     * @return null as key releases are not supported in this controller
+     */
+    public Location keyReleased(KeyEvent evt) {
+        return null;
     }
 }
