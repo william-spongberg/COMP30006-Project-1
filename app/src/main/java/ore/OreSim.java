@@ -52,25 +52,19 @@ public class OreSim extends GameGrid {
      */
     public String runApp(boolean isDisplayingUI) {
         GGBackground bg = getBg();
-        // this wont work anymore
-        // need to iterate over arrayList of actors
-        // changed the arrayList to work with actors.
-        // tuple with elementType in arrayList?
         drawBoard(bg);
         drawActors();
         if (isDisplayingUI) {
             show();
         }
-        ArrayList<MapEntity> entities;
+        ArrayList<Vehicle> vehicles;
         while (!grid.completed() && gameDuration >= 0) {
             try {
                 // update actors
-                entities = getActors(MapEntity);
-                for (MapEntity entity: entities)
+                vehicles = getActors(Vehicle);
+                for (Vehicle vehicle: vehicles)
                 {
-                    // changed the method signature to return a mapGrid, as i presume it does here?
-                    // since we're passing a mapGrid to update.
-                    grid = entity.update(grid);
+                    vehicle.move();
                 }
                 refresh();
                 // handle duration
@@ -166,7 +160,7 @@ public class OreSim extends GameGrid {
             {
                 switch (map.get(y).get(x))
                 {
-                    //TODO: add vehicle control type
+                    //TODO: handle vehicle control type
                     case PUSHER:
                         addActor(new Pusher(), new Location(x, y));
                         break;
