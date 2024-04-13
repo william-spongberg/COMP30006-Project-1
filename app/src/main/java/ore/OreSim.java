@@ -1,10 +1,6 @@
 package ore;
 
-import ch.aplu.jgamegrid.Actor;
-import ch.aplu.jgamegrid.GGBackground;
-import ch.aplu.jgamegrid.GGKeyListener;
-import ch.aplu.jgamegrid.GameGrid;
-import ch.aplu.jgamegrid.Location;
+import ch.aplu.jgamegrid.*;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -12,34 +8,30 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
-import java.util.Collections;
 
 public class OreSim extends GameGrid implements GGKeyListener {
     public static final Color BORDER_COLOUR = new Color(100, 100, 100);
     public static final Color FLOOR_COLOUR = Color.lightGray;
     public static final Color OUTSIDE_COLOUR = Color.darkGray;
-
-    private final MapGrid grid;
-    private final int numHorzCells;
-    private final int numVertCells;
-    private final Properties properties;
-
+    private static final double ONE_SECOND = 1000.0;
     // TODO: set to private, create getters and setters
     public final boolean isAutoMode;
-    public List<String> autoMovements = new ArrayList<String>();
-
+    private final MapGrid grid;
+    private final Properties properties;
+    private final StringBuilder logResult = new StringBuilder();
+    public List<String> autoMovements = new ArrayList<>();
     private double gameDuration;
     private int movementIndex;
-    private static final double ONE_SECOND = 1000.0;
-    private final StringBuilder logResult = new StringBuilder();
+    private ArrayList<Actor> targets;
+    private ArrayList<Actor> ores;
+
 
     public OreSim(Properties properties, MapGrid grid) {
         super(grid.getNumHorzCells(), grid.getNumVertCells(), 30, false);
         this.grid = grid;
-        numHorzCells = grid.getNumHorzCells();
-        numVertCells = grid.getNumVertCells();
         this.properties = properties;
         this.isAutoMode = properties.getProperty("movement.mode").equals("auto");
         if (isAutoMode) {
@@ -66,6 +58,9 @@ public class OreSim extends GameGrid implements GGKeyListener {
         drawBoard(bg);
         drawActors();
 
+        ores = getActors(Ore.class);
+        targets = getActors(Target.class);
+
         if (isDisplayingUI) {
             show();
         }
@@ -73,6 +68,7 @@ public class OreSim extends GameGrid implements GGKeyListener {
         for (Actor vehicle : vehicles) {
             addKeyListener(((Vehicle) vehicle).getController());
         }
+
         while (!completed() && gameDuration >= 0) {
             try {
                 // update actors
@@ -119,14 +115,13 @@ public class OreSim extends GameGrid implements GGKeyListener {
         StringBuilder stringBuilder = new StringBuilder();
         boolean hasAddedColon = false;
         boolean hasAddedLastComma = false;
-        for (int i = 0; i < actors.size(); i++) {
-            Actor actor = actors.get(i);
+        for (Actor actor : actors) {
             if (actor.isVisible()) {
                 if (!hasAddedColon) {
                     stringBuilder.append(":");
                     hasAddedColon = true;
                 }
-                stringBuilder.append(actor.getX() + "-" + actor.getY());
+                stringBuilder.append(actor.getX()).append("-").append(actor.getY());
                 stringBuilder.append(",");
                 hasAddedLastComma = true;
             }
@@ -140,7 +135,7 @@ public class OreSim extends GameGrid implements GGKeyListener {
     }
 
     /**
-     * Students need to modify this method so it can write an actual statistics into
+     * Students need to modify this method, so it can write an actual statistics into
      * the statistics file. It currently
      * only writes the sample data.
      */
@@ -240,14 +235,9 @@ public class OreSim extends GameGrid implements GGKeyListener {
         for (int y = 0; y < grid.getNumVertCells(); y++) {
             for (int x = 0; x < grid.getNumHorzCells(); x++) {
                 switch (map.get(y).get(x)) {
-                    case OUTSIDE:
-                        bg.fillCell(new Location(x, y), OUTSIDE_COLOUR);
-                        break;
-                    case BORDER:
-                        bg.fillCell(new Location(x, y), BORDER_COLOUR);
-                        break;
-                    default:
-                        bg.fillCell(new Location(x, y), FLOOR_COLOUR);
+                    case OUTSIDE -> bg.fillCell(new Location(x, y), OUTSIDE_COLOUR);
+                    case BORDER -> bg.fillCell(new Location(x, y), BORDER_COLOUR);
+                    default -> bg.fillCell(new Location(x, y), FLOOR_COLOUR);
                 }
             }
         }
@@ -255,27 +245,19 @@ public class OreSim extends GameGrid implements GGKeyListener {
 
     private int getOresDone() {
         int counter = 0;
-        for (Actor ore: getActors(Ore.class))
-        {
-            ArrayList<Actor> oreLocation = (getActorsAt(ore.getLocation()));
-            if (oreLocation.size() > 1)
-            {
-                counter++;
+        for (Actor ore : ores) {
+            for (Actor target : targets) {
+                if (ore.getLocation().equals(target.getLocation())) {
+                    counter++;
+                    break;
+                }
             }
         }
         return counter;
     }
 
     private boolean completed() {
-        // try to find an ore not at a target
-        for (Actor ore: getActors(Ore.class))
-        {
-            if (getActorsAt(ore.getLocation()).size() != 2)
-            {
-                return false;
-            }
-        }
-        return true;
+        return getOresDone() == ores.size();
     }
 
     /**
@@ -293,7 +275,7 @@ public class OreSim extends GameGrid implements GGKeyListener {
         List<Actor> bulldozers = getActors(Bulldozer.class);
         List<Actor> excavators = getActors(Excavator.class);
 
-        logResult.append(movementIndex + "#");
+        logResult.append(movementIndex).append("#");
         logResult.append(ElementType.PUSHER.getShortType()).append(actorLocations(pushers)).append("#");
         logResult.append(ElementType.ORE.getShortType()).append(actorLocations(ores)).append("#");
         logResult.append(ElementType.TARGET.getShortType()).append(actorLocations(targets)).append("#");
