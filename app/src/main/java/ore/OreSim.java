@@ -25,8 +25,8 @@ import java.util.Collections;
 public class OreSim extends GameGrid implements GGKeyListener {
     public static final Color BORDER_COLOUR = new Color(100, 100, 100);
     public static final Color FLOOR_COLOUR = Color.lightGray;
-    //TODO: see drawBoard()
     public static final Color OUTSIDE_COLOUR = Color.darkGray;
+
     private final MapGrid grid;
     private final int numHorzCells;
     private final int numVertCells;
@@ -55,7 +55,6 @@ public class OreSim extends GameGrid implements GGKeyListener {
 
         System.out.println("\nisAutoMode = " + isAutoMode);
         System.out.println("autoMovements = " + autoMovements);
-        //System.out.println("First move: " + autoMovements.get(0));
         System.out.println("gameDuration = " + gameDuration);
 
         addKeyListener(this);
@@ -87,10 +86,12 @@ public class OreSim extends GameGrid implements GGKeyListener {
                 }
                 refresh();
                 updateLogResult();
+
                 // handle duration
                 Thread.sleep(simulationPeriod);
                 double minusDuration = (simulationPeriod / ONE_SECOND);
                 gameDuration -= minusDuration;
+
                 // Set title
                 String title = String.format("# Ores at Target: %d. Time left: %.2f seconds", getOresDone(), gameDuration);
                 setTitle(title);
@@ -188,7 +189,6 @@ public class OreSim extends GameGrid implements GGKeyListener {
         }
     }
 
-
     /**
      * Draw all different actors on the board: pusher, ore, target, rock, clay, bulldozer, excavator
      */
@@ -225,7 +225,6 @@ public class OreSim extends GameGrid implements GGKeyListener {
                 }
             }
         }
-        //System.out.println("ores in goal = " + getOresDone());
         setPaintOrder(Target.class);
     }
 
