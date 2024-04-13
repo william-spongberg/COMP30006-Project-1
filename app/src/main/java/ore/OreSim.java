@@ -254,8 +254,11 @@ public class OreSim extends GameGrid implements GGKeyListener {
 
     private int getOresDone() {
         int counter = 0;
-        for (Actor ore : getActors(Ore.class)) {
-            if (getActorsAt(ore.getLocation(), Target.class).size() > 0) {
+        for (Actor ore: getActors(Ore.class))
+        {
+            ArrayList<Actor> oreLocation = (getActorsAt(ore.getLocation()));
+            if (oreLocation.size() > 1)
+            {
                 counter++;
             }
         }
@@ -264,8 +267,10 @@ public class OreSim extends GameGrid implements GGKeyListener {
 
     private boolean completed() {
         // try to find an ore not at a target
-        for (Actor ore : getActors(Ore.class)) {
-            if (getActorsAt(ore.getLocation(), Target.class).size() == 0) {
+        for (Actor ore: getActors(Ore.class))
+        {
+            if (getActorsAt(ore.getLocation()).size() != 2)
+            {
                 return false;
             }
         }
