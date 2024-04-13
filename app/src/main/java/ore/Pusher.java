@@ -11,6 +11,7 @@ import java.util.List;
  * It extends the Vehicle class.
  */
 public class Pusher extends Vehicle {
+    private static int id = 0;
 
     /**
      * Constructs a Pusher object.
@@ -23,6 +24,12 @@ public class Pusher extends Vehicle {
     public Pusher(boolean isAuto, List<String> controls, int autoMovementIndex) {
         super("sprites/pusher.png", isAuto, controls, autoMovementIndex);
         setIsAuto(controls, 'P');
+        incrementId();
+
+        System.out.println("\nPusher " + getId() + " created");
+        System.out.println("            isAuto: " + isAuto);
+        System.out.println("            controls: " + controls);
+        System.out.println("            autoMovementIndex: " + autoMovementIndex + "\n");
     }
 
     /**
@@ -70,5 +77,21 @@ public class Pusher extends Vehicle {
                 "\n"
         };
         return result;
+    }
+
+    /**
+     * Returns the ID of the vehicle.
+     *
+     * @return the ID of the vehicle
+     */
+    public static int getId() {
+        return id;
+    }
+
+    /**
+     * Increments the ID of the vehicle.
+     */
+    public static void incrementId() {
+        id++;
     }
 }

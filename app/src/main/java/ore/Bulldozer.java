@@ -9,6 +9,7 @@ import java.util.List;
  * It extends the Vehicle class.
  */
 public class Bulldozer extends Vehicle {
+    private static int id = 0;
     private int numClayRemoved = 0;
 
     /**
@@ -22,6 +23,12 @@ public class Bulldozer extends Vehicle {
     public Bulldozer(boolean isAuto, List<String> controls, int autoMovementIndex) {
         super("sprites/bulldozer.png", isAuto, controls, autoMovementIndex);
         setIsAuto(controls, 'B');
+        incrementId();
+
+        System.out.println("\nBulldozer " + getId() + " created");
+        System.out.println("            isAuto: " + isAuto);
+        System.out.println("            controls: " + controls);
+        System.out.println("            autoMovementIndex: " + autoMovementIndex + "\n");
     }
 
     /**
@@ -79,6 +86,15 @@ public class Bulldozer extends Vehicle {
     }
 
     /**
+     * Returns the ID of the vehicle.
+     *
+     * @return the ID of the vehicle
+     */
+    public static int getId() {
+        return id;
+    }
+
+    /**
      * Returns the number of clay removed by the bulldozer.
      *
      * @return the number of clay removed
@@ -94,5 +110,12 @@ public class Bulldozer extends Vehicle {
      */
     public void incrementNumClayRemoved() {
         this.numClayRemoved++;
+    }
+
+    /**
+     * Increments the ID of the vehicle.
+     */
+    public static void incrementId() {
+        id++;
     }
 }

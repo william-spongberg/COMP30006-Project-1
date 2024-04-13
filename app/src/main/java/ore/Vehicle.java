@@ -13,8 +13,6 @@ import java.util.List;
 public abstract class Vehicle extends Actor {
     private VehicleController controller = null;
     private boolean isAuto = false;
-    // TODO: fix, e.g. make pusher-1, bulldozer-1 etc, seperate per class
-    private static int id = 0;
     private int numMoves = 0;
 
     /**
@@ -29,18 +27,12 @@ public abstract class Vehicle extends Actor {
     public Vehicle(String image, boolean isAuto, List<String> controls, int autoMovementIndex) {
         super(true, image);
         this.isAuto = isAuto;
-        incrementID();
 
         if (isAuto) {
             this.controller = new AutomaticController(this, controls, autoMovementIndex);
         } else {
             this.controller = new KeyboardController(this);
         }
-
-        System.out.println("\nVehicle " + getId() + " created");
-        System.out.println("Vehicle isAuto: " + isAuto);
-        System.out.println("Vehicle controls: " + controls);
-        System.out.println("Vehicle autoMovementIndex: " + autoMovementIndex + "\n");
     }
 
     /**
@@ -164,15 +156,6 @@ public abstract class Vehicle extends Actor {
     }
 
     /**
-     * Returns the ID of the vehicle.
-     *
-     * @return the ID of the vehicle
-     */
-    public static int getId() {
-        return id;
-    }
-
-    /**
      * Returns the number of moves made by the vehicle.
      *
      * @return the number of moves made by the vehicle
@@ -199,13 +182,6 @@ public abstract class Vehicle extends Actor {
      */
     public void setIsAuto(boolean isAuto) {
         this.isAuto = isAuto;
-    }
-
-    /**
-     * Increments the ID of the vehicle by 1.
-     */
-    public void incrementID() {
-        id += 1;
     }
 
     /**
