@@ -12,9 +12,6 @@ import java.util.List;
  */
 public class Pusher extends Vehicle {
     private static int id = 0;
-    private VehicleController controller = null;
-    private boolean isAuto = false;
-    private int numMoves = 0;
 
     /**
      * Constructs a Pusher object.
@@ -41,6 +38,7 @@ public class Pusher extends Vehicle {
      * @param location the location to check
      * @return true if the Pusher can move to the location, false otherwise
      */
+    @Override
     public boolean canMove(Location location) {
         // assuming only one ore can exist in a location at a time
         if (gameGrid.getOneActorAt(location, Ore.class) != null) {
@@ -58,6 +56,7 @@ public class Pusher extends Vehicle {
      * @param actor the actor to check collision with
      * @return true if the Pusher collides with the actor, false otherwise
      */
+    @Override
     public boolean collideWithActor(Actor actor) {
         if (actor instanceof Ore) {
             Ore ore = (Ore) actor;
@@ -75,6 +74,7 @@ public class Pusher extends Vehicle {
      * 
      * @return an array of strings containing the statistics
      */
+    @Override
     public String[] getStatistics() {
         String result[] = {
                 "Pusher-" + getId() + " Moves: " + this.getNumMoves()
@@ -91,33 +91,6 @@ public class Pusher extends Vehicle {
         return id;
     }
 
-    /**
-     * Returns the controller for the vehicle.
-     *
-     * @return the controller for the vehicle
-     */
-    public VehicleController getController() {
-        return this.controller;
-    }
-
-    /**
-     * Returns a boolean value indicating whether the vehicle is automatic or not.
-     *
-     * @return true if the vehicle is automatic, false otherwise
-     */
-    public boolean getIsAuto() {
-        return this.isAuto;
-    }
-
-    /**
-     * Returns the number of moves made by the vehicle.
-     *
-     * @return the number of moves made by the vehicle
-     */
-    public int getNumMoves() {
-        return this.numMoves;
-    }
-
     /* setters */
 
     /**
@@ -125,31 +98,5 @@ public class Pusher extends Vehicle {
      */
     public static void incrementId() {
         id++;
-    }
-
-    /**
-     * Sets the controller for the vehicle.
-     *
-     * @param controller the controller to be set
-     */
-    public void setController(VehicleController controller) {
-        this.controller = controller;
-    }
-
-    /**
-     * Sets the value indicating whether the vehicle is automatic or manual.
-     * 
-     * @param controls the list of controls for the vehicle
-     * @param vehicleType the type of vehicle
-     */
-    public void setIsAuto(boolean isAuto) {
-        this.isAuto = isAuto;
-    }
-
-    /**
-     * Increments the number of moves made by the vehicle.
-     */
-    public void incrementNumMoves() {
-        this.numMoves++;
     }
 }

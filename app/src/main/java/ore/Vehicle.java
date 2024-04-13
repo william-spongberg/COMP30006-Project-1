@@ -11,6 +11,10 @@ import java.util.List;
  * It provides common functionality and properties for all vehicles in the game.
  */
 public abstract class Vehicle extends Actor {
+    private VehicleController controller = null;
+    private boolean isAuto = false;
+    private int numMoves = 0;
+    
     /**
      * Constructs a new Vehicle object.
      * 
@@ -134,26 +138,32 @@ public abstract class Vehicle extends Actor {
      */
     public abstract String[] getStatistics();
 
-    /**
+        /**
      * Returns the controller for the vehicle.
      *
      * @return the controller for the vehicle
      */
-    public abstract VehicleController getController();
+    public VehicleController getController() {
+        return this.controller;
+    }
 
     /**
      * Returns a boolean value indicating whether the vehicle is automatic or not.
      *
      * @return true if the vehicle is automatic, false otherwise
      */
-    public abstract boolean getIsAuto();
+    public boolean getIsAuto() {
+        return this.isAuto;
+    }
 
     /**
      * Returns the number of moves made by the vehicle.
      *
      * @return the number of moves made by the vehicle
      */
-    public abstract int getNumMoves();
+    public int getNumMoves() {
+        return this.numMoves;
+    }
 
     /* setters */
 
@@ -162,19 +172,24 @@ public abstract class Vehicle extends Actor {
      *
      * @param controller the controller to be set
      */
-    public abstract void setController(VehicleController controller);
+    public void setController(VehicleController controller) {
+        this.controller = controller;
+    }
 
     /**
      * Sets the value indicating whether the vehicle is automatic or manual.
      * 
-     * @param isAuto true if the vehicle is automatic, false if it is manual
+     * @param controls the list of controls for the vehicle
+     * @param vehicleType the type of vehicle
      */
-    public abstract void setIsAuto(boolean isAuto);
+    public void setIsAuto(boolean isAuto) {
+        this.isAuto = isAuto;
+    }
 
     /**
      * Increments the number of moves made by the vehicle.
-     * This method should be implemented by subclasses to update the number of moves
-     * specific to each type of vehicle.
      */
-    public abstract void incrementNumMoves();
+    public void incrementNumMoves() {
+        this.numMoves++;
+    }
 }

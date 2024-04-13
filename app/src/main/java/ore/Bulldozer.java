@@ -10,9 +10,6 @@ import java.util.List;
  */
 public class Bulldozer extends Vehicle {
     private static int id = 0;
-    private VehicleController controller = null;
-    private boolean isAuto = false;
-    private int numMoves = 0;
     private int numClayRemoved = 0;
 
     /**
@@ -94,32 +91,6 @@ public class Bulldozer extends Vehicle {
     public static int getId() {
         return id;
     }
-    /**
-     * Returns the controller for the vehicle.
-     *
-     * @return the controller for the vehicle
-     */
-    public VehicleController getController() {
-        return this.controller;
-    }
-
-    /**
-     * Returns a boolean value indicating whether the vehicle is automatic or not.
-     *
-     * @return true if the vehicle is automatic, false otherwise
-     */
-    public boolean getIsAuto() {
-        return this.isAuto;
-    }
-
-    /**
-     * Returns the number of moves made by the vehicle.
-     *
-     * @return the number of moves made by the vehicle
-     */
-    public int getNumMoves() {
-        return this.numMoves;
-    }
 
     /**
      * Gets the number of rocks removed by the excavator.
@@ -137,31 +108,6 @@ public class Bulldozer extends Vehicle {
      */
     public static void incrementId() {
         id++;
-    }
-
-    /**
-     * Sets the controller for the vehicle.
-     *
-     * @param controller the controller to be set
-     */
-    public void setController(VehicleController controller) {
-        this.controller = controller;
-    }
-
-    /**
-     * Sets the value indicating whether the vehicle is automatic or manual.
-     *
-     * @param isAuto true if the vehicle is automatic, false if it is manual
-     */
-    public void setIsAuto(boolean isAuto) {
-        this.isAuto = isAuto;
-    }
-
-    /**
-     * Increments the number of moves made by the vehicle.
-     */
-    public void incrementNumMoves() {
-        this.numMoves++;
     }
 
     /**
