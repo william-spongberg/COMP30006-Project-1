@@ -49,7 +49,7 @@ public class Bulldozer extends Vehicle {
      */
     public boolean collideWithActor(Actor actor) {
         if (actor instanceof Clay) {
-            ((Clay) gameGrid.getOneActorAt(actor.getLocation(), Clay.class)).removeSelf();
+            actor.removeSelf();
             this.incrementNumClayRemoved();
             return true;
         }

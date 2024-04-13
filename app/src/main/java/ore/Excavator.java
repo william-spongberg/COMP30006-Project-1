@@ -49,7 +49,7 @@ public class Excavator extends Vehicle {
      */
     public boolean collideWithActor(Actor actor) {
         if (actor instanceof Rock) {
-            ((Rock) gameGrid.getOneActorAt(actor.getLocation(), Rock.class)).removeSelf();
+            actor.removeSelf();
             this.incrementNumRockRemoved();
             return true;
         }
