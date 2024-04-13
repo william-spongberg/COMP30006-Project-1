@@ -9,6 +9,7 @@ import java.util.List;
  * It extends the Vehicle class.
  */
 public class Excavator extends Vehicle {
+    private static int id = 0;
     private int numRockRemoved = 0;
 
     /**
@@ -21,6 +22,13 @@ public class Excavator extends Vehicle {
      */
     public Excavator(boolean isAuto, List<String> controls, int autoMovementIndex) {
         super("sprites/excavator.png", isAuto, controls, autoMovementIndex);
+        setIsAuto(controls, 'E');
+        incrementId();
+
+        System.out.println("\nExcavator " + getId() + " created");
+        System.out.println("            isAuto: " + isAuto);
+        System.out.println("            controls: " + controls);
+        System.out.println("            autoMovementIndex: " + autoMovementIndex + "\n");
     }
 
     /**
@@ -78,6 +86,15 @@ public class Excavator extends Vehicle {
     }
 
     /**
+     * Returns the ID of the vehicle.
+     *
+     * @return the ID of the vehicle
+     */
+    public static int getId() {
+        return id;
+    }
+
+    /**
      * Gets the number of rocks removed by the excavator.
      *
      * @return the number of rocks removed
@@ -93,5 +110,12 @@ public class Excavator extends Vehicle {
      */
     public void incrementNumRockRemoved() {
         this.numRockRemoved++;
+    }
+
+    /**
+     * Increments the ID of the vehicle.
+     */
+    public static void incrementId() {
+        id++;
     }
 }

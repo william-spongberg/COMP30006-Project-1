@@ -13,7 +13,6 @@ import java.util.List;
 public abstract class Vehicle extends Actor {
     private VehicleController controller = null;
     private boolean isAuto = false;
-    private static int id = 0;
     private int numMoves = 0;
 
     /**
@@ -28,18 +27,31 @@ public abstract class Vehicle extends Actor {
     public Vehicle(String image, boolean isAuto, List<String> controls, int autoMovementIndex) {
         super(true, image);
         this.isAuto = isAuto;
-        incrementID();
 
         if (isAuto) {
             this.controller = new AutomaticController(this, controls, autoMovementIndex);
         } else {
             this.controller = new KeyboardController(this);
         }
+    }
 
-        System.out.println("\nVehicle " + getId() + " created");
-        System.out.println("Vehicle isAuto: " + isAuto);
-        System.out.println("Vehicle controls: " + controls);
-        System.out.println("Vehicle autoMovementIndex: " + autoMovementIndex + "\n");
+    /**
+     * Sets the automatic status of the vehicle based on the provided controls and
+     * character.
+     * If the controls list is not empty and contains the specified character, the
+     * automatic status is set to true.
+     *
+     * @param controls the list of controls to check
+     * @param c        the character to search for in the controls list
+     */
+    public void setIsAuto(List<String> controls, char c) {
+        if (!(controls.isEmpty())) {
+            for (String s : controls) {
+                if (s.indexOf(c) != -1) {
+                    this.setIsAuto(true);
+                }
+            }
+        }
     }
 
     /**
@@ -66,7 +78,7 @@ public abstract class Vehicle extends Actor {
         if (location != null && !(this.gameGrid.getBg().getColor(location).equals(OreSim.BORDER_COLOUR))
                 && !(this.gameGrid.getBg().getColor(location).equals(OreSim.OUTSIDE_COLOUR))
                 && canMove(location)) {
-            
+
             updateTargets(location);
 
             this.setLocation(location);
@@ -77,21 +89,22 @@ public abstract class Vehicle extends Actor {
 
     /**
      * Updates the targets based on the given location.
-     * Shows the targets at the current location and hides the targets at the new location.
+     * Shows the targets at the current location and hides the targets at the new
+     * location.
      *
      * @param location the new location to update the targets
      */
     private void updateTargets(Location location) {
         List<Actor> actors = this.gameGrid.getActorsAt(this.getLocation());
-        for (Actor actor: actors) {
+        for (Actor actor : actors) {
             if (actor instanceof Target) {
                 Target target = (Target) actor;
                 target.show();
             }
         }
-        
+
         actors = this.gameGrid.getActorsAt(location);
-        for (Actor actor: actors) {
+        for (Actor actor : actors) {
             if (actor instanceof Target) {
                 Target target = (Target) actor;
                 target.hide();
@@ -143,15 +156,6 @@ public abstract class Vehicle extends Actor {
     }
 
     /**
-     * Returns the ID of the vehicle.
-     *
-     * @return the ID of the vehicle
-     */
-    public static int getId() {
-        return id;
-    }
-
-    /**
      * Returns the number of moves made by the vehicle.
      *
      * @return the number of moves made by the vehicle
@@ -178,13 +182,6 @@ public abstract class Vehicle extends Actor {
      */
     public void setIsAuto(boolean isAuto) {
         this.isAuto = isAuto;
-    }
-
-    /**
-     * Increments the ID of the vehicle by 1.
-     */
-    public void incrementID() {
-        id += 1;
     }
 
     /**
