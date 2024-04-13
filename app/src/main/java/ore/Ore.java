@@ -17,19 +17,19 @@ public class Ore extends Actor
     }
 
     // checks if we can move, if we can, then we check if we are going to / leaving a target
-    public void checkAndMove(Location location) {
+    public boolean checkAndMove(Location location) {
         // see whats at the location we're moving to.
         ArrayList<Actor> onLocation = gameGrid.getActorsAt(location);
 
         // check if we're gonna hit a wall.
         Color c = gameGrid.getBg().getColor(location);
-        if (c == BORDER_COLOUR) {
-            return;
+        if (c.equals(BORDER_COLOUR)) {
+            return false;
         }
 
         // check if theres too much at a spot (target and ore) or theres something else blocking us
         if (onLocation.size() > 1 || (onLocation.size() == 1 && !(onLocation.get(0) instanceof Target))) {
-            return;
+            return false;
         }
 
         // if we have reached this point, there is either a target or empty space.
@@ -50,12 +50,13 @@ public class Ore extends Actor
             if (targetAt != null) {
                 targetAt.show();
             }
-            return;
+            return true;
 
         }
         // must be an empty space, so move.
         this.setLocation(location);
         this.show(0);
+        return true;
 
     }
 }
