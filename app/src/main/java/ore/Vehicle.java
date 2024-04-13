@@ -5,16 +5,14 @@ import ch.aplu.jgamegrid.*;
 import java.util.List;
 
 /**
- * Represents a vehicle in the game.
- * 
- * This class is an abstract class that extends the `Actor` class.
- * It provides common functionality and properties for all vehicles in the game.
+ * The abstract class Vehicle represents a vehicle in the game.
+ * It extends the Actor class and provides common functionality and attributes for all vehicles.
  */
 public abstract class Vehicle extends Actor {
     private VehicleController controller = null;
     private boolean isAuto = false;
     private int numMoves = 0;
-    
+
     /**
      * Constructs a new Vehicle object.
      * 
