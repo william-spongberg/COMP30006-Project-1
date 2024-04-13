@@ -16,12 +16,6 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Collections;
 
-/**
- * The `OreSim` class represents a simulation of an ore mining game. It extends the `GameGrid` class and implements the `GGKeyListener` interface.
- * The class contains inner classes representing different types of game elements such as `Target`, `Ore`, `Pusher`, `Bulldozer`, `Excavator`, `Rock`, and `Clay`.
- * The `OreSim` class is responsible for setting up the game grid, initializing game elements, handling user input, and running the game simulation.
- * It also provides methods for checking the progress of the game, updating statistics, and drawing the game board.
- */
 public class OreSim extends GameGrid implements GGKeyListener {
     public static final Color BORDER_COLOUR = new Color(100, 100, 100);
     public static final Color FLOOR_COLOUR = Color.lightGray;
@@ -40,6 +34,7 @@ public class OreSim extends GameGrid implements GGKeyListener {
     private int movementIndex;
     private static final double ONE_SECOND = 1000.0;
     private final StringBuilder logResult = new StringBuilder();
+
     public OreSim(Properties properties, MapGrid grid) {
         super(grid.getNumHorzCells(), grid.getNumVertCells(), 30, false);
         this.grid = grid;
@@ -79,10 +74,9 @@ public class OreSim extends GameGrid implements GGKeyListener {
             try {
                 // update actors
                 vehicles = getActors(Vehicle.class);
-                for (Actor vehicle: vehicles)
-                {
-                    ((Vehicle)vehicle).moveVehicle();
-                    addKeyListener(((Vehicle)vehicle).getController());
+                for (Actor vehicle : vehicles) {
+                    ((Vehicle) vehicle).moveVehicle();
+                    addKeyListener(((Vehicle) vehicle).getController());
                 }
                 refresh();
                 updateLogResult();
@@ -93,7 +87,8 @@ public class OreSim extends GameGrid implements GGKeyListener {
                 gameDuration -= minusDuration;
 
                 // Set title
-                String title = String.format("# Ores at Target: %d. Time left: %.2f seconds", getOresDone(), gameDuration);
+                String title = String.format("# Ores at Target: %d. Time left: %.2f seconds", getOresDone(),
+                        gameDuration);
                 setTitle(title);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
@@ -108,13 +103,13 @@ public class OreSim extends GameGrid implements GGKeyListener {
             setTitle("Mission Failed. You ran out of time");
         }
 
-
         updateStatistics();
         return logResult.toString();
     }
 
     /**
-     * Transform the list of actors to a string of location for a specific kind of actor.
+     * Transform the list of actors to a string of location for a specific kind of
+     * actor.
      *
      * @param actors
      * @return
@@ -144,7 +139,8 @@ public class OreSim extends GameGrid implements GGKeyListener {
     }
 
     /**
-     * Students need to modify this method so it can write an actual statistics into the statistics file. It currently
+     * Students need to modify this method so it can write an actual statistics into
+     * the statistics file. It currently
      * only writes the sample data.
      */
     private void updateStatistics() {
@@ -190,16 +186,14 @@ public class OreSim extends GameGrid implements GGKeyListener {
     }
 
     /**
-     * Draw all different actors on the board: pusher, ore, target, rock, clay, bulldozer, excavator
+     * Draw all different actors on the board: pusher, ore, target, rock, clay,
+     * bulldozer, excavator
      */
     private void drawActors() {
         ArrayList<ArrayList<ElementType>> map = grid.getMap();
-        for (int y = 0; y < grid.getNumVertCells(); y++)
-        {
-            for (int x = 0; x < grid.getNumHorzCells(); x++)
-            {
-                switch (map.get(y).get(x))
-                {
+        for (int y = 0; y < grid.getNumVertCells(); y++) {
+            for (int x = 0; x < grid.getNumHorzCells(); x++) {
+                switch (map.get(y).get(x)) {
                     case PUSHER:
                         addActor(new Pusher(isAutoMode, autoMovements, 0), new Location(x, y));
                         break;
@@ -235,18 +229,16 @@ public class OreSim extends GameGrid implements GGKeyListener {
      */
 
     private void drawBoard(GGBackground bg) {
-        //TODO: work out what tf going on here
-        // the following for loop should paint cells the correct colour, so unsure what the next 2 lines do :P
+        // TODO: work out what tf going on here
+        // the following for loop should paint cells the correct colour, so unsure what
+        // the next 2 lines do :P
         bg.clear(new Color(230, 230, 230));
         bg.setPaintColor(Color.darkGray);
 
         ArrayList<ArrayList<ElementType>> map = grid.getMap();
-        for (int y = 0; y < grid.getNumVertCells(); y++)
-        {
-            for (int x = 0; x < grid.getNumHorzCells(); x++)
-            {
-                switch (map.get(y).get(x))
-                {
+        for (int y = 0; y < grid.getNumVertCells(); y++) {
+            for (int x = 0; x < grid.getNumHorzCells(); x++) {
+                switch (map.get(y).get(x)) {
                     case OUTSIDE:
                         bg.fillCell(new Location(x, y), OUTSIDE_COLOUR);
                         break;
@@ -259,26 +251,21 @@ public class OreSim extends GameGrid implements GGKeyListener {
             }
         }
     }
-    private int getOresDone()
-    {
+
+    private int getOresDone() {
         int counter = 0;
-        for (Actor ore: getActors(Ore.class))
-        {
-            if (getActorsAt(ore.getLocation(), Target.class).size() > 0)
-            {
+        for (Actor ore : getActors(Ore.class)) {
+            if (getActorsAt(ore.getLocation(), Target.class).size() > 0) {
                 counter++;
             }
         }
         return counter;
     }
 
-    private boolean completed()
-    {
+    private boolean completed() {
         // try to find an ore not at a target
-        for (Actor ore: getActors(Ore.class))
-        {
-            if (getActorsAt(ore.getLocation(), Target.class).size() == 0)
-            {
+        for (Actor ore : getActors(Ore.class)) {
+            if (getActorsAt(ore.getLocation(), Target.class).size() == 0) {
                 return false;
             }
         }
@@ -325,6 +312,7 @@ public class OreSim extends GameGrid implements GGKeyListener {
         OUTSIDE("OS"), EMPTY("ET"), BORDER("BD"),
         PUSHER("P"), BULLDOZER("B"), EXCAVATOR("E"), ORE("O"),
         ROCK("R"), CLAY("C"), TARGET("T");
+
         private final String shortType;
 
         ElementType(String shortType) {
