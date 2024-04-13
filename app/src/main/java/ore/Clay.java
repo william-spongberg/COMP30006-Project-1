@@ -9,10 +9,6 @@ public class Clay extends Actor
         super(false, "sprites/clay.png");
     }
 
-    public void destroy() {
-        this.removeSelf();
-    }
-
 }
 
 

@@ -8,9 +8,5 @@ public class Rock extends Actor {
         super(false, "sprites/rock.png");
     }
 
-    public void destroy() {
-        this.removeSelf();
-    }
-
 
 }
