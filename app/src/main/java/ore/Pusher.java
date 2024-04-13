@@ -51,36 +51,10 @@ public class Pusher extends Vehicle {
             Ore ore = (Ore) actor;
             // try to move the ore
             ore.setDirection(this.getDirection());
-            return moveOre(ore);
+            ore.checkAndMove(ore.getNextMoveLocation());
+            return true;
         }
         return false;
-    }
-
-    /**
-     * Moves the specified ore to the next location.
-     *
-     * @param ore the ore to move
-     * @return true if the ore is successfully moved, false otherwise
-     */
-    private boolean moveOre(Ore ore) {
-        Location nextLocation = ore.getNextMoveLocation();
-
-        // Test if try to move into another actor and actor is not the target
-        List<Actor> actorsNext = gameGrid.getActorsAt(nextLocation);
-        if (actorsNext != null) {
-            for (Actor actor : actorsNext) {
-                if (!(actor instanceof Target)) {
-                    return false;
-                }
-            }
-        }
-
-        // TODO: Check if ore is pushed into border (colour?)
-
-        // Move the ore to the next location
-        ore.checkAndMove(nextLocation);
-
-        return true;
     }
 
     /**

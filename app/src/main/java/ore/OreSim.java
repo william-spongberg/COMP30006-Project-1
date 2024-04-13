@@ -55,7 +55,7 @@ public class OreSim extends GameGrid implements GGKeyListener {
 
         System.out.println("\nisAutoMode = " + isAutoMode);
         System.out.println("autoMovements = " + autoMovements);
-        System.out.println("First move: " + autoMovements.get(0));
+        //System.out.println("First move: " + autoMovements.get(0));
         System.out.println("gameDuration = " + gameDuration);
 
         addKeyListener(this);
@@ -206,9 +206,11 @@ public class OreSim extends GameGrid implements GGKeyListener {
                         } else {
 
                             boolean isPusherAutoMode = false;
-                            for (String s : autoMovements) {
-                                if (s.indexOf('P') != -1) {
-                                    isPusherAutoMode = true;
+                            if (autoMovements.isEmpty()) {
+                                for (String s : autoMovements) {
+                                    if (s.indexOf('P') != -1) {
+                                        isPusherAutoMode = true;
+                                    }
                                 }
                             }
                             System.out.println("isPusherAutoMode = " + isPusherAutoMode);
