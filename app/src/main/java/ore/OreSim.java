@@ -206,7 +206,7 @@ public class OreSim extends GameGrid implements GGKeyListener {
                         } else {
 
                             boolean isPusherAutoMode = false;
-                            if (autoMovements.isEmpty()) {
+                            if (!(autoMovements.isEmpty())) {
                                 for (String s : autoMovements) {
                                     if (s.indexOf('P') != -1) {
                                         isPusherAutoMode = true;
@@ -220,6 +220,17 @@ public class OreSim extends GameGrid implements GGKeyListener {
                         break;
                     case BULLDOZER:
                         if (!isAutoMode) {
+
+                            boolean isBulldozerAutoMode = false;
+                            if (!(autoMovements.isEmpty())) {
+                                for (String s : autoMovements) {
+                                    if (s.indexOf('B') != -1) {
+                                        isBulldozerAutoMode = true;
+                                    }
+                                }
+                            }
+                            System.out.println("isPusherAutoMode = " + isBulldozerAutoMode);
+
                             addActor(new Bulldozer(false, null, 0), new Location(x, y));
                         } else {
                             addActor(new Bulldozer(autoMovements.contains("B"), autoMovements, 0), new Location(x, y));
@@ -227,6 +238,17 @@ public class OreSim extends GameGrid implements GGKeyListener {
                         break;
                     case EXCAVATOR:
                         if (!isAutoMode) {
+                            
+                            boolean isExcavatorAutoMode = false;
+                            if (!(autoMovements.isEmpty())) {
+                                for (String s : autoMovements) {
+                                    if (s.indexOf('E') != -1) {
+                                        isExcavatorAutoMode = true;
+                                    }
+                                }
+                            }
+                            System.out.println("isPusherAutoMode = " + isExcavatorAutoMode);
+                            
                             addActor(new Excavator(false, null, 0), new Location(x, y));
                         } else {
                             addActor(new Excavator(autoMovements.contains("E"), autoMovements, 0), new Location(x, y));
