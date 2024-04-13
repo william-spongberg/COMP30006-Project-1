@@ -67,7 +67,9 @@ public abstract class Vehicle extends Actor {
      * @param location the location to move the vehicle to
      */
     public void moveToLocation(Location location) {
-        if (location != null && !(this.gameGrid.getBg().getColor(location).equals(OreSim.BORDER_COLOUR)) && canMove(location)) {
+        if (location != null && !(this.gameGrid.getBg().getColor(location).equals(OreSim.BORDER_COLOUR))
+                && !(this.gameGrid.getBg().getColor(location).equals(OreSim.OUTSIDE_COLOUR))
+                && canMove(location)) {
             Target curTarget = (Target) this.gameGrid.getOneActorAt(this.getLocation(), Target.class);
             if (curTarget != null) {
                 curTarget.show();
