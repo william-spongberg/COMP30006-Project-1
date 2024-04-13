@@ -5,18 +5,16 @@ import ch.aplu.jgamegrid.Location;
 
 import java.awt.*;
 import java.util.ArrayList;
-import ch.aplu.jgamegrid.GGBackground;
 
-
-
-public class Ore extends Actor
-{
+public class Ore extends Actor {
     private static final Color BORDER_COLOUR = new Color(100, 100, 100);
+
     public Ore() {
         super("sprites/ore.png", 2);
     }
 
-    // checks if we can move, if we can, then we check if we are going to / leaving a target
+    // checks if we can move, if we can, then we check if we are going to / leaving
+    // a target
     public boolean checkAndMove(Location location) {
         // see whats at the location we're moving to.
         ArrayList<Actor> onLocation = gameGrid.getActorsAt(location);
@@ -27,7 +25,8 @@ public class Ore extends Actor
             return false;
         }
 
-        // check if theres too much at a spot (target and ore) or theres something else blocking us
+        // check if theres too much at a spot (target and ore) or theres something else
+        // blocking us
         if (onLocation.size() > 1 || (onLocation.size() == 1 && !(onLocation.get(0) instanceof Target))) {
             return false;
         }
@@ -41,7 +40,6 @@ public class Ore extends Actor
             // update us (set us to an oreCart)
             this.setLocation(location);
             this.show(1);
-
 
             // if we were already on the target, show the target we were at
             ArrayList<Actor> actorsOnLocation = gameGrid.getActorsAt(this.getLocation());
