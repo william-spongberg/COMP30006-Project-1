@@ -23,7 +23,7 @@ public class Ore extends Actor
 
         // check if we're gonna hit a wall.
         Color c = gameGrid.getBg().getColor(location);
-        if (c == BORDER_COLOUR) {
+        if (c.equals(BORDER_COLOUR)) {
             return;
         }
 

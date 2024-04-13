@@ -10,7 +10,7 @@ public class Clay extends Actor
     }
 
     public void destroy() {
-        removeSelf();
+        this.removeSelf();
     }
 
 }

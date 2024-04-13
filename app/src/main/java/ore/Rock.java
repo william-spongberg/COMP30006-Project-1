@@ -9,7 +9,7 @@ public class Rock extends Actor {
     }
 
     public void destroy() {
-        removeSelf();
+        this.removeSelf();
     }
 
 
