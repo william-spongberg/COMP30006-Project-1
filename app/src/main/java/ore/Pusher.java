@@ -51,8 +51,7 @@ public class Pusher extends Vehicle {
             Ore ore = (Ore) actor;
             // try to move the ore
             ore.setDirection(this.getDirection());
-            ore.checkAndMove(ore.getNextMoveLocation());
-            return true;
+            return ore.checkAndMove(ore.getNextMoveLocation());
         }
         return false;
     }
