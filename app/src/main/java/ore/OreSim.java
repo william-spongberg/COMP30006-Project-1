@@ -23,17 +23,17 @@ import java.util.Collections;
  * It also provides methods for checking the progress of the game, updating statistics, and drawing the game board.
  */
 public class OreSim extends GameGrid implements GGKeyListener {
-    private static final Color BORDER_COLOUR = new Color(100, 100, 100);
-    private static final Color FLOOR_COLOUR = Color.lightGray;
+    public static final Color BORDER_COLOUR = new Color(100, 100, 100);
+    public static final Color FLOOR_COLOUR = Color.lightGray;
     //TODO: see drawBoard()
-    private static final Color OUTSIDE_COLOUR = Color.darkGray;
+    public static final Color OUTSIDE_COLOUR = Color.darkGray;
     private final MapGrid grid;
     private final int numHorzCells;
     private final int numVertCells;
     private final Properties properties;
-    private final boolean isAutoMode;
 
     // TODO: set to private, create getters and setters
+    public final boolean isAutoMode;
     public List<String> autoMovements = new ArrayList<String>();
 
     private double gameDuration;
@@ -50,10 +50,13 @@ public class OreSim extends GameGrid implements GGKeyListener {
         if (isAutoMode) {
             Collections.addAll(autoMovements, properties.getProperty("machines.movements").split(","));
         }
-        //System.out.println("autoMovements = " + autoMovements);
-
         gameDuration = Integer.parseInt(properties.getProperty("duration"));
         setSimulationPeriod(Integer.parseInt(properties.getProperty("simulationPeriod")));
+
+        System.out.println("\nisAutoMode = " + isAutoMode);
+        System.out.println("autoMovements = " + autoMovements);
+        System.out.println("First move: " + autoMovements.get(0));
+        System.out.println("gameDuration = " + gameDuration);
 
         addKeyListener(this);
     }
@@ -198,21 +201,30 @@ public class OreSim extends GameGrid implements GGKeyListener {
                 switch (map.get(y).get(x))
                 {
                     case PUSHER:
-                        if (autoMovements == null) {
+                        if (!isAutoMode) {
                             addActor(new Pusher(false, null, 0), new Location(x, y));
                         } else {
-                            addActor(new Pusher(autoMovements.contains("P"), autoMovements, 0), new Location(x, y));
+
+                            boolean isPusherAutoMode = false;
+                            for (String s : autoMovements) {
+                                if (s.indexOf('P') != -1) {
+                                    isPusherAutoMode = true;
+                                }
+                            }
+                            System.out.println("isPusherAutoMode = " + isPusherAutoMode);
+
+                            addActor(new Pusher(isPusherAutoMode, autoMovements, 0), new Location(x, y));
                         }
                         break;
                     case BULLDOZER:
-                        if (autoMovements == null) {
+                        if (!isAutoMode) {
                             addActor(new Bulldozer(false, null, 0), new Location(x, y));
                         } else {
                             addActor(new Bulldozer(autoMovements.contains("B"), autoMovements, 0), new Location(x, y));
                         }
                         break;
                     case EXCAVATOR:
-                        if (autoMovements == null) {
+                        if (!isAutoMode) {
                             addActor(new Excavator(false, null, 0), new Location(x, y));
                         } else {
                             addActor(new Excavator(autoMovements.contains("E"), autoMovements, 0), new Location(x, y));
@@ -234,7 +246,7 @@ public class OreSim extends GameGrid implements GGKeyListener {
                 }
             }
         }
-        System.out.println("ores = " + getOresDone());
+        //System.out.println("ores in goal = " + getOresDone());
         setPaintOrder(Target.class);
     }
 

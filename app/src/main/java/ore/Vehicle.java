@@ -27,6 +27,7 @@ public abstract class Vehicle extends Actor {
      */
     public Vehicle(String image, boolean isAuto, List<String> controls, int autoMovementIndex) {
         super(true, image);
+        this.isAuto = isAuto;
         incrementID();
 
         if (isAuto) {
@@ -34,6 +35,11 @@ public abstract class Vehicle extends Actor {
         } else {
             this.controller = new KeyboardController(this);
         }
+
+        System.out.println("\nVehicle " + getId() + " created");
+        System.out.println("Vehicle isAuto: " + isAuto);
+        System.out.println("Vehicle controls: " + controls);
+        System.out.println("Vehicle autoMovementIndex: " + autoMovementIndex + "\n");
     }
 
     /**
@@ -44,7 +50,7 @@ public abstract class Vehicle extends Actor {
      * the controller's manualMoveNext method.
      */
     public void moveVehicle() {
-        if (isAuto) {
+        if (this.isAuto) {
             moveToLocation(controller.autoMoveNext());
         } else {
             moveToLocation(controller.manualMoveNext());
@@ -61,8 +67,8 @@ public abstract class Vehicle extends Actor {
      * @param location the location to move the vehicle to
      */
     public void moveToLocation(Location location) {
-        if (location != null && canMove(location)) {
-            Target curTarget = (Target) gameGrid.getOneActorAt(this.getLocation(), Target.class);
+        if (location != null && (this.gameGrid.getBg().getColor(location) != OreSim.BORDER_COLOUR) && canMove(location)) {
+            Target curTarget = (Target) this.gameGrid.getOneActorAt(this.getLocation(), Target.class);
             if (curTarget != null) {
                 curTarget.show();
             }

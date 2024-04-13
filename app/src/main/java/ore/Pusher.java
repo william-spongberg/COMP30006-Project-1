@@ -34,7 +34,7 @@ public class Pusher extends Vehicle {
         // assuming only one ore can exist in a location at a time
         if (gameGrid.getOneActorAt(location, Ore.class) != null) {
             return collideWithActor(gameGrid.getOneActorAt(location, Ore.class));
-        } else if (gameGrid.getOneActorAt(location) == null) {
+        } else if ((gameGrid.getOneActorAt(location) == null) || (gameGrid.getOneActorAt(location, Target.class) != null)) {
             return true;
         }
         return false;

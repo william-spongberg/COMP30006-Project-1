@@ -41,7 +41,12 @@ public class AutomaticController extends VehicleController {
             String move = currentMove[1];
             this.setAutoMovementIndex(this.getAutoMovementIndex() + 1);
 
-            if (machine.equals("P")) {
+            if ((machine.equals("P") && this.getVehicle() instanceof Pusher)
+                    || (machine.equals("B") && this.getVehicle() instanceof Bulldozer)
+                    || (machine.equals("E") && this.getVehicle() instanceof Excavator)) {
+
+                System.out.println("Machine: " + machine + ", Move: " + move);
+
                 if (this.getIsFinished())
                     return null;
 
