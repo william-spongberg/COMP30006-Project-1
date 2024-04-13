@@ -58,25 +58,44 @@ public abstract class Vehicle extends Actor {
     }
 
     /**
-     * Moves the vehicle to the specified location if it is not null and can be
-     * moved to.
-     * If the vehicle is currently on a target, the target is shown.
-     * The vehicle's location is updated and the vehicle is set as the controller's
-     * vehicle.
-     *
+     * Moves the vehicle to the specified location if it is a valid move.
+     * 
      * @param location the location to move the vehicle to
      */
     public void moveToLocation(Location location) {
         if (location != null && !(this.gameGrid.getBg().getColor(location).equals(OreSim.BORDER_COLOUR))
                 && !(this.gameGrid.getBg().getColor(location).equals(OreSim.OUTSIDE_COLOUR))
                 && canMove(location)) {
-            Target curTarget = (Target) this.gameGrid.getOneActorAt(this.getLocation(), Target.class);
-            if (curTarget != null) {
-                curTarget.show();
-            }
+            
+            updateTargets(location);
+
             this.setLocation(location);
             this.controller.setVehicle(this);
             this.incrementNumMoves();
+        }
+    }
+
+    /**
+     * Updates the targets based on the given location.
+     * Shows the targets at the current location and hides the targets at the new location.
+     *
+     * @param location the new location to update the targets
+     */
+    private void updateTargets(Location location) {
+        List<Actor> actors = this.gameGrid.getActorsAt(this.getLocation());
+        for (Actor actor: actors) {
+            if (actor instanceof Target) {
+                Target target = (Target) actor;
+                target.show();
+            }
+        }
+        
+        actors = this.gameGrid.getActorsAt(location);
+        for (Actor actor: actors) {
+            if (actor instanceof Target) {
+                Target target = (Target) actor;
+                target.hide();
+            }
         }
     }
 
