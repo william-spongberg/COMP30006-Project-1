@@ -21,6 +21,7 @@ public class Bulldozer extends Vehicle {
      */
     public Bulldozer(boolean isAuto, List<String> controls, int autoMovementIndex) {
         super("sprites/bulldozer.png", isAuto, controls, autoMovementIndex);
+        setIsAuto(controls, 'B');
     }
 
     /**

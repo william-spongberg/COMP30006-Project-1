@@ -201,49 +201,13 @@ public class OreSim extends GameGrid implements GGKeyListener {
                 switch (map.get(y).get(x))
                 {
                     case PUSHER:
-                        if (!isAutoMode) {
-                            addActor(new Pusher(false, null, 0), new Location(x, y));
-                        } else {
-                            boolean isPusherAutoMode = false;
-                            if (!(autoMovements.isEmpty())) {
-                                for (String s : autoMovements) {
-                                    if (s.indexOf('P') != -1) {
-                                        isPusherAutoMode = true;
-                                    }
-                                }
-                            }
-                            addActor(new Pusher(isPusherAutoMode, autoMovements, 0), new Location(x, y));
-                        }
+                        addActor(new Pusher(isAutoMode, autoMovements, 0), new Location(x, y));
                         break;
                     case BULLDOZER:
-                        if (!isAutoMode) {
-                            addActor(new Bulldozer(false, null, 0), new Location(x, y));
-                        } else {
-                            boolean isBulldozerAutoMode = false;
-                            if (!(autoMovements.isEmpty())) {
-                                for (String s : autoMovements) {
-                                    if (s.indexOf('B') != -1) {
-                                        isBulldozerAutoMode = true;
-                                    }
-                                }
-                            }
-                            addActor(new Bulldozer(isBulldozerAutoMode, autoMovements, 0), new Location(x, y));
-                        }
+                        addActor(new Bulldozer(isAutoMode, autoMovements, 0), new Location(x, y));
                         break;
                     case EXCAVATOR:
-                        if (!isAutoMode) {                          
-                            addActor(new Excavator(false, null, 0), new Location(x, y));
-                        } else {
-                            boolean isExcavatorAutoMode = false;
-                            if (!(autoMovements.isEmpty())) {
-                                for (String s : autoMovements) {
-                                    if (s.indexOf('E') != -1) {
-                                        isExcavatorAutoMode = true;
-                                    }
-                                }
-                            }
-                            addActor(new Excavator(isExcavatorAutoMode, autoMovements, 0), new Location(x, y));
-                        }
+                        addActor(new Excavator(isAutoMode, autoMovements, 0), new Location(x, y));
                         break;
                     case ORE:
                         addActor(new Ore(), new Location(x, y));

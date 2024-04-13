@@ -22,6 +22,7 @@ public class Pusher extends Vehicle {
      */
     public Pusher(boolean isAuto, List<String> controls, int autoMovementIndex) {
         super("sprites/pusher.png", isAuto, controls, autoMovementIndex);
+        setIsAuto(controls, 'P');
     }
 
     /**
@@ -34,7 +35,8 @@ public class Pusher extends Vehicle {
         // assuming only one ore can exist in a location at a time
         if (gameGrid.getOneActorAt(location, Ore.class) != null) {
             return collideWithActor(gameGrid.getOneActorAt(location, Ore.class));
-        } else if ((gameGrid.getOneActorAt(location) == null) || (gameGrid.getOneActorAt(location, Target.class) != null)) {
+        } else if ((gameGrid.getOneActorAt(location) == null)
+                || (gameGrid.getOneActorAt(location, Target.class) != null)) {
             return true;
         }
         return false;

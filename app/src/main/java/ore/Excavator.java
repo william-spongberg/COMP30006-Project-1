@@ -21,6 +21,7 @@ public class Excavator extends Vehicle {
      */
     public Excavator(boolean isAuto, List<String> controls, int autoMovementIndex) {
         super("sprites/excavator.png", isAuto, controls, autoMovementIndex);
+        setIsAuto(controls, 'E');
     }
 
     /**
