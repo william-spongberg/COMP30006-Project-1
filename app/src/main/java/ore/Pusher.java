@@ -12,6 +12,9 @@ import java.util.List;
  */
 public class Pusher extends Vehicle {
     private static int id = 0;
+    private VehicleController controller = null;
+    private boolean isAuto = false;
+    private int numMoves = 0;
 
     /**
      * Constructs a Pusher object.
@@ -23,10 +26,10 @@ public class Pusher extends Vehicle {
      */
     public Pusher(boolean isAuto, List<String> controls, int autoMovementIndex) {
         super("sprites/pusher.png", isAuto, controls, autoMovementIndex);
-        setIsAuto(controls, 'P');
+        this.setIsAuto(controls, 'P');
         incrementId();
 
-        System.out.println("\nPusher " + getId() + " created");
+        System.out.println("\nPusher " + getId() + ":");
         System.out.println("            isAuto: " + isAuto);
         System.out.println("            controls: " + controls);
         System.out.println("            autoMovementIndex: " + autoMovementIndex + "\n");
@@ -65,19 +68,19 @@ public class Pusher extends Vehicle {
         return false;
     }
 
+    /* getters */
+
     /**
      * Retrieves the statistics of the Pusher object.
      * 
      * @return an array of strings containing the statistics
      */
     public String[] getStatistics() {
-        String[] result = {
-                "Pusher-" + getId(),
-                " Moves: " + this.getNumMoves(),
-                "\n"
+        String result[] = {
+                "Pusher-" + getId() + " Moves: " + this.getNumMoves()
         };
         return result;
-    }
+    }   
 
     /**
      * Returns the ID of the vehicle.
@@ -89,9 +92,64 @@ public class Pusher extends Vehicle {
     }
 
     /**
+     * Returns the controller for the vehicle.
+     *
+     * @return the controller for the vehicle
+     */
+    public VehicleController getController() {
+        return this.controller;
+    }
+
+    /**
+     * Returns a boolean value indicating whether the vehicle is automatic or not.
+     *
+     * @return true if the vehicle is automatic, false otherwise
+     */
+    public boolean getIsAuto() {
+        return this.isAuto;
+    }
+
+    /**
+     * Returns the number of moves made by the vehicle.
+     *
+     * @return the number of moves made by the vehicle
+     */
+    public int getNumMoves() {
+        return this.numMoves;
+    }
+
+    /* setters */
+
+    /**
      * Increments the ID of the vehicle.
      */
     public static void incrementId() {
         id++;
+    }
+
+    /**
+     * Sets the controller for the vehicle.
+     *
+     * @param controller the controller to be set
+     */
+    public void setController(VehicleController controller) {
+        this.controller = controller;
+    }
+
+    /**
+     * Sets the value indicating whether the vehicle is automatic or manual.
+     * 
+     * @param controls the list of controls for the vehicle
+     * @param vehicleType the type of vehicle
+     */
+    public void setIsAuto(boolean isAuto) {
+        this.isAuto = isAuto;
+    }
+
+    /**
+     * Increments the number of moves made by the vehicle.
+     */
+    public void incrementNumMoves() {
+        this.numMoves++;
     }
 }
