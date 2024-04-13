@@ -33,7 +33,6 @@ public class Ore extends Actor
         }
 
         // if we have reached this point, there is either a target or empty space.
-        Target targetAt = (Target) gameGrid.getOneActorAt(this.getLocation(), Target.class);
 
         if (onLocation.size() == 1 && onLocation.get(0) instanceof Target) {
             // get the target we're going to
@@ -43,13 +42,17 @@ public class Ore extends Actor
             this.setLocation(location);
             this.show(1);
 
-            // hide the target we're going to
-            targetTo.hide();
 
             // if we were already on the target, show the target we were at
-            if (targetAt != null) {
-                targetAt.show();
+            ArrayList<Actor> actorsOnLocation = gameGrid.getActorsAt(this.getLocation());
+            for (Actor actor : actorsOnLocation) {
+                if (actor instanceof Target) {
+                    Target targetAt = (Target) actor;
+                    targetAt.show();
+                }
             }
+            // hide the target we're going to
+            targetTo.hide();
             return true;
 
         }
