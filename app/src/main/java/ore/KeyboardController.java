@@ -62,7 +62,6 @@ public class KeyboardController extends VehicleController {
         }
 
         if (next != null) {
-            // TODO: updateLogResult();
             this.setNextLocation(next);
             return true;
         }
