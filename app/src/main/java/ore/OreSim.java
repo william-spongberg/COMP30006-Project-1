@@ -69,14 +69,15 @@ public class OreSim extends GameGrid implements GGKeyListener {
         if (isDisplayingUI) {
             show();
         }
-        ArrayList<Actor> vehicles;
+        ArrayList<Actor> vehicles = getActors(Vehicle.class);
+        for (Actor vehicle : vehicles) {
+            addKeyListener(((Vehicle) vehicle).getController());
+        }
         while (!completed() && gameDuration >= 0) {
             try {
                 // update actors
-                vehicles = getActors(Vehicle.class);
                 for (Actor vehicle : vehicles) {
                     ((Vehicle) vehicle).moveVehicle();
-                    addKeyListener(((Vehicle) vehicle).getController());
                 }
                 refresh();
                 updateLogResult();
