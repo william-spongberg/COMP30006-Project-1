@@ -11,10 +11,6 @@ import java.util.List;
  * It provides common functionality and properties for all vehicles in the game.
  */
 public abstract class Vehicle extends Actor {
-    private VehicleController controller = null;
-    private boolean isAuto = false;
-    private int numMoves = 0;
-
     /**
      * Constructs a new Vehicle object.
      * 
@@ -26,12 +22,12 @@ public abstract class Vehicle extends Actor {
      */
     public Vehicle(String image, boolean isAuto, List<String> controls, int autoMovementIndex) {
         super(true, image);
-        this.isAuto = isAuto;
+        setIsAuto(isAuto);
 
         if (isAuto) {
-            this.controller = new AutomaticController(this, controls, autoMovementIndex);
+            setController(new AutomaticController(this, controls, autoMovementIndex));
         } else {
-            this.controller = new KeyboardController(this);
+            setController(new KeyboardController(this));
         }
     }
 
@@ -48,7 +44,7 @@ public abstract class Vehicle extends Actor {
         if (!(controls.isEmpty())) {
             for (String s : controls) {
                 if (s.indexOf(c) != -1) {
-                    this.setIsAuto(true);
+                    setIsAuto(true);
                 }
             }
         }
@@ -62,10 +58,10 @@ public abstract class Vehicle extends Actor {
      * the controller's manualMoveNext method.
      */
     public void moveVehicle() {
-        if (this.isAuto) {
-            moveToLocation(controller.autoMoveNext());
+        if (getIsAuto()) {
+            moveToLocation(getController().autoMoveNext());
         } else {
-            moveToLocation(controller.manualMoveNext());
+            moveToLocation(getController().manualMoveNext());
         }
     }
 
@@ -75,15 +71,14 @@ public abstract class Vehicle extends Actor {
      * @param location the location to move the vehicle to
      */
     public void moveToLocation(Location location) {
-        if (location != null && !(this.gameGrid.getBg().getColor(location).equals(OreSim.BORDER_COLOUR))
-                && !(this.gameGrid.getBg().getColor(location).equals(OreSim.OUTSIDE_COLOUR))
+        if (location != null && !(gameGrid.getBg().getColor(location).equals(OreSim.BORDER_COLOUR))
+                && !(gameGrid.getBg().getColor(location).equals(OreSim.OUTSIDE_COLOUR))
                 && canMove(location)) {
 
             updateTargets(location);
-
-            this.setLocation(location);
-            this.controller.setVehicle(this);
-            this.incrementNumMoves();
+            setLocation(location);
+            getController().setVehicle(this);
+            incrementNumMoves();
         }
     }
 
@@ -95,7 +90,7 @@ public abstract class Vehicle extends Actor {
      * @param location the new location to update the targets
      */
     private void updateTargets(Location location) {
-        List<Actor> actors = this.gameGrid.getActorsAt(this.getLocation());
+        List<Actor> actors = gameGrid.getActorsAt(getLocation());
         for (Actor actor : actors) {
             if (actor instanceof Target) {
                 Target target = (Target) actor;
@@ -111,6 +106,8 @@ public abstract class Vehicle extends Actor {
             }
         }
     }
+
+    /* abstract methods */
 
     /**
      * Checks if the vehicle can move to the specified location.
@@ -128,6 +125,8 @@ public abstract class Vehicle extends Actor {
      */
     public abstract boolean collideWithActor(Actor actor);
 
+    /* getters */
+
     /**
      * Returns an array of strings representing the statistics of the vehicle.
      * 
@@ -135,59 +134,47 @@ public abstract class Vehicle extends Actor {
      */
     public abstract String[] getStatistics();
 
-    /* getters */
-
     /**
-     * Gets the controller of the vehicle.
-     * 
-     * @return The controller of the vehicle.
+     * Returns the controller for the vehicle.
+     *
+     * @return the controller for the vehicle
      */
-    public VehicleController getController() {
-        return this.controller;
-    }
+    public abstract VehicleController getController();
 
     /**
-     * Returns the value indicating whether the vehicle is automatic or not.
+     * Returns a boolean value indicating whether the vehicle is automatic or not.
      *
      * @return true if the vehicle is automatic, false otherwise
      */
-    public boolean getIsAuto() {
-        return this.isAuto;
-    }
+    public abstract boolean getIsAuto();
 
     /**
      * Returns the number of moves made by the vehicle.
      *
      * @return the number of moves made by the vehicle
      */
-    public int getNumMoves() {
-        return this.numMoves;
-    }
+    public abstract int getNumMoves();
 
     /* setters */
 
     /**
-     * Sets the controller of the vehicle.
-     * 
-     * @param controller The controller to set.
+     * Sets the controller for the vehicle.
+     *
+     * @param controller the controller to be set
      */
-    public void setController(VehicleController controller) {
-        this.controller = controller;
-    }
+    public abstract void setController(VehicleController controller);
 
     /**
      * Sets the value indicating whether the vehicle is automatic or manual.
-     *
+     * 
      * @param isAuto true if the vehicle is automatic, false if it is manual
      */
-    public void setIsAuto(boolean isAuto) {
-        this.isAuto = isAuto;
-    }
+    public abstract void setIsAuto(boolean isAuto);
 
     /**
-     * Increments the number of moves for the vehicle.
+     * Increments the number of moves made by the vehicle.
+     * This method should be implemented by subclasses to update the number of moves
+     * specific to each type of vehicle.
      */
-    public void incrementNumMoves() {
-        this.numMoves++;
-    }
+    public abstract void incrementNumMoves();
 }
