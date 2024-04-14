@@ -4,7 +4,6 @@ import ch.aplu.jgamegrid.*;
 
 import java.util.List;
 
-//import javax.swing.border.Border;
 
 /**
  * The Pusher class represents a vehicle that pushes ore in a game.

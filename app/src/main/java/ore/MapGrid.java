@@ -2,18 +2,10 @@ package ore;
 
 import java.util.ArrayList;
 
+
 /**
- * The MapGrid class represents a grid-based map for an ore simulation game.
- * It stores information about the elements present in each cell of the grid,
- * such as borders, empty spaces, stones, targets, pushers, bulldozers, excavators,
- * rocks, and clay. The class provides methods to retrieve information about the
- * dimensions of the grid, the number of stones, and the type of element in a specific cell.
- * <p>
- * The map grid is initialized based on a predefined model, which consists of a string
- * representation of the map and the dimensions of the grid for each model. The map
- * elements are mapped from the string representation to the corresponding element types.
- * <p>
- * //@param model The index of the model to use for initializing the map grid.
+ * Represents a grid-based map for an ore simulation.
+ * The map is defined by a 2D array of ElementTypes.
  */
 public class MapGrid {
     private final static String[] map_0 = {
@@ -27,9 +19,9 @@ public class MapGrid {
             "x...*............ox", // 7
             "xxxxx.DDD.xPxx...ox", // 8
             "    x.....xxxxxxxxx", // 9
-            "    xxxxxxx        "};//10
+            "    xxxxxxx        " };// 10
     private final static String[] map_1 = {
-            "xxxxxxxxxxxx", // 0  (14)
+            "xxxxxxxxxxxx", // 0 (14)
             "x..........x", // 1
             "x....RB....x", // 2
             "xo...R.*...x", // 3
@@ -37,7 +29,7 @@ public class MapGrid {
             "xP....ERRRRx", // 5
             "x....RRR*.xx", // 6
             "x..........x", // 7
-            "xxxxxxxxxxxx"};// 8
+            "xxxxxxxxxxxx" };// 8
 
     public ArrayList<ArrayList<OreSim.ElementType>> getMap() {
         return map;
@@ -77,13 +69,10 @@ public class MapGrid {
 
         // generate 2d array of ElementTypes
         ArrayList<ArrayList<OreSim.ElementType>> _map = new ArrayList<>();
-        for (int y = 0; y < numVertCells; y++)
-        {
+        for (int y = 0; y < numVertCells; y++) {
             _map.add(new ArrayList<>());
-            for (int x = 0; x < numHorzCells; x++)
-            {
-                switch (map_str[y].charAt(x))
-                {
+            for (int x = 0; x < numHorzCells; x++) {
+                switch (map_str[y].charAt(x)) {
                     case 'P':
                         _map.get(y).add(OreSim.ElementType.PUSHER);
                         break;
