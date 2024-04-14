@@ -139,17 +139,20 @@ public class OreSim extends GameGrid implements GGKeyListener {
      */
     private void drawActors() {
         ArrayList<ArrayList<ElementType>> map = grid.getMap();
+        int pusherId, bulldozerId, excavatorId;
+        pusherId = bulldozerId = excavatorId = 0;
+        
         for (int y = 0; y < grid.getNumVertCells(); y++) {
             for (int x = 0; x < grid.getNumHorzCells(); x++) {
                 switch (map.get(y).get(x)) {
                     case PUSHER:
-                        addVehicle(new Pusher(isAutoMode, autoMovements, 0), new Location(x, y));
+                        addVehicle(new Pusher(++pusherId, isAutoMode, autoMovements, 0), new Location(x, y));
                         break;
                     case BULLDOZER:
-                        addVehicle(new Bulldozer(isAutoMode, autoMovements, 0), new Location(x, y));
+                        addVehicle(new Bulldozer(++bulldozerId, isAutoMode, autoMovements, 0), new Location(x, y));
                         break;
                     case EXCAVATOR:
-                        addVehicle(new Excavator(isAutoMode, autoMovements, 0), new Location(x, y));
+                        addVehicle(new Excavator(++excavatorId, isAutoMode, autoMovements, 0), new Location(x, y));
                         break;
                     case ORE:
                         addActor(new Ore(), new Location(x, y));
@@ -167,7 +170,6 @@ public class OreSim extends GameGrid implements GGKeyListener {
                 }
             }
         }
-        setPaintOrder(Target.class);
     }
 
     /**

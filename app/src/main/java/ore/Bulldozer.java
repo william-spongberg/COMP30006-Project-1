@@ -9,7 +9,6 @@ import java.util.List;
  * It extends the Vehicle class.
  */
 public class Bulldozer extends Vehicle {
-    private static int id = 0;
     private int numClayRemoved = 0;
 
     /**
@@ -20,10 +19,9 @@ public class Bulldozer extends Vehicle {
      * @param controls          The list of controls for the vehicle.
      * @param autoMovementIndex The index of the automatic movement for the vehicle.
      */
-    public Bulldozer(boolean isAuto, List<String> controls, int autoMovementIndex) {
-        super("sprites/bulldozer.png", isAuto, controls, autoMovementIndex);
-        this.setIsAuto(controls, 'B');
-        incrementId();
+    public Bulldozer(int id, boolean isAuto, List<String> controls, int autoMovementIndex) {
+        super("sprites/bulldozer.png", id, isAuto, controls, autoMovementIndex);
+        setIsAuto(controls, 'B');
 
         System.out.println("\nBulldozer " + getId() + ":");
         System.out.println("            isAuto: " + isAuto);
@@ -58,7 +56,7 @@ public class Bulldozer extends Vehicle {
     public boolean collideWithActor(Actor actor) {
         if (actor instanceof Clay) {
             actor.removeSelf();
-            this.incrementNumClayRemoved();
+            incrementNumClayRemoved();
             return true;
         }
         return false;
@@ -75,22 +73,13 @@ public class Bulldozer extends Vehicle {
      */
     public String[] getStatistics() {
         String result[] = {
-            "Bulldozer-" + getId() + " Moves: " + this.getNumMoves(),
-            "Bulldozer-" + getId() + " Clay removed: " + this.getNumClayRemoved()
+            "Bulldozer-" + getId() + " Moves: " + getNumMoves(),
+            "Bulldozer-" + getId() + " Clay removed: " + getNumClayRemoved()
     };
         return result;
     }
 
     /* getters */
-
-    /**
-     * Returns the ID of the vehicle.
-     *
-     * @return the ID of the vehicle
-     */
-    public static int getId() {
-        return id;
-    }
 
     /**
      * Gets the number of rocks removed by the excavator.
@@ -102,13 +91,6 @@ public class Bulldozer extends Vehicle {
     }
 
     /* setters */
-
-    /**
-     * Increments the ID of the vehicle.
-     */
-    public static void incrementId() {
-        id++;
-    }
 
     /**
      * Increments the number of clay removed by the bulldozer.
