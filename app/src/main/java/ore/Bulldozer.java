@@ -9,7 +9,6 @@ import java.util.List;
  * It extends the Vehicle class.
  */
 public class Bulldozer extends Vehicle {
-    private static int id = 0;
     private int numClayRemoved = 0;
 
     /**
@@ -20,12 +19,11 @@ public class Bulldozer extends Vehicle {
      * @param controls          The list of controls for the vehicle.
      * @param autoMovementIndex The index of the automatic movement for the vehicle.
      */
-    public Bulldozer(boolean isAuto, List<String> controls, int autoMovementIndex) {
-        super("sprites/bulldozer.png", isAuto, controls, autoMovementIndex);
+    public Bulldozer(int id, boolean isAuto, List<String> controls, int autoMovementIndex) {
+        super("sprites/bulldozer.png", id, isAuto, controls, autoMovementIndex);
         setIsAuto(controls, 'B');
-        incrementId();
 
-        System.out.println("\nBulldozer " + getId() + " created");
+        System.out.println("\nBulldozer " + getId() + ":");
         System.out.println("            isAuto: " + isAuto);
         System.out.println("            controls: " + controls);
         System.out.println("            autoMovementIndex: " + autoMovementIndex + "\n");
@@ -58,7 +56,7 @@ public class Bulldozer extends Vehicle {
     public boolean collideWithActor(Actor actor) {
         if (actor instanceof Clay) {
             actor.removeSelf();
-            this.incrementNumClayRemoved();
+            incrementNumClayRemoved();
             return true;
         }
         return false;
@@ -75,29 +73,18 @@ public class Bulldozer extends Vehicle {
      */
     public String[] getStatistics() {
         String result[] = {
-                "Bulldozer-" + getId(),
-                " Moves: " + this.getNumMoves(),
-                "\n",
-                "Bulldozer-" + getId(),
-                " Clay removed: " + this.getNumClayRemoved(),
-                "\n"
-        };
+            "Bulldozer-" + getId() + " Moves: " + getNumMoves(),
+            "Bulldozer-" + getId() + " Clay removed: " + getNumClayRemoved()
+    };
         return result;
     }
 
-    /**
-     * Returns the ID of the vehicle.
-     *
-     * @return the ID of the vehicle
-     */
-    public static int getId() {
-        return id;
-    }
+    /* getters */
 
     /**
-     * Returns the number of clay removed by the bulldozer.
+     * Gets the number of rocks removed by the excavator.
      *
-     * @return the number of clay removed
+     * @return the number of rocks removed
      */
     public int getNumClayRemoved() {
         return this.numClayRemoved;
@@ -110,12 +97,5 @@ public class Bulldozer extends Vehicle {
      */
     public void incrementNumClayRemoved() {
         this.numClayRemoved++;
-    }
-
-    /**
-     * Increments the ID of the vehicle.
-     */
-    public static void incrementId() {
-        id++;
     }
 }

@@ -5,12 +5,11 @@ import ch.aplu.jgamegrid.*;
 import java.util.List;
 
 /**
- * Represents a vehicle in the game.
- * 
- * This class is an abstract class that extends the `Actor` class.
- * It provides common functionality and properties for all vehicles in the game.
+ * The abstract class Vehicle represents a vehicle in the game.
+ * It extends the Actor class and provides common functionality and attributes for all vehicles.
  */
 public abstract class Vehicle extends Actor {
+    private int id;
     private VehicleController controller = null;
     private boolean isAuto = false;
     private int numMoves = 0;
@@ -24,14 +23,15 @@ public abstract class Vehicle extends Actor {
      * @param controls          The list of controls for the vehicle.
      * @param autoMovementIndex The index of the automatic movement for the vehicle.
      */
-    public Vehicle(String image, boolean isAuto, List<String> controls, int autoMovementIndex) {
+    public Vehicle(String image, int id, boolean isAuto, List<String> controls, int autoMovementIndex) {
         super(true, image);
-        this.isAuto = isAuto;
+        setIsAuto(isAuto);
+        setId(id);
 
         if (isAuto) {
-            this.controller = new AutomaticController(this, controls, autoMovementIndex);
+            setController(new AutomaticController(this, controls, autoMovementIndex));
         } else {
-            this.controller = new KeyboardController(this);
+            setController(new KeyboardController(this));
         }
     }
 
@@ -48,7 +48,7 @@ public abstract class Vehicle extends Actor {
         if (!(controls.isEmpty())) {
             for (String s : controls) {
                 if (s.indexOf(c) != -1) {
-                    this.setIsAuto(true);
+                    setIsAuto(true);
                 }
             }
         }
@@ -62,10 +62,10 @@ public abstract class Vehicle extends Actor {
      * the controller's manualMoveNext method.
      */
     public void moveVehicle() {
-        if (this.isAuto) {
-            moveToLocation(controller.autoMoveNext());
+        if (getIsAuto()) {
+            moveToLocation(getController().autoMoveNext());
         } else {
-            moveToLocation(controller.manualMoveNext());
+            moveToLocation(getController().manualMoveNext());
         }
     }
 
@@ -75,15 +75,14 @@ public abstract class Vehicle extends Actor {
      * @param location the location to move the vehicle to
      */
     public void moveToLocation(Location location) {
-        if (location != null && !(this.gameGrid.getBg().getColor(location).equals(OreSim.BORDER_COLOUR))
-                && !(this.gameGrid.getBg().getColor(location).equals(OreSim.OUTSIDE_COLOUR))
+        if (location != null && !(gameGrid.getBg().getColor(location).equals(OreSim.BORDER_COLOUR))
+                && !(gameGrid.getBg().getColor(location).equals(OreSim.OUTSIDE_COLOUR))
                 && canMove(location)) {
 
             updateTargets(location);
-
-            this.setLocation(location);
-            this.controller.setVehicle(this);
-            this.incrementNumMoves();
+            setLocation(location);
+            getController().setVehicle(this);
+            incrementNumMoves();
         }
     }
 
@@ -95,22 +94,16 @@ public abstract class Vehicle extends Actor {
      * @param location the new location to update the targets
      */
     private void updateTargets(Location location) {
-        List<Actor> actors = this.gameGrid.getActorsAt(this.getLocation());
+        List<Actor> actors = this.gameGrid.getActorsAt(location);
         for (Actor actor : actors) {
             if (actor instanceof Target) {
                 Target target = (Target) actor;
                 target.show();
             }
         }
-
-        actors = this.gameGrid.getActorsAt(location);
-        for (Actor actor : actors) {
-            if (actor instanceof Target) {
-                Target target = (Target) actor;
-                target.hide();
-            }
-        }
     }
+
+    /* abstract methods */
 
     /**
      * Checks if the vehicle can move to the specified location.
@@ -128,6 +121,8 @@ public abstract class Vehicle extends Actor {
      */
     public abstract boolean collideWithActor(Actor actor);
 
+    /* getters */
+
     /**
      * Returns an array of strings representing the statistics of the vehicle.
      * 
@@ -135,19 +130,26 @@ public abstract class Vehicle extends Actor {
      */
     public abstract String[] getStatistics();
 
-    /* getters */
+    /**
+     * Retrieves the id of the Pusher object.
+     * 
+     * @return the id of the Pusher object
+     */
+    public int getId() {
+        return this.id;
+    }
 
     /**
-     * Gets the controller of the vehicle.
-     * 
-     * @return The controller of the vehicle.
+     * Returns the controller for the vehicle.
+     *
+     * @return the controller for the vehicle
      */
     public VehicleController getController() {
         return this.controller;
     }
 
     /**
-     * Returns the value indicating whether the vehicle is automatic or not.
+     * Returns a boolean value indicating whether the vehicle is automatic or not.
      *
      * @return true if the vehicle is automatic, false otherwise
      */
@@ -166,10 +168,17 @@ public abstract class Vehicle extends Actor {
 
     /* setters */
 
+    /*
+     * Sets the id of the Pusher object.
+     */
+    public void setId(int id) {
+        this.id = id;
+    }
+
     /**
-     * Sets the controller of the vehicle.
-     * 
-     * @param controller The controller to set.
+     * Sets the controller for the vehicle.
+     *
+     * @param controller the controller to be set
      */
     public void setController(VehicleController controller) {
         this.controller = controller;
@@ -177,15 +186,16 @@ public abstract class Vehicle extends Actor {
 
     /**
      * Sets the value indicating whether the vehicle is automatic or manual.
-     *
-     * @param isAuto true if the vehicle is automatic, false if it is manual
+     * 
+     * @param controls the list of controls for the vehicle
+     * @param vehicleType the type of vehicle
      */
     public void setIsAuto(boolean isAuto) {
         this.isAuto = isAuto;
     }
 
     /**
-     * Increments the number of moves for the vehicle.
+     * Increments the number of moves made by the vehicle.
      */
     public void incrementNumMoves() {
         this.numMoves++;

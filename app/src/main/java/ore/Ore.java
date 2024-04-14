@@ -5,7 +5,6 @@ import ch.aplu.jgamegrid.Location;
 
 import java.awt.*;
 import java.util.ArrayList;
-import ch.aplu.jgamegrid.GGBackground;
 
 
 /**
@@ -30,7 +29,8 @@ public class Ore extends Actor
             return false;
         }
 
-        // check if theres too much at a spot (target and ore) or theres something else blocking us
+        // check if theres too much at a spot (target and ore) or theres something else
+        // blocking us
         if (onLocation.size() > 1 || (onLocation.size() == 1 && !(onLocation.get(0) instanceof Target))) {
             return false;
         }
@@ -43,7 +43,6 @@ public class Ore extends Actor
             // update us (set us to an oreCart)
             this.setLocation(location);
             this.show(1);
-
 
             // if we were already on the target, show the target we were at
             ArrayList<Actor> actorsOnLocation = gameGrid.getActorsAt(this.getLocation());

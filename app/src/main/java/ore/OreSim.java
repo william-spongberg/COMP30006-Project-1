@@ -1,10 +1,6 @@
 package ore;
 
-import ch.aplu.jgamegrid.Actor;
-import ch.aplu.jgamegrid.GGBackground;
-import ch.aplu.jgamegrid.GGKeyListener;
-import ch.aplu.jgamegrid.GameGrid;
-import ch.aplu.jgamegrid.Location;
+import ch.aplu.jgamegrid.*;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -12,16 +8,10 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
-import java.util.Collections;
 
-/**
- * The `OreSim` class represents a simulation of an ore mining game. It extends the `GameGrid` class and implements the `GGKeyListener` interface.
- * The class contains inner classes representing different types of game elements such as `Target`, `Ore`, `Pusher`, `Bulldozer`, `Excavator`, `Rock`, and `Clay`.
- * The `OreSim` class is responsible for setting up the game grid, initializing game elements, handling user input, and running the game simulation.
- * It also provides methods for checking the progress of the game, updating statistics, and drawing the game board.
- */
 public class OreSim extends GameGrid implements GGKeyListener {
 
     // Color of walls in the simulation that Pushers and Ores cannot move past
@@ -32,28 +22,18 @@ public class OreSim extends GameGrid implements GGKeyListener {
 
     // the colour outside the defined borders
     public static final Color OUTSIDE_COLOUR = Color.darkGray;
+    public static final double ONE_SECOND = 1000.0;
 
+    private final boolean isAutoMode;
+    private List<String> autoMovements = new ArrayList<String>();
     private final MapGrid grid;
-    private final int numHorzCells; // delete?
-    private final int numVertCells; // delete?
-    private final Properties properties; // delete?
-
-    // TODO: set to private, create getters and setters
-
-    // whether or not a vehicle is automatically controlled.
-    public final boolean isAutoMode;
-    public List<String> autoMovements = new ArrayList<String>();
-
+    private final StringBuilder logResult = new StringBuilder();
     private double gameDuration;
     private int movementIndex;
-    private static final double ONE_SECOND = 1000.0;
-    private final StringBuilder logResult = new StringBuilder();
+
     public OreSim(Properties properties, MapGrid grid) {
         super(grid.getNumHorzCells(), grid.getNumVertCells(), 30, false);
         this.grid = grid;
-        numHorzCells = grid.getNumHorzCells();
-        numVertCells = grid.getNumVertCells();
-        this.properties = properties;
         this.isAutoMode = properties.getProperty("movement.mode").equals("auto");
         if (isAutoMode) {
             Collections.addAll(autoMovements, properties.getProperty("machines.movements").split(","));
@@ -68,6 +48,33 @@ public class OreSim extends GameGrid implements GGKeyListener {
         addKeyListener(this);
     }
 
+    public enum ElementType {
+        OUTSIDE("OS"), EMPTY("ET"), BORDER("BD"),
+        PUSHER("P"), BULLDOZER("B"), EXCAVATOR("E"), ORE("O"),
+        ROCK("R"), CLAY("C"), TARGET("T");
+
+        private final String shortType;
+
+        ElementType(String shortType) {
+            this.shortType = shortType;
+        }
+
+        public static ElementType getElementByShortType(String shortType) {
+            ElementType[] types = ElementType.values();
+            for (ElementType type : types) {
+                if (type.getShortType().equals(shortType)) {
+                    return type;
+                }
+            }
+
+            return ElementType.EMPTY;
+        }
+
+        public String getShortType() {
+            return shortType;
+        }
+    }
+
     /**
      * The main method to run the game
      *
@@ -75,24 +82,26 @@ public class OreSim extends GameGrid implements GGKeyListener {
      * @return
      */
     public String runApp(boolean isDisplayingUI) {
+        // draw the board + UI
         GGBackground bg = getBg();
         drawBoard(bg);
         drawActors();
-
         if (isDisplayingUI) {
             show();
         }
-        ArrayList<Actor> vehicles;
-        while (!completed() && gameDuration >= 0) {
+
+        // run game
+        while (!winCondition(getActors(Ore.class), getActors(Target.class)) && gameDuration >= 0) {
             try {
                 // update actors
-                vehicles = getActors(Vehicle.class);
-                for (Actor vehicle: vehicles)
-                {
-                    ((Vehicle)vehicle).moveVehicle();
-                    addKeyListener(((Vehicle)vehicle).getController());
+                for (Actor vehicle : getActors(Vehicle.class)) {
+                    ((Vehicle) vehicle).moveVehicle();
                 }
+
+                // update screen
                 refresh();
+
+                // update results
                 updateLogResult();
 
                 // handle duration
@@ -100,29 +109,169 @@ public class OreSim extends GameGrid implements GGKeyListener {
                 double minusDuration = (simulationPeriod / ONE_SECOND);
                 gameDuration -= minusDuration;
 
-                // Set title
-                String title = String.format("# Ores at Target: %d. Time left: %.2f seconds", getOresDone(), gameDuration);
+                // display title
+                String title = String.format("# Ores at Target: %d. Time left: %.2f seconds",
+                        getOresDone(getActors(Ore.class), getActors(Target.class)),
+                        gameDuration);
                 setTitle(title);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
         }
 
+        // pause the game
         doPause();
 
-        if (completed()) {
+        // display win/lose message
+        if (winCondition(getActors(Ore.class), getActors(Target.class))) {
             setTitle("Mission Complete. Well done!");
         } else if (gameDuration < 0) {
             setTitle("Mission Failed. You ran out of time");
         }
 
-
+        // write statistics to file and return the result
         updateStatistics();
         return logResult.toString();
     }
 
     /**
-     * Transform the list of actors to a string of location for a specific kind of actor.
+     * Draws the actors on the grid based on the elements in the map.
+     * Each element in the map corresponds to a specific actor type.
+     * The method iterates through the map and adds the corresponding actor to the
+     * grid.
+     * The actors include pushers, bulldozers, excavators, ores, rocks, clay, and
+     * targets.
+     * The method also sets the paint order for the Target class.
+     */
+    private void drawActors() {
+        ArrayList<ArrayList<ElementType>> map = grid.getMap();
+        int pusherId, bulldozerId, excavatorId;
+        pusherId = bulldozerId = excavatorId = 0;
+        
+        for (int y = 0; y < grid.getNumVertCells(); y++) {
+            for (int x = 0; x < grid.getNumHorzCells(); x++) {
+                switch (map.get(y).get(x)) {
+                    case PUSHER:
+                        addVehicle(new Pusher(++pusherId, isAutoMode, autoMovements, 0), new Location(x, y));
+                        break;
+                    case BULLDOZER:
+                        addVehicle(new Bulldozer(++bulldozerId, isAutoMode, autoMovements, 0), new Location(x, y));
+                        break;
+                    case EXCAVATOR:
+                        addVehicle(new Excavator(++excavatorId, isAutoMode, autoMovements, 0), new Location(x, y));
+                        break;
+                    case ORE:
+                        addActor(new Ore(), new Location(x, y));
+                        break;
+                    case ROCK:
+                        addActor(new Rock(), new Location(x, y));
+                        break;
+                    case CLAY:
+                        addActor(new Clay(), new Location(x, y));
+                        break;
+                    case TARGET:
+                        addActor(new Target(), new Location(x, y));
+                    default:
+                        break;
+                }
+            }
+        }
+    }
+
+    /**
+     * Draws the game board on the given GGBackground.
+     *
+     * @param bg The GGBackground on which to draw the game board.
+     */
+    private void drawBoard(GGBackground bg) {
+        ArrayList<ArrayList<ElementType>> map = grid.getMap();
+        for (int y = 0; y < grid.getNumVertCells(); y++) {
+            for (int x = 0; x < grid.getNumHorzCells(); x++) {
+                switch (map.get(y).get(x)) {
+                    case OUTSIDE -> bg.fillCell(new Location(x, y), OUTSIDE_COLOUR);
+                    case BORDER -> bg.fillCell(new Location(x, y), BORDER_COLOUR);
+                    default -> bg.fillCell(new Location(x, y), FLOOR_COLOUR);
+                }
+            }
+        }
+    }
+
+    /**
+     * Adds a vehicle to the simulation at the specified location.
+     * Also adds a key listener to the vehicle if it is not automatic.
+     * 
+     * @param vehicle  the vehicle to be added
+     * @param location the location where the vehicle should be added
+     */
+    private void addVehicle(Vehicle vehicle, Location location) {
+        addActor(vehicle, location);
+        if (!vehicle.getIsAuto()) {
+            addKeyListener(vehicle.getController());
+        }
+    }
+
+    /**
+     * Returns the number of ores that have been pushed to a target.
+     *
+     * @param ores    the list of ores to check
+     * @param targets the list of targets to compare with
+     * @return the number of ores that have been pushed to a target.
+     */
+    private int getOresDone(ArrayList<Actor> ores, ArrayList<Actor> targets) {
+        int counter = 0;
+        for (Actor ore : ores) {
+            for (Actor target : targets) {
+                if (ore.getLocation().equals(target.getLocation())) {
+                    counter++;
+                    break;
+                }
+            }
+        }
+        return counter;
+    }
+
+    /**
+     * Checks if the win condition is met.
+     * The win condition is met when the number of completed ores is equal to the
+     * total number of ores.
+     *
+     * @param ores    the list of ores
+     * @param targets the list of targets
+     * @return true if the win condition is met, false otherwise
+     */
+    private boolean winCondition(ArrayList<Actor> ores, ArrayList<Actor> targets) {
+        return getOresDone(ores, targets) == ores.size();
+    }
+
+    /**
+     * Updates the log result by appending the current state of the simulation to
+     * the log result.
+     */
+    private void updateLogResult() {
+        List<Actor> pushers = getActors(Pusher.class);
+        List<Actor> ores = getActors(Ore.class);
+        List<Actor> targets = getActors(Target.class);
+        List<Actor> rocks = getActors(Rock.class);
+        List<Actor> clays = getActors(Clay.class);
+        List<Actor> bulldozers = getActors(Bulldozer.class);
+        List<Actor> excavators = getActors(Excavator.class);
+
+        movementIndex++;
+        logResult.append(movementIndex).append("#");
+        logResult.append(ElementType.PUSHER.getShortType()).append(actorLocations(pushers)).append("#");
+        logResult.append(ElementType.ORE.getShortType()).append(actorLocations(ores)).append("#");
+        logResult.append(ElementType.TARGET.getShortType()).append(actorLocations(targets)).append("#");
+        logResult.append(ElementType.ROCK.getShortType()).append(actorLocations(rocks)).append("#");
+        logResult.append(ElementType.CLAY.getShortType()).append(actorLocations(clays)).append("#");
+        logResult.append(ElementType.BULLDOZER.getShortType()).append(actorLocations(bulldozers)).append("#");
+        logResult.append(ElementType.EXCAVATOR.getShortType()).append(actorLocations(excavators));
+
+        logResult.append("\n");
+    }
+
+    /**
+     * Transform the list of actors to a string of location for a specific kind of
+     * actor.
      *
      * @param actors
      * @return
@@ -131,14 +280,13 @@ public class OreSim extends GameGrid implements GGKeyListener {
         StringBuilder stringBuilder = new StringBuilder();
         boolean hasAddedColon = false;
         boolean hasAddedLastComma = false;
-        for (int i = 0; i < actors.size(); i++) {
-            Actor actor = actors.get(i);
+        for (Actor actor : actors) {
             if (actor.isVisible()) {
                 if (!hasAddedColon) {
                     stringBuilder.append(":");
                     hasAddedColon = true;
                 }
-                stringBuilder.append(actor.getX() + "-" + actor.getY());
+                stringBuilder.append(actor.getX()).append("-").append(actor.getY());
                 stringBuilder.append(",");
                 hasAddedLastComma = true;
             }
@@ -152,8 +300,11 @@ public class OreSim extends GameGrid implements GGKeyListener {
     }
 
     /**
-     * Students need to modify this method so it can write an actual statistics into the statistics file. It currently
-     * only writes the sample data.
+     * Updates the statistics by writing them to a file named "statistics.txt".
+     * The statistics include information from all the pushers, excavators, and
+     * bulldozers in the simulation.
+     * If an error occurs while writing to the file or closing it, an error message
+     * is printed to the console.
      */
     private void updateStatistics() {
         File statisticsFile = new File("statistics.txt");
@@ -198,161 +349,22 @@ public class OreSim extends GameGrid implements GGKeyListener {
     }
 
     /**
-     * Draw all different actors on the board: pusher, ore, target, rock, clay, bulldozer, excavator
+     * Handles the key pressed event for GameGrid.
+     * 
+     * @param evt the KeyEvent object representing the key press event
+     * @return false due to no key press handling in this class
      */
-    private void drawActors() {
-        ArrayList<ArrayList<ElementType>> map = grid.getMap();
-        for (int y = 0; y < grid.getNumVertCells(); y++)
-        {
-            for (int x = 0; x < grid.getNumHorzCells(); x++)
-            {
-                switch (map.get(y).get(x))
-                {
-                    case PUSHER:
-                        addActor(new Pusher(isAutoMode, autoMovements, 0), new Location(x, y));
-                        break;
-                    case BULLDOZER:
-                        addActor(new Bulldozer(isAutoMode, autoMovements, 0), new Location(x, y));
-                        break;
-                    case EXCAVATOR:
-                        addActor(new Excavator(isAutoMode, autoMovements, 0), new Location(x, y));
-                        break;
-                    case ORE:
-                        addActor(new Ore(), new Location(x, y));
-                        break;
-                    case ROCK:
-                        addActor(new Rock(), new Location(x, y));
-                        break;
-                    case CLAY:
-                        addActor(new Clay(), new Location(x, y));
-                        break;
-                    case TARGET:
-                        addActor(new Target(), new Location(x, y));
-                    default:
-                        break;
-                }
-            }
-        }
-        setPaintOrder(Target.class);
-    }
-
-    /**
-     * Draw the basic board with outside color and border color
-     *
-     * @param bg
-     */
-
-    private void drawBoard(GGBackground bg) {
-        //TODO: work out what tf going on here
-        // the following for loop should paint cells the correct colour, so unsure what the next 2 lines do :P
-        bg.clear(new Color(230, 230, 230));
-        bg.setPaintColor(Color.darkGray);
-
-        ArrayList<ArrayList<ElementType>> map = grid.getMap();
-        for (int y = 0; y < grid.getNumVertCells(); y++)
-        {
-            for (int x = 0; x < grid.getNumHorzCells(); x++)
-            {
-                switch (map.get(y).get(x))
-                {
-                    case OUTSIDE:
-                        bg.fillCell(new Location(x, y), OUTSIDE_COLOUR);
-                        break;
-                    case BORDER:
-                        bg.fillCell(new Location(x, y), BORDER_COLOUR);
-                        break;
-                    default:
-                        bg.fillCell(new Location(x, y), FLOOR_COLOUR);
-                }
-            }
-        }
-    }
-    private int getOresDone()
-    {
-        int counter = 0;
-        for (Actor ore: getActors(Ore.class))
-        {
-            ArrayList<Actor> oreLocation = (getActorsAt(ore.getLocation()));
-            if (oreLocation.size() > 1)
-            {
-                counter++;
-            }
-        }
-        return counter;
-    }
-
-    private boolean completed()
-    {
-        // try to find an ore not at a target
-        for (Actor ore: getActors(Ore.class))
-        {
-            if (getActorsAt(ore.getLocation()).size() != 2)
-            {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
-     * The method will generate a log result for all the movements of all actors
-     * The log result will be tested against our expected output.
-     * Your code will need to pass all the 3 test suites with 9 test cases.
-     */
-    private void updateLogResult() {
-        movementIndex++;
-        List<Actor> pushers = getActors(Pusher.class);
-        List<Actor> ores = getActors(Ore.class);
-        List<Actor> targets = getActors(Target.class);
-        List<Actor> rocks = getActors(Clay.class);
-        List<Actor> clays = getActors(Clay.class);
-        List<Actor> bulldozers = getActors(Bulldozer.class);
-        List<Actor> excavators = getActors(Excavator.class);
-
-        logResult.append(movementIndex + "#");
-        logResult.append(ElementType.PUSHER.getShortType()).append(actorLocations(pushers)).append("#");
-        logResult.append(ElementType.ORE.getShortType()).append(actorLocations(ores)).append("#");
-        logResult.append(ElementType.TARGET.getShortType()).append(actorLocations(targets)).append("#");
-        logResult.append(ElementType.ROCK.getShortType()).append(actorLocations(rocks)).append("#");
-        logResult.append(ElementType.CLAY.getShortType()).append(actorLocations(clays)).append("#");
-        logResult.append(ElementType.BULLDOZER.getShortType()).append(actorLocations(bulldozers)).append("#");
-        logResult.append(ElementType.EXCAVATOR.getShortType()).append(actorLocations(excavators));
-
-        logResult.append("\n");
-    }
-
     public boolean keyPressed(KeyEvent evt) {
         return false;
     }
 
+    /**
+     * Handles the key released event for GameGrid.
+     * 
+     * @param evt the KeyEvent object representing the key press event
+     * @return false due to no key release handling in this class
+     */
     public boolean keyReleased(KeyEvent evt) {
         return false;
-    }
-
-    // ------------- Inner classes -------------
-    public enum ElementType {
-        OUTSIDE("OS"), EMPTY("ET"), BORDER("BD"),
-        PUSHER("P"), BULLDOZER("B"), EXCAVATOR("E"), ORE("O"),
-        ROCK("R"), CLAY("C"), TARGET("T");
-        private final String shortType;
-
-        ElementType(String shortType) {
-            this.shortType = shortType;
-        }
-
-        public static ElementType getElementByShortType(String shortType) {
-            ElementType[] types = ElementType.values();
-            for (ElementType type : types) {
-                if (type.getShortType().equals(shortType)) {
-                    return type;
-                }
-            }
-
-            return ElementType.EMPTY;
-        }
-
-        public String getShortType() {
-            return shortType;
-        }
     }
 }
