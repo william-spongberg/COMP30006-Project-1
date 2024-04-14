@@ -9,7 +9,6 @@ import java.util.List;
  * It extends the Vehicle class.
  */
 public class Excavator extends Vehicle {
-    private static int id = 0;
     private int numRockRemoved = 0;
 
     /**
@@ -20,10 +19,9 @@ public class Excavator extends Vehicle {
      * @param controls          The list of controls for the vehicle.
      * @param autoMovementIndex The index of the automatic movement for the vehicle.
      */
-    public Excavator(boolean isAuto, List<String> controls, int autoMovementIndex) {
-        super("sprites/excavator.png", isAuto, controls, autoMovementIndex);
-        this.setIsAuto(controls, 'E');
-        incrementId();
+    public Excavator(int id, boolean isAuto, List<String> controls, int autoMovementIndex) {
+        super("sprites/excavator.png", id, isAuto, controls, autoMovementIndex);
+        setIsAuto(controls, 'E');
 
         System.out.println("\nExcavator " + getId() + ":");
         System.out.println("            isAuto: " + isAuto);
@@ -58,7 +56,7 @@ public class Excavator extends Vehicle {
     public boolean collideWithActor(Actor actor) {
         if (actor instanceof Rock) {
             actor.removeSelf();
-            this.incrementNumRockRemoved();
+            incrementNumRockRemoved();
             return true;
         }
         return false;
@@ -75,19 +73,10 @@ public class Excavator extends Vehicle {
      */
     public String[] getStatistics() {
         String result[] = {
-                "Excavator-" + getId() + " Moves: " + this.getNumMoves(),
-                "Excavator-" + getId() + " Rock removed: " + this.getNumRockRemoved()
+                "Excavator-" + getId() + " Moves: " + getNumMoves(),
+                "Excavator-" + getId() + " Rock removed: " + getNumRockRemoved()
         };
         return result;
-    }
-
-    /**
-     * Returns the ID of the vehicle.
-     *
-     * @return the ID of the vehicle
-     */
-    public static int getId() {
-        return id;
     }
 
     /**
@@ -100,13 +89,6 @@ public class Excavator extends Vehicle {
     }
 
     /* setters */
-
-    /**
-     * Increments the ID of the vehicle.
-     */
-    public static void incrementId() {
-        id++;
-    }
 
     /**
      * Increments the number of rocks removed by the excavator.

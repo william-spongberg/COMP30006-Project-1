@@ -10,8 +10,6 @@ import java.util.List;
  * It extends the Vehicle class.
  */
 public class Pusher extends Vehicle {
-    private static int id = 0;
-
     /**
      * Constructs a Pusher object.
      *
@@ -20,10 +18,9 @@ public class Pusher extends Vehicle {
      * @param controls          The list of controls for the vehicle.
      * @param autoMovementIndex The index of the automatic movement for the vehicle.
      */
-    public Pusher(boolean isAuto, List<String> controls, int autoMovementIndex) {
-        super("sprites/pusher.png", isAuto, controls, autoMovementIndex);
-        this.setIsAuto(controls, 'P');
-        incrementId();
+    public Pusher(int id, boolean isAuto, List<String> controls, int autoMovementIndex) {
+        super("sprites/pusher.png", id, isAuto, controls, autoMovementIndex);
+        setIsAuto(controls, 'P');
 
         System.out.println("\nPusher " + getId() + ":");
         System.out.println("            isAuto: " + isAuto);
@@ -60,7 +57,7 @@ public class Pusher extends Vehicle {
         if (actor instanceof Ore) {
             Ore ore = (Ore) actor;
             // try to move the ore
-            ore.setDirection(this.getDirection());
+            ore.setDirection(getDirection());
             return ore.checkAndMove(ore.getNextMoveLocation());
         }
         return false;
@@ -76,26 +73,8 @@ public class Pusher extends Vehicle {
     @Override
     public String[] getStatistics() {
         String result[] = {
-                "Pusher-" + getId() + " Moves: " + this.getNumMoves()
+                "Pusher-" + getId() + " Moves: " + getNumMoves()
         };
         return result;
-    }   
-
-    /**
-     * Returns the ID of the vehicle.
-     *
-     * @return the ID of the vehicle
-     */
-    public static int getId() {
-        return id;
-    }
-
-    /* setters */
-
-    /**
-     * Increments the ID of the vehicle.
-     */
-    public static void incrementId() {
-        id++;
     }
 }

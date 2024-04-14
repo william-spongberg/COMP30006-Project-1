@@ -9,6 +9,7 @@ import java.util.List;
  * It extends the Actor class and provides common functionality and attributes for all vehicles.
  */
 public abstract class Vehicle extends Actor {
+    private int id;
     private VehicleController controller = null;
     private boolean isAuto = false;
     private int numMoves = 0;
@@ -22,9 +23,10 @@ public abstract class Vehicle extends Actor {
      * @param controls          The list of controls for the vehicle.
      * @param autoMovementIndex The index of the automatic movement for the vehicle.
      */
-    public Vehicle(String image, boolean isAuto, List<String> controls, int autoMovementIndex) {
+    public Vehicle(String image, int id, boolean isAuto, List<String> controls, int autoMovementIndex) {
         super(true, image);
         setIsAuto(isAuto);
+        setId(id);
 
         if (isAuto) {
             setController(new AutomaticController(this, controls, autoMovementIndex));
@@ -92,19 +94,11 @@ public abstract class Vehicle extends Actor {
      * @param location the new location to update the targets
      */
     private void updateTargets(Location location) {
-        List<Actor> actors = gameGrid.getActorsAt(getLocation());
+        List<Actor> actors = this.gameGrid.getActorsAt(location);
         for (Actor actor : actors) {
             if (actor instanceof Target) {
                 Target target = (Target) actor;
                 target.show();
-            }
-        }
-
-        actors = this.gameGrid.getActorsAt(location);
-        for (Actor actor : actors) {
-            if (actor instanceof Target) {
-                Target target = (Target) actor;
-                target.hide();
             }
         }
     }
@@ -136,7 +130,16 @@ public abstract class Vehicle extends Actor {
      */
     public abstract String[] getStatistics();
 
-        /**
+    /**
+     * Retrieves the id of the Pusher object.
+     * 
+     * @return the id of the Pusher object
+     */
+    public int getId() {
+        return this.id;
+    }
+
+    /**
      * Returns the controller for the vehicle.
      *
      * @return the controller for the vehicle
@@ -164,6 +167,13 @@ public abstract class Vehicle extends Actor {
     }
 
     /* setters */
+
+    /*
+     * Sets the id of the Pusher object.
+     */
+    public void setId(int id) {
+        this.id = id;
+    }
 
     /**
      * Sets the controller for the vehicle.
