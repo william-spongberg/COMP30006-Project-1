@@ -23,16 +23,24 @@ import java.util.Collections;
  * It also provides methods for checking the progress of the game, updating statistics, and drawing the game board.
  */
 public class OreSim extends GameGrid implements GGKeyListener {
+
+    // Color of walls in the simulation that Pushers and Ores cannot move past
     public static final Color BORDER_COLOUR = new Color(100, 100, 100);
+
+    // the ground color which we can move on in the simulation
     public static final Color FLOOR_COLOUR = Color.lightGray;
+
+    // the colour outside the defined borders
     public static final Color OUTSIDE_COLOUR = Color.darkGray;
 
     private final MapGrid grid;
-    private final int numHorzCells;
-    private final int numVertCells;
-    private final Properties properties;
+    private final int numHorzCells; // delete?
+    private final int numVertCells; // delete?
+    private final Properties properties; // delete?
 
     // TODO: set to private, create getters and setters
+
+    // whether or not a vehicle is automatically controlled.
     public final boolean isAutoMode;
     public List<String> autoMovements = new ArrayList<String>();
 
