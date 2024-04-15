@@ -25,29 +25,11 @@ public class OreSim extends GameGrid implements GGKeyListener {
     public static final double ONE_SECOND = 1000.0;
 
     private final boolean isAutoMode;
-    private List<String> autoMovements = new ArrayList<String>();
+    private final List<String> autoMovements = new ArrayList<>();
     private final MapGrid grid;
     private final StringBuilder logResult = new StringBuilder();
     private double gameDuration;
     private int movementIndex;
-
-    public OreSim(Properties properties, MapGrid grid) {
-        super(grid.getNumHorzCells(), grid.getNumVertCells(), 30, false);
-        this.grid = grid;
-        this.isAutoMode = properties.getProperty("movement.mode").equals("auto");
-        if (isAutoMode) {
-            Collections.addAll(autoMovements, properties.getProperty("machines.movements").split(","));
-        }
-        gameDuration = Integer.parseInt(properties.getProperty("duration"));
-        setSimulationPeriod(Integer.parseInt(properties.getProperty("simulationPeriod")));
-
-        System.out.println("\nisAutoMode = " + isAutoMode);
-        System.out.println("autoMovements = " + autoMovements);
-        System.out.println("gameDuration = " + gameDuration);
-
-        addKeyListener(this);
-    }
-
     public enum ElementType {
         OUTSIDE("OS"), EMPTY("ET"), BORDER("BD"),
         PUSHER("P"), BULLDOZER("B"), EXCAVATOR("E"), ORE("O"),
@@ -74,12 +56,28 @@ public class OreSim extends GameGrid implements GGKeyListener {
             return shortType;
         }
     }
+    public OreSim(Properties properties, MapGrid grid) {
+        super(grid.getNumHorzCells(), grid.getNumVertCells(), 30, false);
+        this.grid = grid;
+        this.isAutoMode = properties.getProperty("movement.mode").equals("auto");
+        if (isAutoMode) {
+            Collections.addAll(autoMovements, properties.getProperty("machines.movements").split(","));
+        }
+        gameDuration = Integer.parseInt(properties.getProperty("duration"));
+        setSimulationPeriod(Integer.parseInt(properties.getProperty("simulationPeriod")));
+
+        System.out.println("\nisAutoMode = " + isAutoMode);
+        System.out.println("autoMovements = " + autoMovements);
+        System.out.println("gameDuration = " + gameDuration);
+
+        addKeyListener(this);
+    }
 
     /**
      * The main method to run the game
      *
-     * @param isDisplayingUI
-     * @return
+     * @param isDisplayingUI displays the simulation UI if true, hides simulation UI if false
+     * @return A string of the logged result
      */
     public String runApp(boolean isDisplayingUI) {
         // draw the board + UI
@@ -199,7 +197,7 @@ public class OreSim extends GameGrid implements GGKeyListener {
     /**
      * Adds a vehicle to the simulation at the specified location.
      * Also adds a key listener to the vehicle if it is not automatic.
-     * 
+     *
      * @param vehicle  the vehicle to be added
      * @param location the location where the vehicle should be added
      */
@@ -273,8 +271,8 @@ public class OreSim extends GameGrid implements GGKeyListener {
      * Transform the list of actors to a string of location for a specific kind of
      * actor.
      *
-     * @param actors
-     * @return
+     * @param actors A list of Actors
+     * @return A string representing the location of each given actor
      */
     private String actorLocations(List<Actor> actors) {
         StringBuilder stringBuilder = new StringBuilder();
@@ -337,7 +335,7 @@ public class OreSim extends GameGrid implements GGKeyListener {
 
     /**
      * Handles the key pressed event for GameGrid.
-     * 
+     *
      * @param evt the KeyEvent object representing the key press event
      * @return false due to no key press handling in this class
      */
@@ -347,7 +345,7 @@ public class OreSim extends GameGrid implements GGKeyListener {
 
     /**
      * Handles the key released event for GameGrid.
-     * 
+     *
      * @param evt the KeyEvent object representing the key press event
      * @return false due to no key release handling in this class
      */
