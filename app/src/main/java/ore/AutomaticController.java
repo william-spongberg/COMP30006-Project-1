@@ -1,6 +1,7 @@
 package ore;
 
-import ch.aplu.jgamegrid.*;
+import ch.aplu.jgamegrid.Location;
+
 import java.awt.event.KeyEvent;
 import java.util.List;
 
@@ -31,8 +32,8 @@ public class AutomaticController extends VehicleController {
      * properties file.
      *
      * @return the next location of the vehicle after the automatic movement,
-     *         or null if the movement is finished or an invalid control is
-     *         encountered
+     * or null if the movement is finished or an invalid control is
+     * encountered
      */
     public Location autoMoveNext() {
         if (this.getControls() != null && this.getAutoMovementIndex() < this.getControls().size()) {
@@ -70,9 +71,7 @@ public class AutomaticController extends VehicleController {
                         break;
                 }
 
-                if (next != null) {
-                    return next;
-                }
+                return next;
             }
         }
         return null;

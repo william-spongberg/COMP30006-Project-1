@@ -1,6 +1,7 @@
 package ore;
 
-import ch.aplu.jgamegrid.*;
+import ch.aplu.jgamegrid.Actor;
+import ch.aplu.jgamegrid.Location;
 
 import java.util.List;
 
@@ -40,10 +41,7 @@ public class Excavator extends Vehicle {
     public boolean canMove(Location location) {
         if (gameGrid.getOneActorAt(location, Rock.class) != null) {
             return collideWithActor(gameGrid.getOneActorAt(location, Rock.class));
-        } else if (gameGrid.getOneActorAt(location) == null) {
-            return true;
-        }
-        return false;
+        } else return gameGrid.getOneActorAt(location) == null;
     }
 
     /**
@@ -72,7 +70,7 @@ public class Excavator extends Vehicle {
      * @return an array of strings representing the statistics of the Excavator
      */
     public String[] getStatistics() {
-        String result[] = {
+        String[] result = {
                 "Excavator-" + getId() + " Moves: " + getNumMoves(),
                 "Excavator-" + getId() + " Rock removed: " + getNumRockRemoved()
         };

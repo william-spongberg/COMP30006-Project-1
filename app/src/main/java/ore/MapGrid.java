@@ -19,7 +19,7 @@ public class MapGrid {
             "x...*............ox", // 7
             "xxxxx.DDD.xPxx...ox", // 8
             "    x.....xxxxxxxxx", // 9
-            "    xxxxxxx        " };// 10
+            "    xxxxxxx        "};// 10
     private final static String[] map_1 = {
             "xxxxxxxxxxxx", // 0 (14)
             "x..........x", // 1
@@ -29,7 +29,7 @@ public class MapGrid {
             "xP....ERRRRx", // 5
             "x....RRR*.xx", // 6
             "x..........x", // 7
-            "xxxxxxxxxxxx" };// 8
+            "xxxxxxxxxxxx"};// 8
 
     public ArrayList<ArrayList<OreSim.ElementType>> getMap() {
         return map;

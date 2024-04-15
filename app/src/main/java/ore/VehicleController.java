@@ -1,6 +1,8 @@
 package ore;
 
-import ch.aplu.jgamegrid.*;
+import ch.aplu.jgamegrid.GGKeyListener;
+import ch.aplu.jgamegrid.Location;
+
 import java.awt.event.KeyEvent;
 import java.util.List;
 

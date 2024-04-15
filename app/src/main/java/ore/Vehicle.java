@@ -1,6 +1,7 @@
 package ore;
 
-import ch.aplu.jgamegrid.*;
+import ch.aplu.jgamegrid.Actor;
+import ch.aplu.jgamegrid.Location;
 
 import java.util.List;
 
@@ -16,7 +17,7 @@ public abstract class Vehicle extends Actor {
 
     /**
      * Constructs a new Vehicle object.
-     * 
+     *
      * @param image             The image of the vehicle.
      * @param isAuto            A flag indicating whether the vehicle is controlled
      *                          automatically or by the keyboard.
@@ -71,7 +72,7 @@ public abstract class Vehicle extends Actor {
 
     /**
      * Moves the vehicle to the specified location if it is a valid move.
-     * 
+     *
      * @param location the location to move the vehicle to
      */
     public void moveToLocation(Location location) {
@@ -96,8 +97,7 @@ public abstract class Vehicle extends Actor {
     private void updateTargets(Location location) {
         List<Actor> actors = this.gameGrid.getActorsAt(location);
         for (Actor actor : actors) {
-            if (actor instanceof Target) {
-                Target target = (Target) actor;
+            if (actor instanceof Target target) {
                 target.show();
             }
         }
@@ -107,7 +107,7 @@ public abstract class Vehicle extends Actor {
 
     /**
      * Checks if the vehicle can move to the specified location.
-     * 
+     *
      * @param location The location to check.
      * @return true if the vehicle can move to the location, false otherwise.
      */
@@ -115,7 +115,7 @@ public abstract class Vehicle extends Actor {
 
     /**
      * Checks if the vehicle collides with the specified actor.
-     * 
+     *
      * @param actor The actor to check collision with.
      * @return true if the vehicle collides with the actor, false otherwise.
      */
@@ -125,14 +125,14 @@ public abstract class Vehicle extends Actor {
 
     /**
      * Returns an array of strings representing the statistics of the vehicle.
-     * 
+     *
      * @return An array of strings representing the statistics.
      */
     public abstract String[] getStatistics();
 
     /**
      * Retrieves the id of the Pusher object.
-     * 
+     *
      * @return the id of the Pusher object
      */
     public int getId() {
@@ -186,8 +186,8 @@ public abstract class Vehicle extends Actor {
 
     /**
      * Sets the value indicating whether the vehicle is automatic or manual.
-     * 
-     * @param controls the list of controls for the vehicle
+     *
+     * @param controls    the list of controls for the vehicle
      * @param vehicleType the type of vehicle
      */
     public void setIsAuto(boolean isAuto) {

@@ -1,6 +1,7 @@
 package ore;
 
-import ch.aplu.jgamegrid.*;
+import ch.aplu.jgamegrid.Actor;
+import ch.aplu.jgamegrid.Location;
 
 import java.util.List;
 
@@ -39,11 +40,8 @@ public class Pusher extends Vehicle {
         // assuming only one ore can exist in a location at a time
         if (gameGrid.getOneActorAt(location, Ore.class) != null) {
             return collideWithActor(gameGrid.getOneActorAt(location, Ore.class));
-        } else if ((gameGrid.getOneActorAt(location) == null)
-                || (gameGrid.getOneActorAt(location, Target.class) != null)) {
-            return true;
-        }
-        return false;
+        } else return (gameGrid.getOneActorAt(location) == null)
+                || (gameGrid.getOneActorAt(location, Target.class) != null);
     }
 
     /**
@@ -54,8 +52,7 @@ public class Pusher extends Vehicle {
      */
     @Override
     public boolean collideWithActor(Actor actor) {
-        if (actor instanceof Ore) {
-            Ore ore = (Ore) actor;
+        if (actor instanceof Ore ore) {
             // try to move the ore
             ore.setDirection(getDirection());
             return ore.checkAndMove(ore.getNextMoveLocation());
@@ -67,12 +64,12 @@ public class Pusher extends Vehicle {
 
     /**
      * Retrieves the statistics of the Pusher object.
-     * 
+     *
      * @return an array of strings containing the statistics
      */
     @Override
     public String[] getStatistics() {
-        String result[] = {
+        String[] result = {
                 "Pusher-" + getId() + " Moves: " + getNumMoves()
         };
         return result;

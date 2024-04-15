@@ -13,7 +13,7 @@ public class PropertiesLoader {
      *
      * @param propertiesFile The path to the properties file.
      * @return A Properties object containing the loaded properties, or null if an
-     *         error occurs.
+     * error occurs.
      */
     public static Properties loadPropertiesFile(String propertiesFile) {
         try (InputStream input = PropertiesLoader.class.getClassLoader().getResourceAsStream(propertiesFile)) {

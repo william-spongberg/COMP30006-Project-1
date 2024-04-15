@@ -1,6 +1,7 @@
 package ore;
 
-import ch.aplu.jgamegrid.*;
+import ch.aplu.jgamegrid.Location;
+
 import java.awt.event.KeyEvent;
 
 /**
@@ -71,7 +72,7 @@ public class KeyboardController extends VehicleController {
 
     /**
      * Handles the automatic movement of the vehicle.
-     * 
+     *
      * @return null as automatic controls are not supported in this controller
      */
     public Location autoMoveNext() {

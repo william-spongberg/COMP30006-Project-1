@@ -30,6 +30,7 @@ public class OreSim extends GameGrid implements GGKeyListener {
     private final StringBuilder logResult = new StringBuilder();
     private double gameDuration;
     private int movementIndex;
+
     public enum ElementType {
         OUTSIDE("OS"), EMPTY("ET"), BORDER("BD"),
         PUSHER("P"), BULLDOZER("B"), EXCAVATOR("E"), ORE("O"),
@@ -56,6 +57,7 @@ public class OreSim extends GameGrid implements GGKeyListener {
             return shortType;
         }
     }
+
     public OreSim(Properties properties, MapGrid grid) {
         super(grid.getNumHorzCells(), grid.getNumVertCells(), 30, false);
         this.grid = grid;
