@@ -87,8 +87,8 @@ public class OreSim extends GameGrid implements GGKeyListener {
     public String runApp(boolean isDisplayingUI) {
         // draw the board + UI
         GGBackground bg = getBg();
-        drawBoard(bg);
-        drawActors();
+        renderBoard(bg);
+        createActors();
         if (isDisplayingUI) {
             show();
         }
@@ -143,7 +143,7 @@ public class OreSim extends GameGrid implements GGKeyListener {
      * The method iterates through the map and adds the corresponding actor to the
      * grid.
      */
-    private void drawActors() {
+    private void createActors() {
         ArrayList<ArrayList<ElementType>> map = grid.getMap();
         int pusherId, bulldozerId, excavatorId;
         pusherId = bulldozerId = excavatorId = 0;
@@ -183,7 +183,7 @@ public class OreSim extends GameGrid implements GGKeyListener {
      *
      * @param bg The GGBackground on which to draw the game board.
      */
-    private void drawBoard(GGBackground bg) {
+    private void renderBoard(GGBackground bg) {
         ArrayList<ArrayList<ElementType>> map = grid.getMap();
         for (int y = 0; y < grid.getNumVertCells(); y++) {
             for (int x = 0; x < grid.getNumHorzCells(); x++) {
