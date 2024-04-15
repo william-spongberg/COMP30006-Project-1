@@ -105,7 +105,7 @@ public class OreSim extends GameGrid implements GGKeyListener {
 
                 // display title
                 String title = String.format("# Ores at Target: %d. Time left: %.2f seconds",
-                        getOresDone(getActors(Ore.class), getActors(Target.class)),
+                        getNumOresDone(getActors(Ore.class), getActors(Target.class)),
                         gameDuration);
                 setTitle(title);
             } catch (InterruptedException e) {
@@ -141,7 +141,7 @@ public class OreSim extends GameGrid implements GGKeyListener {
         ArrayList<ArrayList<ElementType>> map = grid.getMap();
         int pusherId, bulldozerId, excavatorId;
         pusherId = bulldozerId = excavatorId = 0;
-        
+
         for (int y = 0; y < grid.getNumVertCells(); y++) {
             for (int x = 0; x < grid.getNumHorzCells(); x++) {
                 switch (map.get(y).get(x)) {
@@ -211,7 +211,7 @@ public class OreSim extends GameGrid implements GGKeyListener {
      * @param targets the list of targets to compare with
      * @return the number of ores that have been pushed to a target.
      */
-    private int getOresDone(ArrayList<Actor> ores, ArrayList<Actor> targets) {
+    private int getNumOresDone(ArrayList<Actor> ores, ArrayList<Actor> targets) {
         int counter = 0;
         for (Actor ore : ores) {
             for (Actor target : targets) {
@@ -234,7 +234,7 @@ public class OreSim extends GameGrid implements GGKeyListener {
      * @return true if the win condition is met, false otherwise
      */
     private boolean winCondition(ArrayList<Actor> ores, ArrayList<Actor> targets) {
-        return getOresDone(ores, targets) == ores.size();
+        return getNumOresDone(ores, targets) == ores.size();
     }
 
     /**
@@ -305,26 +305,13 @@ public class OreSim extends GameGrid implements GGKeyListener {
         FileWriter fileWriter = null;
         try {
             fileWriter = new FileWriter(statisticsFile);
-            List<Actor> pushers = getActors(Pusher.class);
-            List<Actor> excavators = getActors(Excavator.class);
-            List<Actor> bulldozers = getActors(Bulldozer.class);
+            List<Actor> vehicles = new ArrayList<>();
+            vehicles.addAll(getActors(Pusher.class));
+            vehicles.addAll(getActors(Excavator.class));
+            vehicles.addAll(getActors(Bulldozer.class));
 
-            for (Actor pusher : pushers) {
-                String[] statistics = ((Pusher) pusher).getStatistics();
-                for (String statistic : statistics) {
-                    fileWriter.write(statistic + "\n");
-                }
-            }
-
-            for (Actor excavator : excavators) {
-                String[] statistics = ((Excavator) excavator).getStatistics();
-                for (String statistic : statistics) {
-                    fileWriter.write(statistic + "\n");
-                }
-            }
-
-            for (Actor bulldozer : bulldozers) {
-                String[] statistics = ((Bulldozer) bulldozer).getStatistics();
+            for (Actor vehicle : vehicles) {
+                String[] statistics = ((Vehicle) vehicle).getStatistics();
                 for (String statistic : statistics) {
                     fileWriter.write(statistic + "\n");
                 }
