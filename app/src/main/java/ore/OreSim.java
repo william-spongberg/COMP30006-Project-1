@@ -14,14 +14,16 @@ import java.util.Properties;
 
 public class OreSim extends GameGrid implements GGKeyListener {
 
-    // Color of walls in the simulation that Pushers and Ores cannot move past
+    // colour of walls in the simulation that Pushers and Ores cannot move past
     public static final Color BORDER_COLOUR = new Color(100, 100, 100);
 
-    // the ground color which we can move on in the simulation
+    // the ground colour which we can move on in the simulation
     public static final Color FLOOR_COLOUR = Color.lightGray;
 
     // the colour outside the defined borders
     public static final Color OUTSIDE_COLOUR = Color.darkGray;
+
+    // the simulation period in milliseconds
     public static final double ONE_SECOND = 1000.0;
 
     private final boolean isAutoMode;
@@ -78,7 +80,8 @@ public class OreSim extends GameGrid implements GGKeyListener {
     /**
      * The main method to run the game
      *
-     * @param isDisplayingUI displays the simulation UI if true, hides simulation UI if false
+     * @param isDisplayingUI displays the simulation UI if true, hides simulation UI
+     *                       if false
      * @return A string of the logged result
      */
     public String runApp(boolean isDisplayingUI) {
@@ -139,9 +142,6 @@ public class OreSim extends GameGrid implements GGKeyListener {
      * Each element in the map corresponds to a specific actor type.
      * The method iterates through the map and adds the corresponding actor to the
      * grid.
-     * The actors include pushers, bulldozers, excavators, ores, rocks, clay, and
-     * targets.
-     * The method also sets the paint order for the Target class.
      */
     private void drawActors() {
         ArrayList<ArrayList<ElementType>> map = grid.getMap();
@@ -249,22 +249,22 @@ public class OreSim extends GameGrid implements GGKeyListener {
      */
     private void updateLogResult() {
         List<Actor> pushers = getActors(Pusher.class);
+        List<Actor> bulldozers = getActors(Bulldozer.class);
+        List<Actor> excavators = getActors(Excavator.class);
         List<Actor> ores = getActors(Ore.class);
         List<Actor> targets = getActors(Target.class);
         List<Actor> rocks = getActors(Rock.class);
         List<Actor> clays = getActors(Clay.class);
-        List<Actor> bulldozers = getActors(Bulldozer.class);
-        List<Actor> excavators = getActors(Excavator.class);
 
         movementIndex++;
         logResult.append(movementIndex).append("#");
         logResult.append(ElementType.PUSHER.getShortType()).append(actorLocations(pushers)).append("#");
+        logResult.append(ElementType.BULLDOZER.getShortType()).append(actorLocations(bulldozers)).append("#");
+        logResult.append(ElementType.EXCAVATOR.getShortType()).append(actorLocations(excavators)).append("#");
         logResult.append(ElementType.ORE.getShortType()).append(actorLocations(ores)).append("#");
         logResult.append(ElementType.TARGET.getShortType()).append(actorLocations(targets)).append("#");
         logResult.append(ElementType.ROCK.getShortType()).append(actorLocations(rocks)).append("#");
         logResult.append(ElementType.CLAY.getShortType()).append(actorLocations(clays)).append("#");
-        logResult.append(ElementType.BULLDOZER.getShortType()).append(actorLocations(bulldozers)).append("#");
-        logResult.append(ElementType.EXCAVATOR.getShortType()).append(actorLocations(excavators));
 
         logResult.append("\n");
     }
