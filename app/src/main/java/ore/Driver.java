@@ -5,6 +5,8 @@ public class Driver {
     // properties/settings for game
     public static final String DEFAULT_PROPERTIES_PATH = "properties/game1.properties";
 
+
+    // main process runs the game
     public static void main(String[] args) throws Exception {
         String propertiesPath = DEFAULT_PROPERTIES_PATH;
         // if more than one property, set to first property

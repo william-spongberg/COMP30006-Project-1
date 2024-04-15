@@ -13,8 +13,14 @@ import java.util.List;
 import java.util.Properties;
 
 public class OreSim extends GameGrid implements GGKeyListener {
+
+    // Color of walls in the simulation that Pushers and Ores cannot move past
     public static final Color BORDER_COLOUR = new Color(100, 100, 100);
+
+    // the ground color which we can move on in the simulation
     public static final Color FLOOR_COLOUR = Color.lightGray;
+
+    // the colour outside the defined borders
     public static final Color OUTSIDE_COLOUR = Color.darkGray;
     public static final double ONE_SECOND = 1000.0;
 
