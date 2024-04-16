@@ -1,7 +1,8 @@
-package ore;
+package ore.object;
 
 import ch.aplu.jgamegrid.Actor;
 import ch.aplu.jgamegrid.Location;
+import ore.OreSim;
 
 import java.awt.*;
 import java.util.ArrayList;

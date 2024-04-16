@@ -2,6 +2,8 @@ package ore;
 
 import java.util.Properties;
 
+import ore.map.MapGrid;
+
 public class Driver {
     // properties/settings for game
     public static final String DEFAULT_PROPERTIES_PATH = "properties/game1.properties";

@@ -1,6 +1,8 @@
-package ore;
+package ore.controller;
 
 import ch.aplu.jgamegrid.Location;
+import ore.vehicle.Vehicle;
+
 import java.util.List;
 
 /**

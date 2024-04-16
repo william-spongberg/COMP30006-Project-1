@@ -1,4 +1,4 @@
-package ore;
+package ore.object;
 
 import ch.aplu.jgamegrid.Actor;
 

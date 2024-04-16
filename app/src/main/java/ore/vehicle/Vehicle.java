@@ -1,7 +1,12 @@
-package ore;
+package ore.vehicle;
 
 import ch.aplu.jgamegrid.Actor;
 import ch.aplu.jgamegrid.Location;
+import ore.OreSim;
+import ore.controller.AutomaticController;
+import ore.controller.KeyboardController;
+import ore.controller.VehicleController;
+import ore.object.Target;
 
 import java.util.List;
 

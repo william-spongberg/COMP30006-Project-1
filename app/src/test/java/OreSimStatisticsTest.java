@@ -1,6 +1,7 @@
-import ore.MapGrid;
 import ore.OreSim;
 import ore.PropertiesLoader;
+import ore.map.MapGrid;
+
 import org.junit.BeforeClass;
 import org.junit.Test;
 

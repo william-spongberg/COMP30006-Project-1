@@ -1,6 +1,8 @@
-package ore;
+package ore.map;
 
 import java.util.ArrayList;
+
+import ore.OreSim;
 
 
 /**
