@@ -27,11 +27,12 @@ public class OreSim extends GameGrid implements GGKeyListener {
     public static final double ONE_SECOND = 1000.0;
 
     private final boolean isAutoMode;
-    private final List<String> autoMovements = new ArrayList<>();
+    private final List<String> moveList = new ArrayList<>();
+    private int movementIndex;
+
     private final MapGrid grid;
     private final StringBuilder logResult = new StringBuilder();
     private double gameDuration;
-    private int movementIndex;
 
     public enum ElementType {
         OUTSIDE("OS"), EMPTY("ET"), BORDER("BD"),
@@ -65,13 +66,13 @@ public class OreSim extends GameGrid implements GGKeyListener {
         this.grid = grid;
         this.isAutoMode = properties.getProperty("movement.mode").equals("auto");
         if (isAutoMode) {
-            Collections.addAll(autoMovements, properties.getProperty("machines.movements").split(","));
+            Collections.addAll(moveList, properties.getProperty("machines.movements").split(","));
         }
         gameDuration = Integer.parseInt(properties.getProperty("duration"));
         setSimulationPeriod(Integer.parseInt(properties.getProperty("simulationPeriod")));
 
         System.out.println("\nisAutoMode = " + isAutoMode);
-        System.out.println("autoMovements = " + autoMovements);
+        System.out.println("autoMovements = " + moveList);
         System.out.println("gameDuration = " + gameDuration);
 
         addKeyListener(this);
@@ -152,13 +153,13 @@ public class OreSim extends GameGrid implements GGKeyListener {
             for (int x = 0; x < grid.getNumHorzCells(); x++) {
                 switch (map.get(y).get(x)) {
                     case PUSHER:
-                        addVehicle(new Pusher(++pusherId, isAutoMode, autoMovements, 0), new Location(x, y));
+                        addVehicle(new Pusher(++pusherId, isAutoMode, moveList, 0), new Location(x, y));
                         break;
                     case BULLDOZER:
-                        addVehicle(new Bulldozer(++bulldozerId, isAutoMode, autoMovements, 0), new Location(x, y));
+                        addVehicle(new Bulldozer(++bulldozerId, isAutoMode, moveList, 0), new Location(x, y));
                         break;
                     case EXCAVATOR:
-                        addVehicle(new Excavator(++excavatorId, isAutoMode, autoMovements, 0), new Location(x, y));
+                        addVehicle(new Excavator(++excavatorId, isAutoMode, moveList, 0), new Location(x, y));
                         break;
                     case ORE:
                         addActor(new Ore(), new Location(x, y));
@@ -206,7 +207,7 @@ public class OreSim extends GameGrid implements GGKeyListener {
     private void addVehicle(Vehicle vehicle, Location location) {
         addActor(vehicle, location);
         if (!vehicle.getIsAuto()) {
-            addKeyListener(vehicle.getController());
+            addKeyListener((KeyboardController)vehicle.getController());
         }
     }
 

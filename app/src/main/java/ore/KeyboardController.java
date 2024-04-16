@@ -1,14 +1,19 @@
 package ore;
 
+import ch.aplu.jgamegrid.GGKeyListener;
 import ch.aplu.jgamegrid.Location;
-
+import java.util.List;
 import java.awt.event.KeyEvent;
 
 /**
- * The KeyboardController class is a subclass of VehicleController that handles
- * user input from the keyboard to control a vehicle in the game.
+ * The `KeyboardController` class implements the `VehicleController` and
+ * `GGKeyListener` interfaces to control a vehicle using keyboard input.
+ * It allows the user to control the vehicle's movement by pressing arrow keys
+ * on the keyboard.
  */
-public class KeyboardController extends VehicleController {
+public class KeyboardController implements VehicleController, GGKeyListener {
+    private Vehicle vehicle = null;
+    private boolean isFinished = false;
     private Location nextLocation = null;
 
     /**
@@ -24,7 +29,7 @@ public class KeyboardController extends VehicleController {
      * Returns the next location to move to based on the last key pressed.
      * Sets the next location to null to avoid moving to the same location.
      */
-    public Location manualMoveNext() {
+    public Location nextMove() {
         Location next = this.getNextLocation();
         // set to null to avoid moving to the same location
         this.setNextLocation(null);
@@ -71,15 +76,6 @@ public class KeyboardController extends VehicleController {
     }
 
     /**
-     * Handles the automatic movement of the vehicle.
-     *
-     * @return null as automatic controls are not supported in this controller
-     */
-    public Location autoMoveNext() {
-        return null;
-    }
-
-    /**
      * Handles the key released event.
      *
      * @param evt the KeyEvent object representing the key release event
@@ -100,6 +96,42 @@ public class KeyboardController extends VehicleController {
         return this.nextLocation;
     }
 
+    /**
+     * Get the associated vehicle.
+     *
+     * @return The associated vehicle.
+     */
+    public Vehicle getVehicle() {
+        return this.vehicle;
+    }
+
+    /**
+     * Check if the controller has finished its operation.
+     *
+     * @return True if the controller has finished, false otherwise.
+     */
+    public boolean getIsFinished() {
+        return this.isFinished;
+    }
+
+    /**
+     * Get the list of moves.
+     *
+     * @return null since done manually.
+     */
+    public List<String> getMoves() {
+        return null;
+    }
+
+    /**
+     * Get the index for automatic movement.
+     *
+     * @return The index for automatic movement.
+     */
+    public int getMovementIndex() {
+        return -1;
+    }
+
     /* setters */
 
     /**
@@ -109,5 +141,41 @@ public class KeyboardController extends VehicleController {
      */
     public void setNextLocation(Location nextLocation) {
         this.nextLocation = nextLocation;
+    }
+
+    /**
+     * Set the associated vehicle.
+     *
+     * @param vehicle The vehicle to set.
+     */
+    public void setVehicle(Vehicle vehicle) {
+        this.vehicle = vehicle;
+    }
+
+    /**
+     * Set the flag indicating if the controller has finished its operation.
+     *
+     * @param isFinished The flag value to set.
+     */
+    public void setIsFinished(boolean isFinished) {
+        this.isFinished = isFinished;
+    }
+
+    /**
+     * Set the list of moves/instructions.
+     *
+     * @param controls The list of moves to set.
+     */
+    public void setMoves(List<String> moves) {
+        return;
+    }
+
+    /**
+     * Set the index for automatic movement.
+     *
+     * @param autoMovementIndex The index to set.
+     */
+    public void setMovementIndex(int autoMovementIndex) {
+        return;
     }
 }

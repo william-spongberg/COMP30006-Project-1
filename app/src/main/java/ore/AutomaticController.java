@@ -1,8 +1,6 @@
 package ore;
 
 import ch.aplu.jgamegrid.Location;
-
-import java.awt.event.KeyEvent;
 import java.util.List;
 
 /**
@@ -10,7 +8,12 @@ import java.util.List;
  * represents a controller for a vehicle that can move automatically based on
  * instructions inputted from a properties file.
  */
-public class AutomaticController extends VehicleController {
+public class AutomaticController implements VehicleController {
+    private Vehicle vehicle = null;
+    private boolean isFinished = false;
+    private List<String> moves = null;
+    private int movementIndex = 0;
+    private Location nextLocation = null;
 
     /**
      * Constructs a new AutomaticController object with the specified vehicle,
@@ -21,10 +24,10 @@ public class AutomaticController extends VehicleController {
      *                          movement
      * @param autoMovementIndex the index of the current control/instruction
      */
-    public AutomaticController(Vehicle vehicle, List<String> controls, int autoMovementIndex) {
+    public AutomaticController(Vehicle vehicle, List<String> moves, int movementIndex) {
         this.setVehicle(vehicle);
-        this.setControls(controls);
-        this.setAutoMovementIndex(autoMovementIndex);
+        this.setMoves(moves);
+        this.setMovementIndex(movementIndex);
     }
 
     /**
@@ -35,12 +38,12 @@ public class AutomaticController extends VehicleController {
      * or null if the movement is finished or an invalid control is
      * encountered
      */
-    public Location autoMoveNext() {
-        if (this.getControls() != null && this.getAutoMovementIndex() < this.getControls().size()) {
-            String[] currentMove = this.getControls().get(this.getAutoMovementIndex()).split("-");
+    public Location nextMove() {
+        if (this.getMoves() != null && this.getMovementIndex() < this.getMoves().size()) {
+            String[] currentMove = this.getMoves().get(this.getMovementIndex()).split("-");
             String machine = currentMove[0];
             String move = currentMove[1];
-            this.setAutoMovementIndex(this.getAutoMovementIndex() + 1);
+            this.setMovementIndex(this.getMovementIndex() + 1);
 
             if ((machine.equals("P") && this.getVehicle() instanceof Pusher)
                     || (machine.equals("B") && this.getVehicle() instanceof Bulldozer)
@@ -77,32 +80,97 @@ public class AutomaticController extends VehicleController {
         return null;
     }
 
+    /* getters */
+
     /**
-     * Handles the manual movement of the vehicle.
+     * Retrieves the next location.
      *
-     * @return null as manual controls are not supported in this controller
+     * @return The next location.
      */
-    public Location manualMoveNext() {
-        return null;
+    public Location getNextLocation() {
+        return this.nextLocation;
     }
 
     /**
-     * Handles the key pressed event.
+     * Get the associated vehicle.
      *
-     * @param evt the KeyEvent object representing the key press event
-     * @return false as manual controls are not supported in this controller
+     * @return The associated vehicle.
      */
-    public boolean keyPressed(KeyEvent evt) {
-        return false;
+    public Vehicle getVehicle() {
+        return this.vehicle;
     }
 
     /**
-     * Handles the key released event.
+     * Check if the controller has finished its operation.
      *
-     * @param evt the KeyEvent object representing the key release event
-     * @return false as manual controls are not supported in this controller
+     * @return True if the controller has finished, false otherwise.
      */
-    public boolean keyReleased(KeyEvent evt) {
-        return false;
+    public boolean getIsFinished() {
+        return this.isFinished;
+    }
+
+    /**
+     * Get the list of moves.
+     *
+     * @return The list of moves.
+     */
+    public List<String> getMoves() {
+        return this.moves;
+    }
+
+    /**
+     * Get the index for automatic movement.
+     *
+     * @return The index for automatic movement.
+     */
+    public int getMovementIndex() {
+        return this.movementIndex;
+    }
+
+    /* setters */
+
+    /**
+     * Sets the next location.
+     *
+     * @param nextLocation the next location to set
+     */
+    public void setNextLocation(Location nextLocation) {
+        this.nextLocation = nextLocation;
+    }
+
+    /**
+     * Set the associated vehicle.
+     *
+     * @param vehicle The vehicle to set.
+     */
+    public void setVehicle(Vehicle vehicle) {
+        this.vehicle = vehicle;
+    }
+
+    /**
+     * Set the flag indicating if the controller has finished its operation.
+     *
+     * @param isFinished The flag value to set.
+     */
+    public void setIsFinished(boolean isFinished) {
+        this.isFinished = isFinished;
+    }
+
+    /**
+     * Set the list of moves.
+     *
+     * @param controls The list of moves to set.
+     */
+    public void setMoves(List<String> controls) {
+        this.moves = controls;
+    }
+
+    /**
+     * Set the index for movement.
+     *
+     * @param movementIndex The index to set.
+     */
+    public void setMovementIndex(int movementIndex) {
+        this.movementIndex = movementIndex;
     }
 }
