@@ -7,7 +7,6 @@ import ore.object.Target;
 
 import java.util.List;
 
-
 /**
  * The Pusher class represents a vehicle that pushes ore in a game.
  * It extends the Vehicle class.
@@ -16,19 +15,19 @@ public class Pusher extends Vehicle {
     /**
      * Constructs a Pusher object.
      *
-     * @param isAuto            A flag indicating whether the vehicle is controlled
-     *                          automatically or by the keyboard.
-     * @param controls          The list of controls for the vehicle.
-     * @param autoMovementIndex The index of the automatic movement for the vehicle.
+     * @param isAuto        A flag indicating whether the vehicle is controlled
+     *                      automatically or by the keyboard.
+     * @param moves         The list of controls for the vehicle.
+     * @param movementIndex The index of the movement for the vehicle.
      */
-    public Pusher(int id, boolean isAuto, List<String> controls, int autoMovementIndex) {
-        super("sprites/pusher.png", id, isAuto, controls, autoMovementIndex);
-        setIsAuto(controls, 'P');
+    public Pusher(int id, boolean isAuto, List<String> moves, int movementIndex) {
+        super("sprites/pusher.png", id, isAuto, moves, movementIndex);
+        setIsAuto(moves, 'P');
 
         System.out.println("\nPusher " + getId() + ":");
         System.out.println("            isAuto: " + isAuto);
-        System.out.println("            controls: " + controls);
-        System.out.println("            autoMovementIndex: " + autoMovementIndex + "\n");
+        System.out.println("            controls: " + moves);
+        System.out.println("            autoMovementIndex: " + movementIndex + "\n");
     }
 
     /**
@@ -42,8 +41,9 @@ public class Pusher extends Vehicle {
         // assuming only one ore can exist in a location at a time
         if (gameGrid.getOneActorAt(location, Ore.class) != null) {
             return collideWithActor(gameGrid.getOneActorAt(location, Ore.class));
-        } else return (gameGrid.getOneActorAt(location) == null)
-                || (gameGrid.getOneActorAt(location, Target.class) != null);
+        } else
+            return (gameGrid.getOneActorAt(location) == null)
+                    || (gameGrid.getOneActorAt(location, Target.class) != null);
     }
 
     /**

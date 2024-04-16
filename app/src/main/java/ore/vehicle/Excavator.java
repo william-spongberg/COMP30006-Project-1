@@ -16,19 +16,19 @@ public class Excavator extends Vehicle {
     /**
      * Constructs an Excavator object.
      *
-     * @param isAuto            A flag indicating whether the vehicle is controlled
-     *                          automatically or by the keyboard.
-     * @param controls          The list of controls for the vehicle.
-     * @param autoMovementIndex The index of the automatic movement for the vehicle.
+     * @param isAuto        A flag indicating whether the vehicle is controlled
+     *                      automatically or by the keyboard.
+     * @param moves         The list of controls for the vehicle.
+     * @param movementIndex The index of the movement for the vehicle.
      */
-    public Excavator(int id, boolean isAuto, List<String> controls, int autoMovementIndex) {
-        super("sprites/excavator.png", id, isAuto, controls, autoMovementIndex);
-        setIsAuto(controls, 'E');
+    public Excavator(int id, boolean isAuto, List<String> moves, int movementIndex) {
+        super("sprites/excavator.png", id, isAuto, moves, movementIndex);
+        setIsAuto(moves, 'E');
 
         System.out.println("\nExcavator " + getId() + ":");
         System.out.println("            isAuto: " + isAuto);
-        System.out.println("            controls: " + controls);
-        System.out.println("            autoMovementIndex: " + autoMovementIndex + "\n");
+        System.out.println("            controls: " + moves);
+        System.out.println("            autoMovementIndex: " + movementIndex + "\n");
     }
 
     /**
@@ -42,7 +42,8 @@ public class Excavator extends Vehicle {
     public boolean canMove(Location location) {
         if (gameGrid.getOneActorAt(location, Rock.class) != null) {
             return collideWithActor(gameGrid.getOneActorAt(location, Rock.class));
-        } else return gameGrid.getOneActorAt(location) == null;
+        } else
+            return gameGrid.getOneActorAt(location) == null;
     }
 
     /**

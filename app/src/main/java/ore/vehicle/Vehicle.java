@@ -12,7 +12,8 @@ import java.util.List;
 
 /**
  * The abstract class Vehicle represents a vehicle in the game.
- * It extends the Actor class and provides common functionality and attributes for all vehicles.
+ * It extends the Actor class and provides common functionality and attributes
+ * for all vehicles.
  */
 public abstract class Vehicle extends Actor {
     private int id;
@@ -23,19 +24,19 @@ public abstract class Vehicle extends Actor {
     /**
      * Constructs a new Vehicle object.
      *
-     * @param image             The image of the vehicle.
-     * @param isAuto            A flag indicating whether the vehicle is controlled
-     *                          automatically or by the keyboard.
-     * @param controls          The list of controls for the vehicle.
-     * @param autoMovementIndex The index of the automatic movement for the vehicle.
+     * @param image         The image of the vehicle.
+     * @param isAuto        A flag indicating whether the vehicle is controlled
+     *                      automatically or by the keyboard.
+     * @param moves         The list of controls for the vehicle.
+     * @param movementIndex The index of the movement for the vehicle.
      */
-    public Vehicle(String image, int id, boolean isAuto, List<String> controls, int autoMovementIndex) {
+    public Vehicle(String image, int id, boolean isAuto, List<String> moves, int movementIndex) {
         super(true, image);
         setIsAuto(isAuto);
         setId(id);
 
         if (isAuto) {
-            setController(new AutomaticController(this, controls, autoMovementIndex));
+            setController(new AutomaticController(this, moves, movementIndex));
         } else {
             setController(new KeyboardController(this));
         }
@@ -47,12 +48,12 @@ public abstract class Vehicle extends Actor {
      * If the controls list is not empty and contains the specified character, the
      * automatic status is set to true.
      *
-     * @param controls the list of controls to check
-     * @param c        the character to search for in the controls list
+     * @param moves the list of controls to check
+     * @param c     the character to search for in the controls list
      */
-    public void setIsAuto(List<String> controls, char c) {
-        if (!(controls.isEmpty())) {
-            for (String s : controls) {
+    public void setIsAuto(List<String> moves, char c) {
+        if (!(moves.isEmpty())) {
+            for (String s : moves) {
                 if (s.indexOf(c) != -1) {
                     setIsAuto(true);
                 }
