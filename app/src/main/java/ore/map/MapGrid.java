@@ -51,9 +51,9 @@ public class MapGrid {
     private final int numVertCells;
 
     /**
-     * Mapping from the string to a HashMap to prepare drawing
+     * Creates a MapGrid object based on a specified map.
      *
-     * @param model An enum specifying the map to generate
+     * @param model An int specifying the map to generate
      */
     public MapGrid(int model) {
         // set map
@@ -75,36 +75,16 @@ public class MapGrid {
             _map.add(new ArrayList<>());
             for (int x = 0; x < numHorzCells; x++) {
                 switch (map_str[y].charAt(x)) {
-                    case 'P':
-                        _map.get(y).add(OreSim.ElementType.PUSHER);
-                        break;
-                    case 'B':
-                        _map.get(y).add(OreSim.ElementType.BULLDOZER);
-                        break;
-                    case 'E':
-                        _map.get(y).add(OreSim.ElementType.EXCAVATOR);
-                        break;
-                    case 'R':
-                        _map.get(y).add(OreSim.ElementType.ROCK);
-                        break;
-                    case 'D':
-                        _map.get(y).add(OreSim.ElementType.CLAY);
-                        break;
-                    case '*':
-                        _map.get(y).add(OreSim.ElementType.ORE);
-                        break;
-                    case 'o':
-                        _map.get(y).add(OreSim.ElementType.TARGET);
-                        break;
-                    case ' ':
-                        _map.get(y).add(OreSim.ElementType.OUTSIDE);
-                        break;
-                    case '.':
-                        _map.get(y).add(OreSim.ElementType.EMPTY);
-                        break;
-                    case 'x':
-                        _map.get(y).add(OreSim.ElementType.BORDER);
-                        break;
+                    case 'P' -> _map.get(y).add(OreSim.ElementType.PUSHER);
+                    case 'B' -> _map.get(y).add(OreSim.ElementType.BULLDOZER);
+                    case 'E' -> _map.get(y).add(OreSim.ElementType.EXCAVATOR);
+                    case 'R' -> _map.get(y).add(OreSim.ElementType.ROCK);
+                    case 'D' -> _map.get(y).add(OreSim.ElementType.CLAY);
+                    case '*' -> _map.get(y).add(OreSim.ElementType.ORE);
+                    case 'o' -> _map.get(y).add(OreSim.ElementType.TARGET);
+                    case ' ' -> _map.get(y).add(OreSim.ElementType.OUTSIDE);
+                    case '.' -> _map.get(y).add(OreSim.ElementType.EMPTY);
+                    case 'x' -> _map.get(y).add(OreSim.ElementType.BORDER);
                 }
             }
         }
