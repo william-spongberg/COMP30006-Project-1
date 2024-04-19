@@ -2,11 +2,11 @@ package ore;
 
 import ch.aplu.jgamegrid.*;
 import ore.controller.KeyboardController;
+import ore.entity.Clay;
+import ore.entity.Ore;
+import ore.entity.Rock;
+import ore.entity.Target;
 import ore.map.MapGrid;
-import ore.object.Clay;
-import ore.object.Ore;
-import ore.object.Rock;
-import ore.object.Target;
 import ore.vehicle.Bulldozer;
 import ore.vehicle.Excavator;
 import ore.vehicle.Pusher;

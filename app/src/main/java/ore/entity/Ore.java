@@ -1,4 +1,4 @@
-package ore.object;
+package ore.entity;
 
 import ch.aplu.jgamegrid.Actor;
 import ch.aplu.jgamegrid.Location;

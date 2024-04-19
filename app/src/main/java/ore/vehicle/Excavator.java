@@ -2,7 +2,7 @@ package ore.vehicle;
 
 import ch.aplu.jgamegrid.Actor;
 import ch.aplu.jgamegrid.Location;
-import ore.object.Rock;
+import ore.entity.Rock;
 
 import java.util.List;
 

@@ -6,7 +6,7 @@ import ore.OreSim;
 import ore.controller.AutomaticController;
 import ore.controller.KeyboardController;
 import ore.controller.VehicleController;
-import ore.object.Target;
+import ore.entity.Target;
 
 import java.util.List;
 
