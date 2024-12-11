@@ -1,4 +1,4 @@
-# Project 1: Process and Memory Management
+# Project 1: Ore Mining Simulator
 
 *Created for SWEN30006 Software Modelling and Design in Semester 1 of 2024 for the University of Melbourne.*
 
